@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: ChildType) => (
-  <html className="dark" lang="en">
+  <html className="light" lang="en">
     <body className={inter.className}>
       <Providers>{children}</Providers>
     </body>
