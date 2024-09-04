@@ -2,6 +2,7 @@
   "name": "grocery-app",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "pnpm@9.6.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -27,6 +28,7 @@
     "@nextui-org/link": "^2.0.34",
     "@nextui-org/modal": "^2.0.39",
     "@nextui-org/pagination": "^2.0.35",
+    "@nextui-org/spinner": "^2.0.33",
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/table": "^2.0.39",
     "@nextui-org/theme": "^2.2.9",
