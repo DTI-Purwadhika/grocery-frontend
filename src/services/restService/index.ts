@@ -15,11 +15,12 @@ export const restService = async (endpoint: string, method: string = "GET", data
       throw new Error(`Failed to ${method} ${endpoint}`);
     }
     const result = await response.json();
-    const totalData = result.data.totalElements;
-    const totalPage = result.data.totalPages;
-    const content = result.data.content;
+    const resultData = result.data;
+    const totalData = resultData.totalElements;
+    const totalPage = resultData.totalPages;
+    const content = resultData.content;
 
-    return { content, totalData, totalPage };
+    return { content, totalData, totalPage, resultData };
   } catch (error) {
     throw new Error(`Can't catch ${endpoint}: ${error}`);
   }

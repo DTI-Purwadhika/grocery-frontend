@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@nextui-org/button";
+import { Button, ButtonGroup } from "@nextui-org/button";
 import { Input, Textarea } from "@nextui-org/input";
 import { useDisclosure } from "@nextui-org/modal";
 import { useRouter } from "next/navigation";
@@ -9,27 +9,27 @@ import { toast } from "sonner";
 import { Spinner } from "@nextui-org/spinner";
 
 import restService from "@/services/restService";
-import { Category } from "@/constants/entity";
-import { categories } from "@/constants/defaultValue";
+import { Product } from "@/constants/entity";
+import { products } from "@/constants/defaultValue";
 import Alert from "@/components/elements/Alert/SaveAlert";
 import { FormType } from "@/shares/types";
 import { capitalize } from "@/hooks/formatter";
 
-const CategoryForm = ({ type = "create", id }: FormType) => {
+const ProductForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [data, setData] = useState<Category>();
+  const [data, setData] = useState<Product>();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { resultData } = await restService(`categories/${id}/update`, "GET");
+        const { resultData } = await restService(`products/${id}`, "GET");
 
         setData(resultData);
         reset(resultData);
       } catch (error) {
-        toast.error("Failed to fetch category");
+        toast.error("Failed to fetch Product");
       } finally {
         setLoading(false);
       }
@@ -38,7 +38,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     if (type === "update" && id) {
       fetchData();
     } else {
-      setData(categories);
+      setData(products);
       setLoading(false);
     }
   }, [id, type]);
@@ -48,32 +48,32 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Category>({
+  } = useForm<Product>({
     defaultValues: data,
   });
 
-  const onSubmit: SubmitHandler<Category> = (newData) => {
+  const onSubmit: SubmitHandler<Product> = (newData) => {
     setData(newData);
     onOpen();
   };
 
   const handleCreate = (createNew: boolean) => {
     if (type === "update") {
-      restService(`categories/${id}`, "PUT", data);
+      restService(`products/${id}`, "PUT", data);
     } else {
-      restService(`categories`, "POST", data);
+      restService(`products`, "POST", data);
     }
     onClose();
-    toast.success(`Category has been ${type}d`);
+    toast.success(`Product has been ${type}d`);
 
     if (createNew) reset();
-    else router.push("/dashboard/categories");
+    else router.push("/dashboard/products");
   };
 
   if (loading) {
     return (
       <div>
-        <Spinner label="Getting Category..." />{" "}
+        <Spinner label="Getting Product..." />{" "}
       </div>
     );
   }
@@ -84,7 +84,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
 
   return (
     <form className="flex flex-col gap-4 items-start" onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="text-2xl font-bold">{capitalize(type)} Category</h2>
+      <h2 className="text-2xl font-bold">{capitalize(type)} Product</h2>
       <div className="grid grid-cols-2 w-full gap-8">
         <Controller
           control={control}
@@ -121,7 +121,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
           )}
         />
       </div>
-      <div className="flex gap-4">
+      <ButtonGroup>
         <Button color="primary" type="submit">
           Submit
         </Button>
@@ -134,11 +134,11 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
         >
           Reset
         </Button>
-      </div>
+      </ButtonGroup>
 
       <Alert
         isOpen={isOpen}
-        title={`This Category will be ${type}d`}
+        title={`This Product will be ${type}d`}
         onClose={onClose}
         onConfirm={handleCreate}
       >
@@ -157,4 +157,4 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
   );
 };
 
-export default CategoryForm;
+export default ProductForm;

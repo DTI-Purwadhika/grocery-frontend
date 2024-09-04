@@ -1,3 +1,5 @@
 export type ActionType = {
-  title?: string;
+  title: string;
+  row: any;
+  fetchData: () => {};
 };

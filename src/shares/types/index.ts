@@ -6,4 +6,11 @@ export type ChildType = {
 
 export type FormType = {
   type: "create" | "update";
+  id?: number;
+};
+
+export type idType = {
+  params: {
+    id: number;
+  };
 };

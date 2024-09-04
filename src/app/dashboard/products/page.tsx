@@ -1,30 +1,8 @@
-// import Datatable from "@/components/data/Table";
+import { Product } from "@/constants/field";
+import { Datatable } from "@/components/data";
 
-// const page = () => {
-//   const columns = [
-//     {
-//       key: "name",
-//       label: "Name",
-//     },
-//     {
-//       key: "code",
-//       label: "Code",
-//     },
-//     {
-//       key: "category",
-//       label: "Category",
-//     },
-//     {
-//       key: "price",
-//       label: "Price",
-//     },
-//     {
-//       key: "images",
-//       label: "Images",
-//     },
-//   ];
+const page = () => (
+  <Datatable columns={Product.columns} defaultCol={Product.selected} title="products" />
+);
 
-//   return <Datatable columns={columns} title="products" />;
-// };
-
-// export default page;
+export default page;

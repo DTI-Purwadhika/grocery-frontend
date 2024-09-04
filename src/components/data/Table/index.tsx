@@ -1,7 +1,7 @@
 "use client";
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@nextui-org/table";
 import { Key, useCallback, useEffect, useMemo, useState } from "react";
-import { Loader } from "lucide-react";
+import { Spinner } from "@nextui-org/spinner";
 
 import restService from "@/services/restService";
 
@@ -24,21 +24,21 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
 
   useEffect(() => {
     setIsLoading(true);
-    const fetchData = async () => {
-      const endpoint = `${title.toLowerCase()}?keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
-      const { content, totalData, totalPage } = await restService(endpoint);
-
-      setCollectData(content);
-      setTotalData(totalData);
-      setTotalPages(totalPage);
-      setIsLoading(false);
-    };
-
     fetchData();
   }, [page, size, sortBy, sortDir, keyword]);
 
+  const fetchData = async () => {
+    const endpoint = `${title.toLowerCase()}?keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
+    const { content, totalData, totalPage } = await restService(endpoint);
+
+    setCollectData(content);
+    setTotalData(totalData);
+    setTotalPages(totalPage);
+    setIsLoading(false);
+  };
+
   const renderCell = useCallback((data: any, columnKey: Key) => {
-    return Cell(title, columnKey, data[columnKey as keyof any]);
+    return Cell(data, columnKey, title, fetchData);
   }, []);
   const headerColumns = useMemo(() => {
     return columns.filter((column) => Array.from(visibleColumns).includes(column.key));
@@ -88,7 +88,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       }
       color={"primary"}
       selectedKeys={selected}
-      selectionMode="multiple"
+      // selectionMode="multiple"
       sortDescriptor={{ column: sortBy as string, direction: sortDir }}
       topContent={
         <TopContent
@@ -116,7 +116,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
         emptyContent={`No ${title} to display.`}
         isLoading={isLoading}
         items={collectData}
-        loadingContent={<Loader />}
+        loadingContent={<Spinner label={`Receiving ${title}...`} />}
       >
         {(item) => (
           <TableRow key={item.id || item.name}>
