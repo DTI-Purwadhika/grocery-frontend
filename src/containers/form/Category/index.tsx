@@ -2,29 +2,29 @@
 import { Button } from "@nextui-org/button";
 import { Input, Textarea } from "@nextui-org/input";
 import { useDisclosure } from "@nextui-org/modal";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { Spinner } from "@nextui-org/spinner";
 
-import restService from "@/services/restService";
 import { Category } from "@/constants/entity";
 import { categories } from "@/constants/defaultValue";
-import Alert from "@/components/elements/Alert/SaveAlert";
 import { FormType } from "@/shares/types";
 import { capitalize } from "@/hooks/formatter";
+import Alert from "@/components/elements/Alert/SaveAlert";
+import restService from "@/services/restService";
+
+import OnSave from "../services/onSave";
 
 const CategoryForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<Category>();
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { resultData } = await restService(`categories/${id}/update`, "GET");
+        const { resultData } = await restService(`categories/${id}`, "GET");
 
         setData(resultData);
         reset(resultData);
@@ -57,17 +57,8 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     onOpen();
   };
 
-  const handleCreate = (createNew: boolean) => {
-    if (type === "update") {
-      restService(`categories/${id}`, "PUT", data);
-    } else {
-      restService(`categories`, "POST", data);
-    }
-    onClose();
-    toast.success(`Category has been ${type}d`);
-
-    if (createNew) reset();
-    else router.push("/dashboard/categories");
+  const onCreate = (createNew: boolean) => {
+    OnSave({ createNew, type, id, data, onClose, reset });
   };
 
   if (loading) {
@@ -140,7 +131,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
         isOpen={isOpen}
         title={`This Category will be ${type}d`}
         onClose={onClose}
-        onConfirm={handleCreate}
+        onConfirm={onCreate}
       >
         <div>
           <p className="mb-4">

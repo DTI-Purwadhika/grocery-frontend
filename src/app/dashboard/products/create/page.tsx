@@ -1,5 +1,5 @@
-import { CategoryForm } from "@/containers/form";
+import { ProductForm } from "@/containers/form";
 
-const page = () => <CategoryForm type="create" />;
+const page = () => <ProductForm type="create" />;
 
 export default page;
