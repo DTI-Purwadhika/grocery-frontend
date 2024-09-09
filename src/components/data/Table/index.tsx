@@ -18,7 +18,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState<Key>("name");
+  const [sortBy, setSortBy] = useState<Key>("id");
   const [sortDir, setSortDir] = useState<"ascending" | "descending">("ascending");
   const [keyword, setKeyword] = useState("");
 
@@ -88,7 +88,8 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       }
       color={"primary"}
       selectedKeys={selected}
-      // selectionMode="multiple"
+      selectionMode="multiple"
+      shadow="md"
       sortDescriptor={{ column: sortBy as string, direction: sortDir }}
       topContent={
         <TopContent

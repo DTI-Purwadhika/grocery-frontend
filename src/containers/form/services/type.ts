@@ -5,4 +5,6 @@ export type SaveType = {
   data: any;
   onClose: () => void;
   reset: () => void;
+  router: any;
+  title: string;
 };

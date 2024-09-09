@@ -1,23 +1,20 @@
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import restService from "@/services/restService";
 
 import { SaveType } from "./type";
 
-const OnSave = ({ createNew, type, id, data, onClose, reset }: SaveType) => {
-  const router = useRouter();
-
+const OnSave = ({ createNew, type, id, data, onClose, reset, router, title }: SaveType) => {
   if (type === "update") {
-    restService(`products/${id}`, "PUT", data);
+    restService(`${title}/${id}`, "PUT", data);
   } else {
-    restService(`products`, "POST", data);
+    restService(`${title}`, "POST", data);
   }
   onClose();
   toast.success(`Product has been ${type}d`);
 
   if (createNew) reset();
-  else router.push("/dashboard/products");
+  else router.push(`/dashboard/${title}`);
 };
 
 export default OnSave;

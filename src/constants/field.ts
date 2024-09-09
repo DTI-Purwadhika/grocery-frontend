@@ -48,7 +48,7 @@ export const Product = {
 };
 
 export const Inventory = {
-  selected: ["code", "productName", "storeName", "totalStock", "actions"],
+  selected: ["code", "name", "storeName", "totalStock", "actions"],
   columns: [
     {
       key: "code",
@@ -56,7 +56,7 @@ export const Inventory = {
       sortable: true,
     },
     {
-      key: "productName",
+      key: "name",
       label: "Product Name",
     },
     {

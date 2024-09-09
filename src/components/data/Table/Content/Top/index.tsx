@@ -4,7 +4,7 @@ import { Plus, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@nextui-org/link";
 
-import { capitalize } from "@/hooks/formatter";
+import { useCapitalize } from "@/hooks/formatter";
 
 import { TopType, ColumnType } from "./type";
 import HeaderDropdown from "./HeaderDropdown";
@@ -37,13 +37,13 @@ const TopContent = ({
   const topContent = useMemo(
     () => (
       <div>
-        <h2 className="text-2xl font-semibold text-default-900 mb-4">{capitalize(title)}</h2>
+        <h2 className="text-2xl font-semibold text-default-900 mb-4">{useCapitalize(title)}</h2>
         <div className="grid grid-cols-2 gap-8 items-end">
           <Input
             isClearable
             label={`Search ${title} by name`}
             labelPlacement="outside"
-            placeholder={`${capitalize(title)} name...`}
+            placeholder={`${useCapitalize(title)} name...`}
             startContent={<Search className="text-default-300" />}
             value={keyword}
             variant="bordered"
@@ -53,7 +53,7 @@ const TopContent = ({
           <div className="flex flex-row justify-end gap-4">
             <Input
               className="w-28 "
-              label={`${capitalize(title)} per page`}
+              label={`${useCapitalize(title)} per page`}
               labelPlacement="outside-left"
               min={1}
               size="sm"

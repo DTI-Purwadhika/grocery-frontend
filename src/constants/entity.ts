@@ -6,6 +6,10 @@ export type Category = {
 export type Product = {
   name: string;
   description: string;
-  price: number;
+  price: number | undefined;
   category: string;
+  images: {
+    url: string;
+    altText: string;
+  }[];
 };

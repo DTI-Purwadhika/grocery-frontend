@@ -2,7 +2,7 @@ import { Button } from "@nextui-org/button";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { ChevronDown } from "lucide-react";
 
-import { capitalize } from "@/hooks/formatter";
+import { useCapitalize } from "@/hooks/formatter";
 
 import { ColumnType } from "./type";
 
@@ -23,7 +23,7 @@ const HeaderDropdown = ({ visibleColumns, setVisibleColumns, columns }: ColumnTy
     >
       {columns.map((column) => (
         <DropdownItem key={column.key} className="capitalize">
-          {capitalize(column.label)}
+          {useCapitalize(column.label)}
         </DropdownItem>
       ))}
     </DropdownMenu>

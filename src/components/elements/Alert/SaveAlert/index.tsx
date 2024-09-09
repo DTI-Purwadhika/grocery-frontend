@@ -12,6 +12,8 @@ const SaveAlert = ({
   isOpen = false,
   onClose,
   onConfirm,
+  isDisabled = false,
+  isUpload = false,
 }: ChildType & AlertProps) => (
   <Modal backdrop={"blur"} isOpen={isOpen} onClose={onClose}>
     <ModalContent>
@@ -25,11 +27,16 @@ const SaveAlert = ({
             <Button color="danger" variant="light" onPress={onClose}>
               Cancel
             </Button>
-            <Button color="default" onPress={() => onConfirm(false)}>
-              Save
+            <Button color="default" isDisabled={isDisabled} onPress={() => onConfirm(false)}>
+              {isUpload ? "Uploading..." : "Save"}
             </Button>
-            <Button color="primary" endContent={<Plus />} onPress={() => onConfirm(true)}>
-              Save & New
+            <Button
+              color="primary"
+              endContent={<Plus />}
+              isDisabled={isDisabled}
+              onPress={() => onConfirm(true)}
+            >
+              {isUpload ? "Uploading..." : "Save & New"}
             </Button>
           </ModalFooter>
         </>

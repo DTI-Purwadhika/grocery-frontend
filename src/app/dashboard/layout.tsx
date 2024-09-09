@@ -1,21 +1,24 @@
-import Link from "next/link";
+import { Apple } from "lucide-react";
 
 import { ChildType } from "@/shares/types";
+import UserCard from "@/components/elements/User";
+import { Sidebar } from "@/components/layout";
 
 const RootLayout = ({ children }: ChildType) => (
   <div className="grid h-screen grid-rows-[1fr_10fr_1fr]">
-    <header className="bg-background  px-8 py-4" />
-    <div className="grid max-h-full w-full lg:grid-cols-[250px_1fr]">
-      <aside className="bg-background hidden py-4 px-8 lg:block overflow-auto">
-        <div className="flex flex-col gap-4 mt-4">
-          <Link href="/dashboard/products">Products</Link>
-          <Link href="/dashboard/categories">Categories</Link>
-          <Link href="/dashboard/inventories">Inventory</Link>
-        </div>
+    <header className="bg-background px-8 pt-4 pb-2 flex justify-between">
+      <span className="font-bold text-green-600 text-2xl ml-6 flex flex-row gap-2 items-center">
+        <Apple /> Grocery App
+      </span>
+      <UserCard />
+    </header>
+    <div className="grid max-h-full w-full lg:grid-cols-[280px_1fr]">
+      <aside className="bg-background hidden h-screen py-4 pl-8 pr-4 lg:block overflow-auto sticky top-0">
+        <Sidebar />
       </aside>
-      <main className="bg-background py-4 px-8 overflow-auto">{children}</main>
+      <main className="bg-background py-4 pr-8 pl-4 overflow-auto">{children}</main>
     </div>
-    <footer className="px-8 py-4">Footer</footer>
+    <footer className="px-8 py-4" />
   </div>
 );
 

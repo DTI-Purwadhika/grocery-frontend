@@ -1,7 +1,7 @@
 "use server";
 import { API_URL } from "@/constants";
 
-export const restService = async (endpoint: string, method: string = "GET", data?: any) => {
+const restService = async (endpoint: string, method: string = "GET", data?: any) => {
   try {
     const response = await fetch(`${API_URL}/${endpoint}`, {
       method: method,
