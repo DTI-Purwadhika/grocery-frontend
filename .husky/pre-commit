@@ -4,11 +4,11 @@ echo '✨💄 Checking your styling with Prettier! Let’s see if you’ve got t
 echo ' '
 
 # Check Prettier standards
-npm run check-format ||
+pnpm check-format ||
 (
     echo ' '
     echo '😱🛑👑 Oh honey, no! 😱🛑👑 
-          That styling is a hot mess! 💄💅 Fix it with npm run format, add your changes, and try again.';
+          That styling is a hot mess! 💄💅 Fix it with pnpm format, add your changes, and try again.';
     echo ' '
     false;
 )
@@ -18,7 +18,7 @@ echo '🧐🔍📝 Time for the ESLint inspection! Let’s see if your code can 
 echo ' '
 
 # Check ESLint Standards
-npm run lint ||
+pnpm lint ||
 (
     echo ' '
     echo '🛑🚫❌ Ugh, darling, really? 🛑🚫❌ 
@@ -32,7 +32,7 @@ echo '📚🎓📏 Quick type check! Show me those types are sharp! 📚🎓📏
 echo ' '
 
 # Check tsconfig standards
-npm run check-types ||
+pnpm check-types ||
 (
     echo ' '
     echo '🙅‍♀️🧐📉 Type check failed, sweetie! 🙅‍♀️🧐📉 
@@ -46,7 +46,7 @@ echo '🎬🌟✨ Showtime! Let’s run those tests! 🎬🌟✨'
 echo ' '
 
 # Check jest tests
-npm run check-test ||
+pnpm check-test ||
 (
     echo ' '
     echo '😩🤦‍♀️😭 Test disaster! 😩🤦‍♀️😭 
@@ -62,7 +62,7 @@ echo ' '
 echo '🏗️🔧🚀 Time to build this beauty! 🏗️🔧🚀'
 echo ' '
 
-npm run build ||
+pnpm build ||
 (
     echo ' '
     echo '💥🔧🔨 Total build catastrophe! 💥🔧🔨 

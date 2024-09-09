@@ -9,5 +9,6 @@ export const products: Product = {
   name: "",
   category: "",
   description: "",
-  price: 0,
+  price: undefined,
+  images: [],
 };
