@@ -110,11 +110,10 @@ const FileUploader = ({ setFiles, files, isUploading }: FileType) => {
               />
               <div className="absolute bottom-0 right-0 flex text-white gap-2 z-10">
                 <Tooltip content="Add More" placement="top">
-                  <span
-                    className="bg-primary rounded-full p-2 opacity-60 hover:opacity-100 cursor-pointer"
-                    onClick={() => removeImage(currentIndex)}
-                  >
-                    <Plus size={16} />
+                  <span className="bg-primary rounded-full p-2 opacity-60 hover:opacity-100 cursor-pointer">
+                    <label htmlFor="fileInput">
+                      <Plus size={16} />
+                    </label>
                   </span>
                 </Tooltip>
                 <Tooltip color="danger" content="Remove" placement="top">

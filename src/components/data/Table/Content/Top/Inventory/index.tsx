@@ -1,15 +1,14 @@
-import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@nextui-org/link";
 
 import { toCapital } from "@/services/formatter";
+import StoreSelect from "@/components/form/StoreSelect";
 
-import { TopType, ColumnType } from "./type";
-import HeaderDropdown from "./HeaderDropdown";
+import { TopType, ColumnType } from "../type";
+import HeaderDropdown from "../HeaderDropdown";
 
-const TopContent = ({
+const StockContent = ({
   title = "data",
   onSearch,
   onSize,
@@ -41,9 +40,9 @@ const TopContent = ({
         <div className="grid grid-cols-2 gap-8 items-end">
           <Input
             isClearable
-            label={`Search ${title} by name`}
+            label={`Search ${title} by product name`}
             labelPlacement="outside"
-            placeholder={`${toCapital(title)} name...`}
+            placeholder={`Product name...`}
             startContent={<Search className="text-default-300" />}
             value={keyword}
             variant="bordered"
@@ -62,19 +61,12 @@ const TopContent = ({
               variant="underlined"
               onValueChange={setSize}
             />
+            <StoreSelect source="stores" />
             <HeaderDropdown
               columns={columns}
               setVisibleColumns={setVisibleColumns}
               visibleColumns={visibleColumns}
             />
-            <Button
-              as={Link}
-              className="bg-primary text-background"
-              endContent={<Plus />}
-              href={`${title}/create`}
-            >
-              Add New
-            </Button>
           </div>
         </div>
       </div>
@@ -85,4 +77,4 @@ const TopContent = ({
   return topContent;
 };
 
-export default TopContent;
+export default StockContent;

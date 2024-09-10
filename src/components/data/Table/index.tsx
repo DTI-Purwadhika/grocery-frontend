@@ -8,6 +8,7 @@ import restService from "@/services/restService";
 import { TableType } from "./type";
 import Cell from "./Cells";
 import { BottomContent, TopContent } from "./Content";
+import StockContent from "./Content/Top/Inventory";
 
 const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableType) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,14 +93,25 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       shadow="md"
       sortDescriptor={{ column: sortBy as string, direction: sortDir }}
       topContent={
-        <TopContent
-          columns={columns}
-          setVisibleColumns={setVisibleColumns}
-          title={title}
-          visibleColumns={visibleColumns}
-          onSearch={setKeyword}
-          onSize={setSize}
-        />
+        title === "inventory" ? (
+          <StockContent
+            columns={columns}
+            setVisibleColumns={setVisibleColumns}
+            title={title}
+            visibleColumns={visibleColumns}
+            onSearch={setKeyword}
+            onSize={setSize}
+          />
+        ) : (
+          <TopContent
+            columns={columns}
+            setVisibleColumns={setVisibleColumns}
+            title={title}
+            visibleColumns={visibleColumns}
+            onSearch={setKeyword}
+            onSize={setSize}
+          />
+        )
       }
       onSelectionChange={(keys) => handleSelectionChange(keys)}
       onSortChange={(sortDescriptor) => {

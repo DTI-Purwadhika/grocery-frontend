@@ -4,12 +4,14 @@ import { useState } from "react";
 
 import { useAutoComplete } from "@/hooks/useAutoComplete";
 
-const CategorySelect = ({ ...fields }) => {
+import { SelectorType } from "./type";
+
+const StoreSelect = ({ source = "" }: SelectorType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentKeyword, setCurrentKeyword] = useState(fields.value);
+  const [currentKeyword, setCurrentKeyword] = useState("");
 
   const { collectData, hasMore, isLoading, onLoadMore } = useAutoComplete({
-    title: "categories",
+    title: source,
     keyword: currentKeyword,
   });
 
@@ -22,16 +24,15 @@ const CategorySelect = ({ ...fields }) => {
 
   return (
     <Autocomplete
-      isRequired
       className="w-full"
       defaultItems={collectData}
       isLoading={isLoading}
-      label="Category"
+      label="Data"
       labelPlacement="outside"
       listboxProps={{
-        emptyContent: "Category not found",
+        emptyContent: "Data not found",
       }}
-      placeholder="Choose the suitable category..."
+      placeholder={`Choose the suitable ${source}...`}
       radius="sm"
       scrollRef={scrollerRef}
       variant="bordered"
@@ -39,12 +40,11 @@ const CategorySelect = ({ ...fields }) => {
         setCurrentKeyword(keyword);
       }}
       onOpenChange={setIsOpen}
-      onSelectionChange={fields.onChange}
-      {...fields}
     >
-      {(category) => <AutocompleteItem key={category.name}>{category.name}</AutocompleteItem>}
+      <AutocompleteItem key={"hehe"}>hehe</AutocompleteItem>
+      {/* {(data) => <AutocompleteItem key={data.id}>{data.name}</AutocompleteItem>} */}
     </Autocomplete>
   );
 };
 
-export default CategorySelect;
+export default StoreSelect;

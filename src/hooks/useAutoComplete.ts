@@ -17,6 +17,7 @@ export const useAutoComplete = ({ title = "", keyword = "" }) => {
   const fetchData = async (newPage: number) => {
     setIsLoading(true);
     const endpoint = `${title}?keyword=${keyword?.toLowerCase()}&size=${size}&page=${newPage}`;
+
     const { content, totalData } = await restService(endpoint);
 
     if (newPage === 0) setCollectData(content);

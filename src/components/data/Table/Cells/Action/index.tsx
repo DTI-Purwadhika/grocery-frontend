@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 import restService from "@/services/restService";
 import Alert from "@/components/elements/Alert";
-import { useCapitalize } from "@/hooks/formatter";
+import { toCapital } from "@/services/formatter";
 
 import { ActionType } from "./type";
 
@@ -31,7 +31,7 @@ const Action = ({ title, row, fetchData }: ActionType) => {
 
   return (
     <div className="flex flex-row justify-start ">
-      <Tooltip content={`${useCapitalize(row.name)} Details`}>
+      <Tooltip content={`${toCapital(row.name)} Details`}>
         <Button isIconOnly color="default" variant="light" onClick={handleDetail}>
           <Eye className="text-default-400 cursor-pointer active:opacity-50" />
         </Button>

@@ -13,7 +13,7 @@ export const Category = {
     {
       key: "totalProduct",
       label: "Total Products",
-      sortable: true,
+      sortable: false,
     },
     {
       key: "actions",
@@ -68,9 +68,9 @@ export const Inventory = {
       label: "Total Stock",
       sortable: true,
     },
-    {
-      key: "actions",
-      label: "Actions",
-    },
+    // {
+    //   key: "actions",
+    //   label: "Actions",
+    // },
   ],
 };

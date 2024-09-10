@@ -12,7 +12,7 @@ import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import { Category } from "@/constants/entity";
 import { categories } from "@/constants/defaultValue";
 import { FormType } from "@/shares/types";
-import { useCapitalize } from "@/hooks/formatter";
+import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
 import restService from "@/services/restService";
 
@@ -83,9 +83,9 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
         <CardBody className="w-full gap-4 p-7 grid grid-cols-3">
           <Card shadow="sm">
             <CardBody className="flex gap-8 p-6 ">
-              <h2 className="text-2xl font-bold">{useCapitalize(type)} Category</h2>
+              <h2 className="text-2xl font-bold">{toCapital(type)} Category</h2>
               <p className="text-sm">
-                {useCapitalize(type)} a new category by filling in the fields below.
+                {toCapital(type)} a new category by filling in the fields below.
               </p>
             </CardBody>
           </Card>
