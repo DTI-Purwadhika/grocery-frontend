@@ -30,9 +30,9 @@ const Action = ({ title, row, fetchData }: ActionType) => {
   const handleDetail = () => {};
 
   return (
-    <div className="flex flex-row justify-start ">
+    <div className="flex flex-row justify-end">
       <Tooltip content={`${toCapital(row.name)} Details`}>
-        <Button isIconOnly color="default" variant="light" onClick={handleDetail}>
+        <Button isIconOnly color="primary" variant="light" onClick={handleDetail}>
           <Eye className="text-default-400 cursor-pointer active:opacity-50" />
         </Button>
       </Tooltip>

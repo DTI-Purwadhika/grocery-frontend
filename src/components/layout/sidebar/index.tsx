@@ -1,9 +1,10 @@
 "use client";
-import { useCurrentPath } from "@/hooks/useCurrentPath";
 import { Card, CardBody } from "@nextui-org/card";
 import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
 import { Barcode, Blocks, ChartArea, Group, House, Store, User } from "lucide-react";
 import { useState } from "react";
+
+import { useCurrentPath } from "@/hooks/useCurrentPath";
 
 const Sidebar = () => {
   const { getLastSegment } = useCurrentPath();
@@ -31,9 +32,9 @@ const Sidebar = () => {
           <ListboxSection showDivider>
             <ListboxItem
               key="dashboard"
+              className={getLastSegment() === "dashboard" ? "bg-default-300" : ""}
               href="/dashboard"
               startContent={<House />}
-              className={getLastSegment() === "dashboard" ? "bg-default-300" : ""}
             >
               Dashboard
             </ListboxItem>
@@ -41,25 +42,25 @@ const Sidebar = () => {
           <ListboxSection showDivider title="Product">
             <ListboxItem
               key="products"
+              className={getLastSegment() === "products" ? "bg-default-300" : ""}
               href="/dashboard/products"
               startContent={<Barcode />}
-              className={getLastSegment() === "products" ? "bg-default-300" : ""}
             >
               Manage Product
             </ListboxItem>
             <ListboxItem
               key="categories"
+              className={getLastSegment() === "categories" ? "bg-default-300" : ""}
               href="/dashboard/categories"
               startContent={<Group />}
-              className={getLastSegment() === "categories" ? "bg-default-300" : ""}
             >
               Product Category
             </ListboxItem>
             <ListboxItem
               key="inventories"
+              className={getLastSegment() === "inventories" ? "bg-default-300" : ""}
               href="/dashboard/inventories"
               startContent={<Blocks />}
-              className={getLastSegment() === "inventories" ? "bg-default-300" : ""}
             >
               Product Inventory
             </ListboxItem>
@@ -67,17 +68,17 @@ const Sidebar = () => {
           <ListboxSection title="Staff">
             <ListboxItem
               key="admins"
+              className={getLastSegment() === "admins" ? "bg-default-300" : ""}
               href="/dashboard/admins"
               startContent={<User />}
-              className={getLastSegment() === "admins" ? "bg-default-300" : ""}
             >
               Store Admin
             </ListboxItem>
             <ListboxItem
               key="stores"
+              className={getLastSegment() === "stores" ? "bg-default-300" : ""}
               href="/dashboard/stores"
               startContent={<Store />}
-              className={getLastSegment() === "stores" ? "bg-default-300" : ""}
             >
               Store
             </ListboxItem>
@@ -85,9 +86,9 @@ const Sidebar = () => {
           <ListboxSection title="Management">
             <ListboxItem
               key="reports"
+              className={getLastSegment() === "reports" ? "bg-default-300" : ""}
               href="/dashboard/reports"
               startContent={<ChartArea />}
-              className={getLastSegment() === "reports" ? "bg-default-300" : ""}
             >
               Report
             </ListboxItem>

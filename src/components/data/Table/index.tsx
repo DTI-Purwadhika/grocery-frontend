@@ -26,6 +26,9 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   useEffect(() => {
     setIsLoading(true);
     fetchData();
+    if (title === "inventory") {
+      restService("inventory/generate-stock", "POST");
+    }
   }, [page, size, sortBy, sortDir, keyword]);
 
   const fetchData = async () => {
@@ -120,7 +123,11 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
     >
       <TableHeader columns={headerColumns}>
         {(column) => (
-          <TableColumn key={column?.key} allowsSorting={column.sortable && true}>
+          <TableColumn
+            key={column?.key}
+            align={column.align}
+            allowsSorting={column.sortable && true}
+          >
             {column?.label}
           </TableColumn>
         )}

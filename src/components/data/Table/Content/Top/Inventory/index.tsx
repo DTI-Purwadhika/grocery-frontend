@@ -37,7 +37,7 @@ const StockContent = ({
     () => (
       <div>
         <h2 className="text-2xl font-semibold text-default-900 mb-4">{toCapital(title)}</h2>
-        <div className="grid grid-cols-2 gap-8 items-end">
+        <div className="grid grid-cols-3 gap-8 items-end">
           <Input
             isClearable
             label={`Search ${title} by product name`}
@@ -49,7 +49,8 @@ const StockContent = ({
             onClear={() => setKeyword("")}
             onValueChange={setKeyword}
           />
-          <div className="flex flex-row justify-end gap-4">
+          <StoreSelect source="stores" />
+          <div className="flex flex-row justify-between">
             <Input
               className="w-28 "
               label={`${toCapital(title)} per page`}
@@ -61,7 +62,6 @@ const StockContent = ({
               variant="underlined"
               onValueChange={setSize}
             />
-            <StoreSelect source="stores" />
             <HeaderDropdown
               columns={columns}
               setVisibleColumns={setVisibleColumns}

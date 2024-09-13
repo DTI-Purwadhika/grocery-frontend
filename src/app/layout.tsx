@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { Providers } from "@/providers/NextUIProviders";
 import { ChildType } from "@/shares/types";
-import { inter } from "@/shares/assets/fonts";
+import { poppins } from "@/shares/assets/fonts";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: ChildType) => (
   <html className="light" lang="en">
-    <body className={inter.className}>
+    <body className={poppins.className}>
       <Providers>{children}</Providers>
     </body>
   </html>

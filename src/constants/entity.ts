@@ -13,3 +13,7 @@ export type Product = {
     altText: string;
   }[];
 };
+
+export type Inventory = {
+  stock: number;
+};

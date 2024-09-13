@@ -3,6 +3,7 @@ import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useState } from "react";
 
 import { useAutoComplete } from "@/hooks/useAutoComplete";
+import { toCapital } from "@/services/formatter";
 
 import { SelectorType } from "./type";
 
@@ -27,7 +28,7 @@ const StoreSelect = ({ source = "" }: SelectorType) => {
       className="w-full"
       defaultItems={collectData}
       isLoading={isLoading}
-      label="Data"
+      label={toCapital(source)}
       labelPlacement="outside"
       listboxProps={{
         emptyContent: "Data not found",
@@ -41,8 +42,8 @@ const StoreSelect = ({ source = "" }: SelectorType) => {
       }}
       onOpenChange={setIsOpen}
     >
-      <AutocompleteItem key={"hehe"}>hehe</AutocompleteItem>
-      {/* {(data) => <AutocompleteItem key={data.id}>{data.name}</AutocompleteItem>} */}
+      {/* <AutocompleteItem key={"hehe"}>hehe</AutocompleteItem> */}
+      {(content) => <AutocompleteItem key={content.id}>{content.name}</AutocompleteItem>}
     </Autocomplete>
   );
 };

@@ -37,6 +37,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
         const { resultData } = await restService(`products/${id}`, "GET");
 
         setData(resultData);
+
         reset(resultData);
       } catch (error) {
         toast.error("Failed to fetch product");
