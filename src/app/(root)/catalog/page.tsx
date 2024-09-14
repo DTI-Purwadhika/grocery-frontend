@@ -1,4 +1,4 @@
-import Catalog from "@/containers/Catalog";
+import { Catalog } from "@/containers";
 
 const page = () => {
   return <Catalog />;
