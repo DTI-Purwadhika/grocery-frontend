@@ -2,7 +2,7 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useState } from "react";
 
-import { useAutoComplete } from "@/hooks/data";
+import { useAutoComplete } from "@/hooks/useAutoComplete";
 
 const CategorySelect = ({ ...fields }) => {
   const [isOpen, setIsOpen] = useState(false);

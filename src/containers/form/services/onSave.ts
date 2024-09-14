@@ -13,8 +13,11 @@ const OnSave = ({ createNew, type, id, data, onClose, reset, router, title }: Sa
   onClose();
   toast.success(`Product has been ${type}d`);
 
-  if (createNew) reset();
-  else router.push(`/dashboard/${title}`);
+  if (createNew) {
+    reset();
+  } else {
+    router.push(`/dashboard/${title}`);
+  }
 };
 
 export default OnSave;

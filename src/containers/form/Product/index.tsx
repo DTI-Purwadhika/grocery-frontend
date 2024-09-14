@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { Product } from "@/constants/entity";
 import { products } from "@/constants/defaultValue";
 import { FormType } from "@/shares/types";
-import { useCapitalize } from "@/hooks/formatter";
+import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
 import restService from "@/services/restService";
 import FileUploader from "@/components/form/FileUploader";
@@ -37,6 +37,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
         const { resultData } = await restService(`products/${id}`, "GET");
 
         setData(resultData);
+
         reset(resultData);
       } catch (error) {
         toast.error("Failed to fetch product");
@@ -137,9 +138,9 @@ const ProductForm = ({ type = "create", id }: FormType) => {
           <div className="grid grid-cols-6 gap-4 w-full">
             <Card className="col-span-2" shadow="sm">
               <CardBody className="flex gap-8 p-6 aspect-[3/4]">
-                <h2 className="text-2xl font-bold">{useCapitalize(type)} Product</h2>
+                <h2 className="text-2xl font-bold">{toCapital(type)} Product</h2>
                 <p className="text-sm">
-                  {useCapitalize(type)} a new product by filling in the fields below.
+                  {toCapital(type)} a new product by filling in the fields below.
                 </p>
               </CardBody>
             </Card>
@@ -230,11 +231,10 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                 />
               </CardBody>
             </Card>
-
             <Card className="col-span-6 h-fit" shadow="sm">
               <CardBody className="flex gap-4 p-4">
                 <h3 className="font-semibold text-lg">
-                  {useCapitalize(currentName || "product")} Inventory
+                  {toCapital(currentName || "product")} Inventory
                 </h3>
                 <p className="text-sm">Manage the stock of {currentName} for your store</p>
               </CardBody>

@@ -30,14 +30,16 @@ const SaveAlert = ({
             <Button color="default" isDisabled={isDisabled} onPress={() => onConfirm(false)}>
               {isUpload ? "Uploading..." : "Save"}
             </Button>
-            <Button
-              color="primary"
-              endContent={<Plus />}
-              isDisabled={isDisabled}
-              onPress={() => onConfirm(true)}
-            >
-              {isUpload ? "Uploading..." : "Save & New"}
-            </Button>
+            {title.includes("updated") ? null : (
+              <Button
+                color="primary"
+                endContent={<Plus />}
+                isDisabled={isDisabled}
+                onPress={() => onConfirm(true)}
+              >
+                {isUpload ? "Uploading..." : "Save & New"}
+              </Button>
+            )}
           </ModalFooter>
         </>
       )}

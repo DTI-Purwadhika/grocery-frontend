@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@nextui-org/button";
 import { Tooltip } from "@nextui-org/tooltip";
 import { Moon, Sun } from "lucide-react";

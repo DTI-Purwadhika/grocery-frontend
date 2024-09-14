@@ -4,8 +4,11 @@ import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
 import { Barcode, Blocks, ChartArea, Group, House, Store, User } from "lucide-react";
 import { useState } from "react";
 
+import { useCurrentPath } from "@/hooks/useCurrentPath";
+
 const Sidebar = () => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["product"]));
+  const { getLastSegment } = useCurrentPath();
+  const [selectedKeys, setSelectedKeys] = useState(new Set([getLastSegment() || "dashboard"]));
 
   const handleSelectionChange = (value: string | Set<string>) => {
     if (typeof value === "string") {
@@ -27,31 +30,66 @@ const Sidebar = () => {
           onSelectionChange={(value) => handleSelectionChange(value as string)}
         >
           <ListboxSection showDivider>
-            <ListboxItem key="dashboard" href="/dashboard" startContent={<House />}>
+            <ListboxItem
+              key="dashboard"
+              className={getLastSegment() === "dashboard" ? "bg-default-300" : ""}
+              href="/dashboard"
+              startContent={<House />}
+            >
               Dashboard
             </ListboxItem>
           </ListboxSection>
           <ListboxSection showDivider title="Product">
-            <ListboxItem key="product" href="/dashboard/products" startContent={<Barcode />}>
+            <ListboxItem
+              key="products"
+              className={getLastSegment() === "products" ? "bg-default-300" : ""}
+              href="/dashboard/products"
+              startContent={<Barcode />}
+            >
               Manage Product
             </ListboxItem>
-            <ListboxItem key="category" href="/dashboard/categories" startContent={<Group />}>
+            <ListboxItem
+              key="categories"
+              className={getLastSegment() === "categories" ? "bg-default-300" : ""}
+              href="/dashboard/categories"
+              startContent={<Group />}
+            >
               Product Category
             </ListboxItem>
-            <ListboxItem key="inventory" href="/dashboard/inventories" startContent={<Blocks />}>
+            <ListboxItem
+              key="inventories"
+              className={getLastSegment() === "inventories" ? "bg-default-300" : ""}
+              href="/dashboard/inventories"
+              startContent={<Blocks />}
+            >
               Product Inventory
             </ListboxItem>
           </ListboxSection>
           <ListboxSection title="Staff">
-            <ListboxItem key="store-admin" href="/dashboard/admins" startContent={<User />}>
+            <ListboxItem
+              key="admins"
+              className={getLastSegment() === "admins" ? "bg-default-300" : ""}
+              href="/dashboard/admins"
+              startContent={<User />}
+            >
               Store Admin
             </ListboxItem>
-            <ListboxItem key="store" startContent={<Store />}>
+            <ListboxItem
+              key="stores"
+              className={getLastSegment() === "stores" ? "bg-default-300" : ""}
+              href="/dashboard/stores"
+              startContent={<Store />}
+            >
               Store
             </ListboxItem>
           </ListboxSection>
           <ListboxSection title="Management">
-            <ListboxItem key="Report" href="/dashboard/report" startContent={<ChartArea />}>
+            <ListboxItem
+              key="reports"
+              className={getLastSegment() === "reports" ? "bg-default-300" : ""}
+              href="/dashboard/reports"
+              startContent={<ChartArea />}
+            >
               Report
             </ListboxItem>
           </ListboxSection>
