@@ -1,6 +1,6 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 import restService from "@/services/restService";
 import { Category } from "@/constants/entity";
@@ -25,20 +25,22 @@ const Datatabs = () => {
   };
 
   return (
-    <Tabs
-      fullWidth
-      aria-label="Catalog tabs"
-      color="primary"
-      isDisabled={isLoading}
-      items={collectData}
-      variant="underlined"
-    >
-      {(item) => (
-        <Tab key={item.name} title={toCapital(item?.name)}>
-          <TabContent category={item.name} />
-        </Tab>
-      )}
-    </Tabs>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Tabs
+        fullWidth
+        aria-label="Catalog tabs"
+        color="primary"
+        isDisabled={isLoading}
+        items={collectData}
+        variant="underlined"
+      >
+        {(item) => (
+          <Tab key={item.name} title={toCapital(item?.name)}>
+            <TabContent category={item.name} />
+          </Tab>
+        )}
+      </Tabs>
+    </Suspense>
   );
 };
 

@@ -7,8 +7,8 @@ import { useState } from "react";
 import { useCurrentPath } from "@/hooks/useCurrentPath";
 
 const Sidebar = () => {
-  const { getLastSegment } = useCurrentPath();
-  const [selectedKeys, setSelectedKeys] = useState(new Set([getLastSegment() || "dashboard"]));
+  const { currentPath } = useCurrentPath();
+  const [selectedKeys, setSelectedKeys] = useState(new Set([currentPath || "dashboard"]));
 
   const handleSelectionChange = (value: string | Set<string>) => {
     if (typeof value === "string") {
@@ -31,8 +31,8 @@ const Sidebar = () => {
         >
           <ListboxSection showDivider>
             <ListboxItem
-              key="dashboard"
-              className={getLastSegment() === "dashboard" ? "bg-default-300" : ""}
+              key="/dashboard"
+              className={currentPath.includes("dashboard") ? "bg-default-300" : ""}
               href="/dashboard"
               startContent={<House />}
             >
@@ -41,24 +41,24 @@ const Sidebar = () => {
           </ListboxSection>
           <ListboxSection showDivider title="Product">
             <ListboxItem
-              key="products"
-              className={getLastSegment() === "products" ? "bg-default-300" : ""}
+              key="/dashboard/products"
+              className={currentPath.includes("products") ? "bg-default-300" : ""}
               href="/dashboard/products"
               startContent={<Barcode />}
             >
               Manage Product
             </ListboxItem>
             <ListboxItem
-              key="categories"
-              className={getLastSegment() === "categories" ? "bg-default-300" : ""}
+              key="/dashboard/categories"
+              className={currentPath.includes("categories") ? "bg-default-300" : ""}
               href="/dashboard/categories"
               startContent={<Group />}
             >
               Product Category
             </ListboxItem>
             <ListboxItem
-              key="inventories"
-              className={getLastSegment() === "inventories" ? "bg-default-300" : ""}
+              key="/dashboard/inventories"
+              className={currentPath.includes("inventories") ? "bg-default-300" : ""}
               href="/dashboard/inventories"
               startContent={<Blocks />}
             >
@@ -67,16 +67,16 @@ const Sidebar = () => {
           </ListboxSection>
           <ListboxSection title="Staff">
             <ListboxItem
-              key="admins"
-              className={getLastSegment() === "admins" ? "bg-default-300" : ""}
+              key="/dashboard/admins"
+              className={currentPath.includes("admins") ? "bg-default-300" : ""}
               href="/dashboard/admins"
               startContent={<User />}
             >
               Store Admin
             </ListboxItem>
             <ListboxItem
-              key="stores"
-              className={getLastSegment() === "stores" ? "bg-default-300" : ""}
+              key="/dashboard/stores"
+              className={currentPath.includes("stores") ? "bg-default-300" : ""}
               href="/dashboard/stores"
               startContent={<Store />}
             >
@@ -85,8 +85,8 @@ const Sidebar = () => {
           </ListboxSection>
           <ListboxSection title="Management">
             <ListboxItem
-              key="reports"
-              className={getLastSegment() === "reports" ? "bg-default-300" : ""}
+              key="/dashboard/reports"
+              className={currentPath.includes("reports") ? "bg-default-300" : ""}
               href="/dashboard/reports"
               startContent={<ChartArea />}
             >

@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable */
 import { Key, useEffect, useState } from "react";
 
@@ -6,6 +7,7 @@ import restService from "@/services/restService";
 import { ProductType } from "@/shares/types/product";
 
 import { BottomContent } from "../../Table/Content";
+import { useQuery } from "@/hooks/useQuery";
 
 type TabProps = {
   category: string;
@@ -20,14 +22,15 @@ const TabContent = ({ category }: TabProps) => {
   const [size, setSize] = useState(10);
   const [sortBy, setSortBy] = useState<Key>("id");
   const [sortDir, setSortDir] = useState<"ascending" | "descending">("ascending");
-  const [keyword, setKeyword] = useState("");
+
+  const { getQueryParam } = useQuery();
 
   useEffect(() => {
     fetchData();
-  }, [category]);
+  }, [category, getQueryParam("keyword"), page, size, sortBy, sortDir]);
 
   const fetchData = async () => {
-    const endpoint = `products?category=${encodeURIComponent(category)}&keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
+    const endpoint = `products?category=${encodeURIComponent(category)}&keyword=${encodeURIComponent(getQueryParam("keyword")?.toLowerCase() || "")}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
     const { content, totalData, totalPage } = await restService(endpoint);
 
     setCollectData(content);

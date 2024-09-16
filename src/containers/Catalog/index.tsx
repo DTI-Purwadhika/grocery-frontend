@@ -1,22 +1,20 @@
 "use client";
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
 import { Menu } from "lucide-react";
+import { Button } from "@nextui-org/button";
 
 import { Datatabs } from "@/components/data";
+import { SearchBar } from "@/components/elements";
 
-const Catalog = () => {
-  return (
-    <div>
-      <div className="flex flex-row justify-between">
-        <Input className="mb-4 w-5/6" placeholder="Search product" radius="sm" variant="bordered" />
-        <Button isIconOnly color="default" variant="light">
-          <Menu />
-        </Button>
-      </div>
-      <Datatabs />
+const Catalog = () => (
+  <>
+    <div className="flex flex-row justify-between items-end mb-2 gap-2">
+      <SearchBar noLabel title="products" />
+      <Button isIconOnly color="default" variant="light">
+        <Menu />
+      </Button>
     </div>
-  );
-};
+    <Datatabs />
+  </>
+);
 
 export default Catalog;
