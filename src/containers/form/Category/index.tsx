@@ -5,7 +5,6 @@ import { useDisclosure } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import { Spinner } from "@nextui-org/spinner";
 import { useRouter } from "next/navigation";
 import { Card, CardBody, CardFooter } from "@nextui-org/card";
 
@@ -15,6 +14,7 @@ import { FormType } from "@/shares/types";
 import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
 import restService from "@/services/restService";
+import { Loading } from "@/components/elements";
 
 import OnSave from "../services/onSave";
 
@@ -65,16 +65,8 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     OnSave({ createNew, type, id, data, onClose, reset, router, title: "categories" });
   };
 
-  if (loading) {
-    return (
-      <div>
-        <Spinner label="Getting Category..." />{" "}
-      </div>
-    );
-  }
-
-  if (!data) {
-    return <div>No data available</div>;
+  if (loading || !data) {
+    return <Loading title="Category Form" />;
   }
 
   return (

@@ -5,3 +5,5 @@ export { default as UserCard } from "./User";
 export { default as Alert } from "./Alert";
 export { default as ProductCard } from "./ProductCard";
 export { default as SearchBar } from "./SearchBar/wrapper";
+export { default as PageSize } from "./PageSize/wrapper";
+export { default as Loading } from "./Loading";

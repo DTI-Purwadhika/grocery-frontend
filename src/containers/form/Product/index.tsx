@@ -5,7 +5,6 @@ import { useDisclosure } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import { Spinner } from "@nextui-org/spinner";
 import { Card, CardBody } from "@nextui-org/card";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +18,7 @@ import FileUploader from "@/components/form/FileUploader";
 import CategorySelect from "@/components/form/CategorySelect";
 import NumberInput from "@/components/form/NumberInput";
 import { UploadFile } from "@/services/uploadService";
+import { Loading } from "@/components/elements";
 
 import OnSave from "../services/onSave";
 
@@ -122,13 +122,8 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     }
   };
 
-  if (loading)
-    <div>
-      <Spinner label="Getting Product..." />
-    </div>;
-
-  if (!data) {
-    return <div>No data available</div>;
+  if (loading || !data) {
+    return <Loading title="Product Form" />;
   }
 
   return (

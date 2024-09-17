@@ -32,7 +32,7 @@ const Sidebar = () => {
           <ListboxSection showDivider>
             <ListboxItem
               key="/dashboard"
-              className={currentPath.includes("dashboard") ? "bg-default-300" : ""}
+              className={currentPath === "/dashboard" ? "bg-default-300" : ""}
               href="/dashboard"
               startContent={<House />}
             >

@@ -8,29 +8,28 @@ import { ProductType } from "@/shares/types/product";
 
 import { BottomContent } from "../../Table/Content";
 import { useQuery } from "@/hooks/useQuery";
+import { TabType } from "./type";
 
-type TabProps = {
-  category: string;
-};
-
-const TabContent = ({ category }: TabProps) => {
+const TabContent = ({ category }: TabType) => {
   const [collectData, setCollectData] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalData, setTotalData] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [sortBy, setSortBy] = useState<Key>("id");
   const [sortDir, setSortDir] = useState<"ascending" | "descending">("ascending");
 
   const { getQueryParam } = useQuery();
 
+  const keyword = getQueryParam("keyword");
+  const page = Number(getQueryParam("page")) || 1;
+
   useEffect(() => {
     fetchData();
-  }, [category, getQueryParam("keyword"), page, size, sortBy, sortDir]);
+  }, [category, keyword, page, size, sortBy, sortDir]);
 
   const fetchData = async () => {
-    const endpoint = `products?category=${encodeURIComponent(category)}&keyword=${encodeURIComponent(getQueryParam("keyword")?.toLowerCase() || "")}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
+    const endpoint = `products?category=${encodeURIComponent(category)}&keyword=${encodeURIComponent(keyword?.toLowerCase() || "")}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
     const { content, totalData, totalPage } = await restService(endpoint);
 
     setCollectData(content);
@@ -47,9 +46,7 @@ const TabContent = ({ category }: TabProps) => {
       <div className={`${totalPages > 1 ? "block" : "hidden"} my-8 w-full`}>
         <BottomContent
           notMultiple
-          page={page}
           selectedSize={collectData.length}
-          setPage={setPage}
           totalData={totalData}
           totalPages={totalPages}
         />

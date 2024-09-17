@@ -6,7 +6,7 @@ import restService from "@/services/restService";
 import { Category } from "@/constants/entity";
 import { toCapital } from "@/services/formatter";
 
-import TabContent from "./Tab";
+import TabContent from "./Tab/wrapper";
 
 const Datatabs = () => {
   const [isLoading, setIsLoading] = useState(false);

@@ -21,7 +21,7 @@ export const useQuery = () => {
       const params = new URLSearchParams(searchParams.toString());
 
       !value ? params.delete(param) : params.set(param, value);
-      router.push(`${currentPath}?${params.toString()}`);
+      router.push(`${currentPath}?${params.toString()}`, { scroll: false });
     },
     [searchParams, currentPath, router],
   );

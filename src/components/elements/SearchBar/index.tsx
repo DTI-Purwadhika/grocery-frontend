@@ -21,7 +21,7 @@ const SearchBar = ({ title, noLabel = false }: SearchBarType) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setQueryParam("keyword", keyword);
-    }, 500);
+    }, 625);
 
     return () => clearTimeout(timeout);
   }, [keyword]);

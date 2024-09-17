@@ -1,77 +1,30 @@
-import { Input } from "@nextui-org/input";
-import { Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
-import { toCapital } from "@/services/formatter";
 import StoreSelect from "@/components/form/StoreSelect";
+import { PageSize, SearchBar } from "@/components/elements";
+import { TitleType } from "@/shares/types";
+import restService from "@/services/restService";
 
-import { TopType, ColumnType } from "../type";
-import HeaderDropdown from "../HeaderDropdown";
+import ColumnSelector from "../ColumnSelector";
+import { ColumnType } from "../type";
 
-const StockContent = ({
-  title = "data",
-  onSearch,
-  onSize,
-  visibleColumns,
-  setVisibleColumns,
-  columns,
-}: TopType & ColumnType) => {
-  const [keyword, setKeyword] = useState<string>("");
-  const [size, setSize] = useState<string>("10");
-
+const StockContent = ({ title = "data", columns }: TitleType & ColumnType) => {
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onSearch(keyword);
-      if (parseInt(size) > 0) {
-        onSize(parseInt(size));
-      } else {
-        setSize("1");
-        onSize(1);
-      }
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [keyword, size]);
+    if (title === "inventory") restService("inventory/generate-stock", "POST");
+  }, []);
 
   const topContent = useMemo(
     () => (
-      <div>
-        <h2 className="text-2xl font-semibold text-default-900 mb-4">{toCapital(title)}</h2>
-        <div className="grid grid-cols-3 gap-8 items-end">
-          <Input
-            isClearable
-            label={`Search ${title} by product name`}
-            labelPlacement="outside"
-            placeholder={`Product name...`}
-            startContent={<Search className="text-default-300" />}
-            value={keyword}
-            variant="bordered"
-            onClear={() => setKeyword("")}
-            onValueChange={setKeyword}
-          />
-          <StoreSelect source="stores" />
-          <div className="flex flex-row justify-between">
-            <Input
-              className="w-28 "
-              label={`${toCapital(title)} per page`}
-              labelPlacement="outside-left"
-              min={1}
-              size="sm"
-              type="number"
-              value={size}
-              variant="underlined"
-              onValueChange={setSize}
-            />
-            <HeaderDropdown
-              columns={columns}
-              setVisibleColumns={setVisibleColumns}
-              visibleColumns={visibleColumns}
-            />
-          </div>
+      <div className="grid grid-cols-3 gap-8 items-end">
+        <SearchBar title={title} />
+        <StoreSelect source="stores" />
+        <div className="flex flex-row justify-between">
+          <PageSize title={title} />
+          <ColumnSelector columns={columns} />
         </div>
       </div>
     ),
-    [keyword, size, visibleColumns],
+    [],
   );
 
   return topContent;
