@@ -1,52 +1,72 @@
-/* eslint-disable */
-import { Key, useEffect, useState } from "react";
+"use client";
+import { Key } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { ProductCard } from "@/components/elements";
-import restService from "@/services/restService";
+import { Loading, ProductCard } from "@/components/elements";
 import { ProductType } from "@/shares/types/product";
+import { useParam } from "@/hooks/useParam";
+import { fetchData } from "@/services/fetchData";
 
 import { BottomContent } from "../../Table/Content";
 
-type TabProps = {
-  category: string;
-};
+import { TabType } from "./type";
 
-const TabContent = ({ category }: TabProps) => {
-  const [collectData, setCollectData] = useState<ProductType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalData, setTotalData] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState<Key>("id");
-  const [sortDir, setSortDir] = useState<"ascending" | "descending">("ascending");
-  const [keyword, setKeyword] = useState("");
+const TabContent = ({ category }: TabType) => {
+  const { getQueryParam, setQueryParam } = useParam();
 
-  useEffect(() => {
-    fetchData();
-  }, [category]);
+  const keyword = getQueryParam("keyword") || "";
+  const page = Number(getQueryParam("page")) || 1;
+  const size = Number(getQueryParam("size")) || 10;
+  const sortBy: Key = "id";
+  const sortDir: "ascending" | "descending" = "ascending";
 
-  const fetchData = async () => {
-    const endpoint = `products?category=${encodeURIComponent(category)}&keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
-    const { content, totalData, totalPage } = await restService(endpoint);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [
+      `products`,
+      keyword,
+      page,
+      size,
+      sortBy,
+      sortDir,
+      category === "All Category" ? "" : category,
+      "",
+    ],
+    queryFn: fetchData,
+    placeholderData: keepPreviousData,
+    staleTime: 10000,
+  });
 
-    setCollectData(content);
-    setTotalData(totalData);
-    setTotalPages(totalPage);
-    setIsLoading(false);
+  if (isLoading) {
+    return <Loading title="Product" />;
+  }
+
+  if (isError) {
+    return <div>Something went wrong...</div>;
+  }
+
+  const {
+    content: collectData,
+    totalData,
+    totalPage: totalPages,
+  } = data || {
+    content: [],
+    totalData: 0,
+    totalPage: 0,
   };
+
+  if (page > totalPages) {
+    setQueryParam("page", "1");
+  }
 
   return (
     <>
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 ">
-        {collectData?.map((data) => <ProductCard key={data.id} {...data} />)}
+        {collectData?.map((data: ProductType) => <ProductCard key={data.id} {...data} />)}
       </div>
       <div className={`${totalPages > 1 ? "block" : "hidden"} my-8 w-full`}>
         <BottomContent
           notMultiple
-          page={page}
           selectedSize={collectData.length}
-          setPage={setPage}
           totalData={totalData}
           totalPages={totalPages}
         />

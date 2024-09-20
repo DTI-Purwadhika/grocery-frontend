@@ -1,23 +1,35 @@
 "use client";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { Tooltip } from "@nextui-org/tooltip";
 import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
 
 const ThemeButton = () => {
-  const [isSelected, setIsSelected] = useState(true);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  const isSelected = theme === "dark";
 
   const toggleTheme = () => {
-    setIsSelected((prevTheme) => !prevTheme);
+    setTheme(isSelected ? "light" : "dark");
   };
 
   return (
     <Tooltip
-      content={isSelected ? "Switch to Dark Mode" : "Switch to Light Mode"}
+      content={isSelected ? "Switch to Light Mode" : "Switch to Dark Mode"}
       placement="bottom"
     >
-      <Button isIconOnly color={isSelected ? "primary" : "default"} onClick={toggleTheme}>
-        {isSelected ? <Sun /> : <Moon />}
+      <Button isIconOnly color={isSelected ? "secondary" : "primary"} onClick={() => toggleTheme()}>
+        {isSelected ? <Moon /> : <Sun />}
       </Button>
     </Tooltip>
   );

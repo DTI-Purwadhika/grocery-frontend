@@ -4,6 +4,7 @@ import { Button } from "@nextui-org/button";
 import { useDisclosure } from "@nextui-org/modal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import restService from "@/services/restService";
 import Alert from "@/components/elements/Alert";
@@ -11,16 +12,26 @@ import { toCapital } from "@/services/formatter";
 
 import { ActionType } from "./type";
 
-const Action = ({ title, row, fetchData }: ActionType) => {
+const Action = ({ title, row }: ActionType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: () => restService(`${title}/${row.id}`, "DELETE"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [title] });
+      toast.success(`${row.name} has been removed`);
+    },
+    onError: () => {
+      toast.error(`Failed to remove ${row.name}`);
+    },
+  });
 
   const handleDelete = () => {
-    restService(`${title}/${row.id}`, "DELETE");
+    deleteMutation.mutate();
     onClose();
-    toast.success(`${row.name} has been removed`);
-    fetchData();
   };
 
   const handleUpdate = () => {

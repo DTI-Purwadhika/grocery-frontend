@@ -4,6 +4,7 @@ export type Category = {
 };
 
 export type Product = {
+  id: number;
   name: string;
   description: string;
   price: number | undefined;
@@ -11,6 +12,11 @@ export type Product = {
   images: {
     url: string;
     altText: string;
+  }[];
+  stocks?: {
+    storeName: string;
+    storeId: string;
+    stock: number;
   }[];
 };
 

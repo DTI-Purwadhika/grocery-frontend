@@ -5,16 +5,18 @@ import { useDisclosure } from "@nextui-org/modal";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Input } from "@nextui-org/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import restService from "@/services/restService";
 import StockAlert from "@/components/elements/Alert/StockAlert";
 
-import { ActionType } from "../Action/type";
+import { InventoryType } from "./type";
 
-const Inventory = ({ title, row, fetchData }: ActionType) => {
+const Inventory = ({ title, row }: InventoryType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [alert, setAlert] = useState(false);
   const [stock, setStock] = useState(row.totalStock);
+  const queryClient = useQueryClient();
 
   const deleteContent = (
     <div>
@@ -46,7 +48,7 @@ const Inventory = ({ title, row, fetchData }: ActionType) => {
           min={0}
           step={1}
           type="number"
-          value={stock}
+          value={stock.toString()}
           onChange={(e) => setStock(parseInt(e.target.value))}
         />
         {/* <Button isIconOnly color="primary" onClick={() => setStock(stock + 10)}>
@@ -56,22 +58,36 @@ const Inventory = ({ title, row, fetchData }: ActionType) => {
     </div>
   );
 
+  const deleteMutation = useMutation({
+    mutationFn: () => restService(`${title}/${row.id}`, "DELETE"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [title] });
+      toast.success(`All stock of ${row.name} from ${row.storeName} has been emptied`);
+    },
+    onError: () => {
+      toast.error(`Failed to remove ${row.name}`);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: () => restService(`${title}/${row.id}`, "PUT", { stock: stock }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [title] });
+      toast.success(`Stock of ${row.name} from ${row.storeName} has been updated`);
+    },
+    onError: () => {
+      toast.error(`Failed to remove ${row.name}`);
+    },
+  });
+
   const handleDelete = () => {
-    restService(`${title}/${row.id}`, "DELETE");
+    deleteMutation.mutate();
     onClose();
-    toast.success(`All stock of ${row.name} from ${row.storeName} has been emptied`);
-    fetchData();
   };
 
   const handleUpdate = () => {
-    const data = {
-      stock: stock,
-    };
-
-    restService(`${title}/${row.id}`, "PUT", data);
+    updateMutation.mutate();
     onClose();
-    toast.success(`Stock of ${row.name} from ${row.storeName} has been updated`);
-    fetchData();
   };
 
   const openUpdate = () => {

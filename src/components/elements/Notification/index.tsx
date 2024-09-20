@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/button";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
+import { Dropdown, DropdownTrigger, DropdownMenu } from "@nextui-org/dropdown";
 import { Badge } from "@nextui-org/badge";
 import { Bell, MessageSquareDashed } from "lucide-react";
 
@@ -14,10 +14,15 @@ const Notification = () => {
           </Button>
           {/* </Tooltip> */}
         </DropdownTrigger>
-        <DropdownMenu aria-label="notification">
-          <DropdownItem key="no-notif" startContent={<MessageSquareDashed />}>
-            No Notification
-          </DropdownItem>
+        <DropdownMenu
+          aria-label="notification"
+          emptyContent={
+            <div className="flex flex-col items-center py-8">
+              <MessageSquareDashed /> No Notification
+            </div>
+          }
+        >
+          {[]}
         </DropdownMenu>
       </Dropdown>
     </Badge>

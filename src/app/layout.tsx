@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { Providers } from "@/providers/NextUIProviders";
+import { Providers } from "@/providers";
 import { ChildType } from "@/shares/types";
 import { poppins } from "@/shares/assets/fonts";
 import "@/styles/globals.css";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: ChildType) => (
-  <html className="light" lang="en">
+  <html className="text-foreground light" lang="en">
     <body className={poppins.className}>
       <Providers>{children}</Providers>
     </body>

@@ -2,12 +2,13 @@
 import { Card, CardBody } from "@nextui-org/card";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { User } from "@nextui-org/user";
+import { User2 } from "lucide-react";
 
 import { ThemeButton, Notification } from "..";
 
 const UserCard = () => (
   <div className="flex flex-row gap-4">
-    <Card>
+    <Card className="hidden md:flex">
       <CardBody className="flex flex-row gap-2">
         <ThemeButton />
         <Notification />
@@ -17,7 +18,12 @@ const UserCard = () => (
       <DropdownTrigger>
         <Card className="cursor-pointer">
           <CardBody>
-            <User description="Admin Store" name="John Doe" />
+            <User
+              className="hidden md:flex md:flex-nowrap w-fit"
+              description="Admin Store"
+              name="John Doe"
+            />
+            <User2 className="md:hidden" />
           </CardBody>
         </Card>
       </DropdownTrigger>

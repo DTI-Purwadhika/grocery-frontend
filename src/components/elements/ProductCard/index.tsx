@@ -13,10 +13,12 @@ const ProductCard = ({ id, name, price, images }: ProductType) => {
       <Card radius="sm" shadow="sm">
         <CardBody className="aspect-[5/6]">
           <Image
+            isZoomed
             alt={name + " image"}
-            className="object-cover rounded-md"
+            className="object-cover rounded-md aspect-[4/3] w-full"
+            fallbackSrc="https://via.placeholder.com/500x500"
             src={images}
-            width={270}
+            width={500}
           />
           <div className="h-full flex flex-col justify-between">
             <h3 className={`${fontSizeClass} font-semibold mt-2`}>{productName}</h3>
