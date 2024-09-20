@@ -4,12 +4,12 @@ import { Input } from "@nextui-org/input";
 import { useEffect, useState } from "react";
 
 import { toCapital } from "@/services/formatter";
-import { useQuery } from "@/hooks/useQuery";
+import { useParam } from "@/hooks/useParam";
 import { TitleType } from "@/shares/types";
 
 const PageSize = ({ title }: TitleType) => {
   const [size, setSize] = useState("10");
-  const { setQueryParam, getQueryParam } = useQuery();
+  const { setQueryParam, getQueryParam } = useParam();
 
   useEffect(() => {
     const param = getQueryParam("size") || "10";

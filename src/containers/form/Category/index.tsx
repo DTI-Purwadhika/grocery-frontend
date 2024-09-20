@@ -70,7 +70,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form id={type + "category"} onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardBody className="w-full gap-4 p-7 grid grid-cols-3">
           <Card shadow="sm">

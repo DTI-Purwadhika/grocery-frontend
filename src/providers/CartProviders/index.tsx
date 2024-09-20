@@ -1,10 +1,18 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-import { Product } from "@/constants/entity";
 import { ChildType } from "@/shares/types";
+import {
+  fetchCartItems,
+  addItemToCart,
+  updateItemQuantity,
+  removeItemFromCart,
+  clearCart,
+} from "@/services/cartService";
 
-import { CartContextType, CartItem } from "./type";
+import { CartContextType, CartItem, CartType } from "./type";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -19,49 +27,91 @@ export const useCart = (): CartContextType => {
 };
 
 export const CartProvider = ({ children }: ChildType) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const queryClient = useQueryClient();
+
+  // ! This is a dummy userId
+  const userId = "1";
+
+  const { data } = useQuery<CartType>({
+    queryKey: ["cart", userId],
+    queryFn: () => fetchCartItems(userId),
+  });
 
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    if (data?.items) {
+      const num = data.items.reduce((acc, item) => acc + item.quantity, 0);
 
-    setCartItems(savedCart);
-  }, []);
+      localStorage.setItem("cartCount", num.toString());
+    }
+  }, [data]);
 
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+  const addItemToCartMutation = useMutation({
+    mutationFn: ({ product, storeId }: { product: CartItem; storeId: string }) =>
+      addItemToCart(product, storeId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+      toast.success(`Item added to cart`);
+    },
+    onError: () => {
+      toast.error(`Failed to add item to cart`);
+    },
+  });
 
-  const addItemToCart = (product: Product, quantity: number) => {
-    setCartItems((prev) => {
-      const existingItem = prev.find((item) => item.id === product.id);
+  const updateItemQuantityMutation = useMutation({
+    mutationFn: ({
+      id,
+      productId,
+      quantity,
+    }: {
+      id: number;
+      productId: number;
+      quantity: number;
+    }) => updateItemQuantity(id, productId, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+      toast.success(`Item updated`);
+    },
+    onError: () => {
+      toast.error(`Failed to update item in cart`);
+    },
+  });
 
-      if (existingItem) {
-        return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
-        );
-      } else {
-        return [...prev, { ...product, quantity }];
-      }
-    });
-  };
+  const removeItemFromCartMutation = useMutation({
+    mutationFn: ({ id, productId }: { id: number; productId: number }) =>
+      removeItemFromCart(id, productId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+      toast.success(`Item removed from cart`);
+    },
+    onError: () => {
+      toast.error(`Failed to remove item in cart`);
+    },
+  });
 
-  const updateItemQuantity = (productId: number, quantity: number) => {
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, quantity } : item)),
-    );
-  };
-
-  const removeItemFromCart = (productId: number) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== productId));
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
+  const clearCartMutation = useMutation({
+    mutationFn: ({ id }: { id: number }) => clearCart(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+      toast.success(`All Item removed from cart`);
+    },
+    onError: () => {
+      toast.error(`Failed to remove all item in cart`);
+    },
+  });
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addItemToCart, updateItemQuantity, removeItemFromCart, clearCart }}
+      value={{
+        cart: data || { id: "", userId: "", items: [] },
+        addItemToCart: (product: CartItem, storeId: string) =>
+          addItemToCartMutation.mutate({ product, storeId }),
+        updateItemQuantity: (id: number, productId: number, quantity: number) =>
+          updateItemQuantityMutation.mutate({ id, productId, quantity }),
+        removeItemFromCart: (id: number, productId: number) =>
+          removeItemFromCartMutation.mutate({ id, productId }),
+        clearCart: (id: number) => clearCartMutation.mutate({ id }),
+        cartCount: data?.items ? data.items.reduce((acc, item) => acc + item.quantity, 0) : -1,
+      }}
     >
       {children}
     </CartContext.Provider>

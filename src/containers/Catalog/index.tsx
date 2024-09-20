@@ -1,4 +1,3 @@
-"use client";
 import { Menu } from "lucide-react";
 import { Button } from "@nextui-org/button";
 

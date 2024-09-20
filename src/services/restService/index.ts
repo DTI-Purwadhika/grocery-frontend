@@ -1,6 +1,7 @@
 "use server";
 import { API_URL } from "@/constants";
 
+// * data?: any, karena kita tidak tahu bentuk data yang akan kita terima
 const restService = async (endpoint: string, method: string = "GET", data?: any) => {
   try {
     const response = await fetch(`${API_URL}/${endpoint}`, {

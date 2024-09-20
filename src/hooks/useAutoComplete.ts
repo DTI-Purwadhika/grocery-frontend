@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import restService from "@/services/restService";
 
@@ -8,44 +8,33 @@ export type dataType = {
 };
 
 export const useAutoComplete = ({ title = "", keyword = "" }) => {
-  const [collectData, setCollectData] = useState<dataType[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const size = 10;
+  const size = 8;
 
-  const fetchData = async (newPage: number) => {
-    setIsLoading(true);
-    const endpoint = `${title}?keyword=${keyword?.toLowerCase()}&size=${size}&page=${newPage}`;
+  const fetchData = async ({ pageParam = 0 }) => {
+    const endpoint = `${title}?keyword=${keyword?.toLowerCase()}&size=${size}&page=${pageParam}`;
     const { content, totalData, resultData } = await restService(endpoint);
+    const data = title === "stores" ? resultData : content;
 
-    if (newPage === 0) setCollectData(title === "stores" ? resultData : content);
-    else setCollectData((prevData) => [...prevData, ...content]);
-
-    setHasMore((newPage + 1) * size < totalData);
-    setIsLoading(false);
+    return {
+      data,
+      hasMore: (pageParam + 1) * size < totalData,
+    };
   };
 
-  useEffect(() => {
-    setCollectData([]);
-    setPage(0);
-    setHasMore(true);
-    fetchData(0);
-  }, [title, keyword]);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ["autocomplete", title, keyword],
+    queryFn: fetchData,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => (lastPage.hasMore ? pages.length : undefined),
+  });
 
-  const onLoadMore = () => {
-    if (hasMore && !isLoading) {
-      const newPage = page + 1;
-
-      setPage(newPage);
-      fetchData(newPage);
-    }
-  };
+  const collectData = data?.pages.flatMap((page) => page.data) || [];
 
   return {
     collectData,
-    hasMore,
     isLoading,
-    onLoadMore,
+    hasMore: hasNextPage,
+    onLoadMore: fetchNextPage,
+    isFetchingNextPage,
   };
 };

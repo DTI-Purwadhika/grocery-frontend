@@ -1,7 +1,7 @@
 import { Pagination } from "@nextui-org/pagination";
 import { useMemo } from "react";
 
-import { useQuery } from "@/hooks/useQuery";
+import { useParam } from "@/hooks/useParam";
 
 import { BottomType } from "./type";
 
@@ -11,13 +11,17 @@ const BottomContent = ({
   totalData,
   notMultiple = false,
 }: BottomType) => {
-  const { getQueryParam, setQueryParam } = useQuery();
+  const { getQueryParam, setQueryParam } = useParam();
 
   const currentPage = getQueryParam("page") || 1;
 
   const handlePageChange = (newPage: number) => {
     setQueryParam("page", newPage.toString());
   };
+
+  if (Number(currentPage) > totalPages) {
+    setQueryParam("page", "1");
+  }
 
   const bottomContent = useMemo(
     () => (

@@ -13,6 +13,11 @@ export type Product = {
     url: string;
     altText: string;
   }[];
+  stocks?: {
+    storeName: string;
+    storeId: string;
+    stock: number;
+  }[];
 };
 
 export type Inventory = {

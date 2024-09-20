@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 import { useCurrentPath } from "./useCurrentPath";
 
-export const useQuery = () => {
+export const useParam = () => {
   const { currentPath } = useCurrentPath();
   const searchParams = useSearchParams();
   const router = useRouter();

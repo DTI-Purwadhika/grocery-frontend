@@ -8,10 +8,11 @@ import {
   TableCell,
   SortDescriptor,
 } from "@nextui-org/table";
-import { Key, useCallback, useEffect, useMemo, useState } from "react";
+import { Key, useCallback, useMemo, useState } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import restService from "@/services/restService";
-import { useQuery } from "@/hooks/useQuery";
+import { fetchData } from "@/services/fetchData";
+import { useParam } from "@/hooks/useParam";
 import { Loading } from "@/components/elements";
 
 import { TableType } from "./type";
@@ -19,13 +20,8 @@ import Cell from "./Cells";
 import { BottomContent, TopContent } from "./Content";
 
 const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableType) => {
-  const { getQueryParam, setQueryParam } = useQuery();
-  const [isLoading, setIsLoading] = useState(true);
+  const { getQueryParam, setQueryParam } = useParam();
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const [collectData, setCollectData] = useState<any[]>([]);
-  const [totalData, setTotalData] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-
   const sorter = (getQueryParam("sort") || "id,ascending").split(",");
   const [sort, setSort] = useState<SortDescriptor>({
     column: sorter[0],
@@ -37,28 +33,34 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   const page = parseInt(getQueryParam("page") || "1", 10);
   const size = parseInt(getQueryParam("size") || "10", 10);
   const keyword = getQueryParam("keyword") || "";
+  const category = getQueryParam("category") || "";
+  const store = getQueryParam("stores") || "";
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetchData();
-  }, [page, size, sort, keyword]);
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      title,
+      keyword,
+      page,
+      size,
+      sort.column?.toString() || "id",
+      sort.direction?.toString() || "ascending",
+      category,
+      store,
+    ],
+    queryFn: fetchData,
+    placeholderData: keepPreviousData,
+  });
 
-  const fetchData = async () => {
-    const endpoint = `${title.toLowerCase()}?keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sort?.column}&sortDir=${sort?.direction?.replace("ending", "")}`;
-    const { content, totalData, totalPage } = await restService(endpoint);
+  // useEffect(() => {
+  //   if (title === "inventory") restService("inventory/generate-stock", "POST");
+  // }, []);
 
-    setCollectData(content);
-    setTotalData(totalData);
-    setTotalPages(totalPage);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
-  };
-
-  const renderCell = useCallback((data: any, columnKey: Key) => {
-    return Cell(data, columnKey, title, fetchData);
-  }, []);
+  const renderCell = useCallback(
+    (data: any, columnKey: Key) => {
+      return Cell(data, columnKey, title);
+    },
+    [title],
+  );
 
   const headerColumns = useMemo(() => {
     return columns.filter((column) => Array.from(visibleColumns).includes(column.key));
@@ -74,7 +76,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       setSelected((prevSelected) => {
         const newSelected = new Set(prevSelected);
 
-        collectData.forEach((data) => {
+        data?.content.forEach((data: { id: string }) => {
           const id = data.id;
 
           if (!newSelected.has(id)) newSelected.add(id);
@@ -90,11 +92,11 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       removeWrapper
       aria-label={`Data of ${title}`}
       bottomContent={
-        totalPages > 0 ? (
+        data?.totalPage > 0 ? (
           <BottomContent
             selectedSize={selected.size}
-            totalData={totalData}
-            totalPages={totalPages}
+            totalData={data?.totalData}
+            totalPages={data?.totalPage}
           />
         ) : null
       }
@@ -130,10 +132,10 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       <TableBody
         emptyContent={`No ${title} to display.`}
         isLoading={isLoading}
-        items={collectData}
-        loadingContent={<Loading noCard title={title} />}
+        items={data?.content || []}
+        loadingContent={<Loading title={title} />}
       >
-        {(item) => (
+        {(item: { id: string }) => (
           <TableRow key={item.id} id={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>

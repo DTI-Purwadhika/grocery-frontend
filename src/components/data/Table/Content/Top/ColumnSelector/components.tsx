@@ -4,12 +4,12 @@ import { ChevronDown } from "lucide-react";
 import { useMemo } from "react";
 
 import { toCapital } from "@/services/formatter";
-import { useQuery } from "@/hooks/useQuery";
+import { useParam } from "@/hooks/useParam";
 
 import { ColumnType } from "../type";
 
 const ColumnSelectorCom = ({ columns }: ColumnType) => {
-  const { getQueryParam, setQueryParam } = useQuery();
+  const { getQueryParam, setQueryParam } = useParam();
 
   const visibleColumnsString =
     getQueryParam("visibleColumns") || columns.map((col) => col.key).join(",");

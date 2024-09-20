@@ -1,18 +1,13 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
-import StoreSelect from "@/components/form/StoreSelect";
+import { StoreSelect } from "@/components/form";
 import { PageSize, SearchBar } from "@/components/elements";
 import { TitleType } from "@/shares/types";
-import restService from "@/services/restService";
 
 import ColumnSelector from "../ColumnSelector";
 import { ColumnType } from "../type";
 
 const StockContent = ({ title = "data", columns }: TitleType & ColumnType) => {
-  useEffect(() => {
-    if (title === "inventory") restService("inventory/generate-stock", "POST");
-  }, []);
-
   const topContent = useMemo(
     () => (
       <div className="grid grid-cols-3 gap-8 items-end">

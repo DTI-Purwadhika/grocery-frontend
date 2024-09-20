@@ -4,12 +4,14 @@ import { useState } from "react";
 
 import { useAutoComplete } from "@/hooks/useAutoComplete";
 import { toCapital } from "@/services/formatter";
+import { useParam } from "@/hooks/useParam";
 
 import { SelectorType } from "./type";
 
 const StoreSelect = ({ source = "" }: SelectorType) => {
+  const { getQueryParam, setQueryParam } = useParam();
   const [isOpen, setIsOpen] = useState(false);
-  const [currentKeyword, setCurrentKeyword] = useState("");
+  const [currentKeyword, setCurrentKeyword] = useState(getQueryParam(source) || "");
 
   const { collectData, hasMore, isLoading, onLoadMore } = useAutoComplete({
     title: source,
@@ -41,8 +43,10 @@ const StoreSelect = ({ source = "" }: SelectorType) => {
         setCurrentKeyword(keyword);
       }}
       onOpenChange={setIsOpen}
+      onSelectionChange={(selected) => {
+        setQueryParam(source, selected?.toString() || "");
+      }}
     >
-      {/* <AutocompleteItem key={"hehe"}>hehe</AutocompleteItem> */}
       {(content) => <AutocompleteItem key={content.id}>{content.name}</AutocompleteItem>}
     </Autocomplete>
   );
