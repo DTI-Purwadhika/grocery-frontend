@@ -11,7 +11,7 @@ import {
 import { Key, useCallback, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import { fetchData } from "@/services/fetchData";
+import { fetchData } from "@/services/dataService";
 import { useParam } from "@/hooks/useParam";
 import { Loading } from "@/components/elements";
 

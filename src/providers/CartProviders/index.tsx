@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -36,14 +36,6 @@ export const CartProvider = ({ children }: ChildType) => {
     queryKey: ["cart", userId],
     queryFn: () => fetchCartItems(userId),
   });
-
-  useEffect(() => {
-    if (data?.items) {
-      const num = data.items.reduce((acc, item) => acc + item.quantity, 0);
-
-      localStorage.setItem("cartCount", num.toString());
-    }
-  }, [data]);
 
   const addItemToCartMutation = useMutation({
     mutationFn: ({ product, storeId }: { product: CartItem; storeId: string }) =>
@@ -110,7 +102,7 @@ export const CartProvider = ({ children }: ChildType) => {
         removeItemFromCart: (id: number, productId: number) =>
           removeItemFromCartMutation.mutate({ id, productId }),
         clearCart: (id: number) => clearCartMutation.mutate({ id }),
-        cartCount: data?.items ? data.items.reduce((acc, item) => acc + item.quantity, 0) : -1,
+        cartCount: data?.items ? data.items.reduce((acc, item) => acc + item.quantity, 0) : 0,
       }}
     >
       {children}
