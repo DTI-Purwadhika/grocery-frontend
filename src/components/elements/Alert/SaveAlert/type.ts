@@ -3,4 +3,6 @@ export type AlertProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (createNew: boolean) => void;
+  isDisabled?: boolean;
+  isUpload?: boolean;
 };

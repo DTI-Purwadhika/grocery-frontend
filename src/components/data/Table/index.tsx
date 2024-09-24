@@ -1,55 +1,74 @@
 "use client";
-import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@nextui-org/table";
-import { Key, useCallback, useEffect, useMemo, useState } from "react";
-import { Spinner } from "@nextui-org/spinner";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableColumn,
+  TableRow,
+  TableCell,
+  SortDescriptor,
+} from "@nextui-org/table";
+import { Key, useCallback, useMemo, useState } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import restService from "@/services/restService";
+import { fetchData } from "@/services/fetchData";
+import { useParam } from "@/hooks/useParam";
+import { Loading } from "@/components/elements";
 
 import { TableType } from "./type";
 import Cell from "./Cells";
 import { BottomContent, TopContent } from "./Content";
 
 const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableType) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { getQueryParam, setQueryParam } = useParam();
   const [selected, setSelected] = useState<Set<string>>(new Set([]));
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(defaultCol));
-  const [collectData, setCollectData] = useState<any[]>([]);
-  const [totalData, setTotalData] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState<Key>("name");
-  const [sortDir, setSortDir] = useState<"ascending" | "descending">("ascending");
-  const [keyword, setKeyword] = useState("");
+  const sorter = (getQueryParam("sort") || "id,ascending").split(",");
+  const [sort, setSort] = useState<SortDescriptor>({
+    column: sorter[0],
+    direction: sorter[1] as "ascending" | "descending",
+  });
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetchData();
-  }, [page, size, sortBy, sortDir, keyword]);
+  const columnParam = getQueryParam("visibleColumns") || defaultCol.map((col) => col).join(",");
+  const visibleColumns = new Set(columnParam.split(","));
+  const page = parseInt(getQueryParam("page") || "1", 10);
+  const size = parseInt(getQueryParam("size") || "10", 10);
+  const keyword = getQueryParam("keyword") || "";
+  const category = getQueryParam("category") || "";
+  const store = getQueryParam("stores") || "";
 
-  const fetchData = async () => {
-    const endpoint = `${title.toLowerCase()}?keyword=${keyword.toLowerCase()}&page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir?.replace("ending", "")}`;
-    const { content, totalData, totalPage } = await restService(endpoint);
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      title,
+      keyword,
+      page,
+      size,
+      sort.column?.toString() || "id",
+      sort.direction?.toString() || "ascending",
+      category,
+      store,
+    ],
+    queryFn: fetchData,
+    placeholderData: keepPreviousData,
+  });
 
-    setCollectData(content);
-    setTotalData(totalData);
-    setTotalPages(totalPage);
-    setIsLoading(false);
-  };
+  // useEffect(() => {
+  //   if (title === "inventory") restService("inventory/generate-stock", "POST");
+  // }, []);
 
-  const renderCell = useCallback((data: any, columnKey: Key) => {
-    return Cell(data, columnKey, title, fetchData);
-  }, []);
+  const renderCell = useCallback(
+    (data: any, columnKey: Key) => {
+      return Cell(data, columnKey, title);
+    },
+    [title],
+  );
+
   const headerColumns = useMemo(() => {
     return columns.filter((column) => Array.from(visibleColumns).includes(column.key));
   }, [visibleColumns]);
 
-  const handleSortChange = (
-    column: Key | undefined,
-    direction: "ascending" | "descending" | undefined,
-  ) => {
-    if (column) setSortBy(column);
-    if (direction) setSortDir(direction);
+  const handleSortChange = (sortBy: SortDescriptor) => {
+    setQueryParam("sort", sortBy.column + "," + sortBy.direction);
+    setSort(sortBy);
   };
 
   const handleSelectionChange = (keys: "all" | Set<Key>) => {
@@ -57,57 +76,55 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       setSelected((prevSelected) => {
         const newSelected = new Set(prevSelected);
 
-        collectData.forEach((data) => {
-          const idOrName = data.id || data.name;
+        data?.content.forEach((data: { id: string }) => {
+          const id = data.id;
 
-          if (!newSelected.has(idOrName)) {
-            newSelected.add(idOrName);
-          }
+          if (!newSelected.has(id)) newSelected.add(id);
         });
 
         return newSelected;
       });
-    } else {
-      setSelected(new Set(Array.from(keys) as string[]));
-    }
+    } else setSelected(new Set(Array.from(keys) as string[]));
   };
 
   return (
     <Table
+      removeWrapper
       aria-label={`Data of ${title}`}
       bottomContent={
-        totalPages > 0 ? (
+        data?.totalPage > 0 ? (
           <BottomContent
-            page={page}
             selectedSize={selected.size}
-            setPage={setPage}
-            totalData={totalData}
-            totalPages={totalPages}
+            totalData={data?.totalData}
+            totalPages={data?.totalPage}
           />
         ) : null
       }
+      bottomContentPlacement="outside"
+      classNames={{
+        table: "min-h-[400px]",
+      }}
       color={"primary"}
+      isHeaderSticky={true}
       selectedKeys={selected}
-      // selectionMode="multiple"
-      sortDescriptor={{ column: sortBy as string, direction: sortDir }}
-      topContent={
-        <TopContent
-          columns={columns}
-          setVisibleColumns={setVisibleColumns}
-          title={title}
-          visibleColumns={visibleColumns}
-          onSearch={setKeyword}
-          onSize={setSize}
-        />
-      }
+      selectionMode="multiple"
+      shadow="md"
+      sortDescriptor={sort}
+      topContent={<TopContent columns={columns} title={title} />}
+      topContentPlacement="outside"
       onSelectionChange={(keys) => handleSelectionChange(keys)}
       onSortChange={(sortDescriptor) => {
-        handleSortChange(sortDescriptor.column, sortDescriptor.direction);
+        handleSortChange(sortDescriptor);
       }}
     >
       <TableHeader columns={headerColumns}>
         {(column) => (
-          <TableColumn key={column?.key} allowsSorting={column.sortable && true}>
+          <TableColumn
+            key={column.key}
+            align={column.align}
+            allowsSorting={column.sortable && true}
+            id={column.key}
+          >
             {column?.label}
           </TableColumn>
         )}
@@ -115,11 +132,11 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       <TableBody
         emptyContent={`No ${title} to display.`}
         isLoading={isLoading}
-        items={collectData}
-        loadingContent={<Spinner label={`Receiving ${title}...`} />}
+        items={data?.content || []}
+        loadingContent={<Loading title={title} />}
       >
-        {(item) => (
-          <TableRow key={item.id || item.name}>
+        {(item: { id: string }) => (
+          <TableRow key={item.id} id={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

@@ -14,3 +14,7 @@ export type idType = {
     id: number;
   };
 };
+
+export type TitleType = {
+  title: string;
+};

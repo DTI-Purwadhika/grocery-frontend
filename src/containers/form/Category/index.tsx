@@ -2,29 +2,33 @@
 import { Button } from "@nextui-org/button";
 import { Input, Textarea } from "@nextui-org/input";
 import { useDisclosure } from "@nextui-org/modal";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import { Spinner } from "@nextui-org/spinner";
+import { useRouter } from "next/navigation";
+import { Card, CardBody, CardFooter } from "@nextui-org/card";
 
-import restService from "@/services/restService";
 import { Category } from "@/constants/entity";
 import { categories } from "@/constants/defaultValue";
-import Alert from "@/components/elements/Alert/SaveAlert";
 import { FormType } from "@/shares/types";
-import { capitalize } from "@/hooks/formatter";
+import { toCapital } from "@/services/formatter";
+import Alert from "@/components/elements/Alert/SaveAlert";
+import restService from "@/services/restService";
+import { Loading } from "@/components/elements";
+
+import OnSave from "../services/onSave";
 
 const CategoryForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<Category>();
   const [loading, setLoading] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { resultData } = await restService(`categories/${id}/update`, "GET");
+        const { resultData } = await restService(`categories/${id}`, "GET");
 
         setData(resultData);
         reset(resultData);
@@ -57,90 +61,91 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     onOpen();
   };
 
-  const handleCreate = (createNew: boolean) => {
-    if (type === "update") {
-      restService(`categories/${id}`, "PUT", data);
-    } else {
-      restService(`categories`, "POST", data);
-    }
-    onClose();
-    toast.success(`Category has been ${type}d`);
-
-    if (createNew) reset();
-    else router.push("/dashboard/categories");
+  const onCreate = (createNew: boolean) => {
+    OnSave({ createNew, type, id, data, onClose, reset, router, title: "categories" });
   };
 
-  if (loading) {
-    return (
-      <div>
-        <Spinner label="Getting Category..." />{" "}
-      </div>
-    );
-  }
-
-  if (!data) {
-    return <div>No data available</div>;
+  if (loading || !data) {
+    return <Loading title="Category Form" />;
   }
 
   return (
-    <form className="flex flex-col gap-4 items-start" onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="text-2xl font-bold">{capitalize(type)} Category</h2>
-      <div className="grid grid-cols-2 w-full gap-8">
-        <Controller
-          control={control}
-          name="name"
-          render={({ field }) => (
-            <Input
-              {...field}
-              defaultValue={data.name}
-              errorMessage={errors.name?.message?.toString()}
-              isInvalid={errors.name && true}
-              label={"Name"}
-              radius={"sm"}
-              value={field.value}
-              variant={"bordered"}
-            />
-          )}
-          rules={{ required: "Name is required" }}
-        />
+    <form id={type + "category"} onSubmit={handleSubmit(onSubmit)}>
+      <Card>
+        <CardBody className="w-full gap-4 p-7 grid grid-cols-3">
+          <Card shadow="sm">
+            <CardBody className="flex gap-8 p-6 ">
+              <h2 className="text-2xl font-bold">{toCapital(type)} Category</h2>
+              <p className="text-sm">
+                {toCapital(type)} a new category by filling in the fields below.
+              </p>
+            </CardBody>
+          </Card>
+          <Card className="col-span-2" shadow="sm">
+            <CardBody className="flex gap-4 p-4">
+              <Controller
+                control={control}
+                name="name"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    defaultValue={data.name}
+                    errorMessage={errors.name?.message?.toString()}
+                    isInvalid={errors.name && true}
+                    label={"Name"}
+                    labelPlacement="outside"
+                    placeholder="Daily needs..."
+                    radius={"sm"}
+                    value={field.value}
+                    variant={"bordered"}
+                  />
+                )}
+                rules={{ required: "Name is required" }}
+              />
 
-        <Controller
-          control={control}
-          name="description"
-          render={({ field }) => (
-            <Textarea
-              {...field}
-              defaultValue={data.description}
-              errorMessage={errors.description?.message?.toString()}
-              isInvalid={errors.description && true}
-              label="Description"
-              radius={"sm"}
-              value={field.value}
-              variant="bordered"
-            />
-          )}
-        />
-      </div>
-      <div className="flex gap-4">
-        <Button color="primary" type="submit">
-          Submit
-        </Button>
-        <Button
-          color="danger"
-          type="reset"
-          onClick={() => {
-            reset();
-          }}
-        >
-          Reset
-        </Button>
-      </div>
+              <Controller
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    defaultValue={data.description}
+                    errorMessage={errors.description?.message?.toString()}
+                    isInvalid={errors.description && true}
+                    label="Description"
+                    labelPlacement="outside"
+                    placeholder="Essentials such as groceries, toiletries, and household supplies that are required for everyday living...."
+                    radius={"sm"}
+                    value={field.value}
+                    variant="bordered"
+                  />
+                )}
+              />
+            </CardBody>
+          </Card>
+        </CardBody>
+        <CardFooter className="flex gap-4 px-7 pb-7">
+          <Button color="primary" type="submit">
+            Submit
+          </Button>
+          <Button
+            color="danger"
+            type="reset"
+            variant="light"
+            onClick={() => {
+              reset();
+            }}
+          >
+            Reset
+          </Button>
+        </CardFooter>
+      </Card>
 
       <Alert
         isOpen={isOpen}
         title={`This Category will be ${type}d`}
         onClose={onClose}
-        onConfirm={handleCreate}
+        onConfirm={onCreate}
       >
         <div>
           <p className="mb-4">

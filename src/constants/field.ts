@@ -13,11 +13,12 @@ export const Category = {
     {
       key: "totalProduct",
       label: "Total Products",
-      sortable: true,
+      sortable: false,
     },
     {
       key: "actions",
-      label: "Actions",
+      label: "Actions ",
+      align: "end" as "end",
     },
   ],
 };
@@ -42,13 +43,14 @@ export const Product = {
     },
     {
       key: "actions",
-      label: "Actions",
+      label: "Actions ",
+      align: "end" as "end",
     },
   ],
 };
 
 export const Inventory = {
-  selected: ["code", "productName", "storeName", "totalStock", "actions"],
+  selected: ["name", "storeName", "totalStock", "inventory"],
   columns: [
     {
       key: "code",
@@ -56,7 +58,7 @@ export const Inventory = {
       sortable: true,
     },
     {
-      key: "productName",
+      key: "name",
       label: "Product Name",
     },
     {
@@ -69,8 +71,9 @@ export const Inventory = {
       sortable: true,
     },
     {
-      key: "actions",
-      label: "Actions",
+      key: "inventory",
+      label: "Actions ",
+      align: "end" as "end",
     },
   ],
 };

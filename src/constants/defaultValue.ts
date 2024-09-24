@@ -6,8 +6,10 @@ export const categories: Category = {
 };
 
 export const products: Product = {
+  id: 0,
   name: "",
   category: "",
   description: "",
-  price: 0,
+  price: undefined,
+  images: [],
 };
