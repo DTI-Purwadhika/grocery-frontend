@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChildType } from "@/shares/types";
 
 const RootLayout = ({ children }: ChildType) => (
-  <div className="grid h-screen grid-rows-[1fr_10fr_1fr]">
+  <div className="grid h-screen grid-rows-[1fr_10fr_1fr] text-black">
     <header className="bg-background  px-8 py-4" />
     <div className="grid max-h-full w-full lg:grid-cols-[250px_1fr]">
       <aside className="bg-background hidden py-4 px-8 lg:block overflow-auto">
