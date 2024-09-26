@@ -32,9 +32,9 @@ export const authConfig: NextAuthConfig = {
 
           if (!response.ok) {
             return {
-              id: data.userId,
               error: data.error,
               email: credentials.email,
+              name: "",
               role: "",
               token: "",
             };
@@ -44,7 +44,7 @@ export const authConfig: NextAuthConfig = {
           useCookies.set("Sid", data.token, { maxAge: 5 * 60 * 60 });
 
           return {
-            id: data.userId,
+            name: data.name,
             email: data.email,
             role: data.role,
             token: data.token,
@@ -75,9 +75,12 @@ export const authConfig: NextAuthConfig = {
           );
 
           const data = await response.json();
+
           user.email = data.email;
+
           // @ts-ignore
           user.token = data.token;
+
           // @ts-ignore
           user.role = data.role;
 
@@ -101,20 +104,51 @@ export const authConfig: NextAuthConfig = {
 
       return true;
     },
-    async jwt({ token, user }) {
-      // @ts-ignore
-      token.sub = user.email;
-      // @ts-ignore
-      token.role = user.role;
-      // @ts-ignore
-      token.token = user.token;
 
+    async jwt({ token, user }) {
+      if (user) {
+        // @ts-ignore
+        token.sub = user.email;
+        // @ts-ignore
+        token.role = user.role;
+        // @ts-ignore
+        token.token = user.token;
+
+        console.log(token);
+      }
       return token;
+    },
+    async session({ token, session }) {
+      if (token.email) {
+        session.user.email = token.email;
+      }
+      if (token.role) {
+        // @ts-ignore
+        session.user.role = token.role;
+      }
+      if (token.token) {
+        // @ts-ignore
+        session.token = token.token;
+      }
+      return session;
     },
   },
   session: { strategy: "jwt", maxAge: 5 * 60 * 60 },
   pages: {
     signIn: "/login",
+  },
+  jwt: {
+    maxAge: 5 * 60 * 60,
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+      },
+    },
   },
 };
 
