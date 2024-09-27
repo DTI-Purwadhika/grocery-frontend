@@ -13,6 +13,7 @@ import { Badge } from "@nextui-org/badge";
 import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Blocks, Heart, ShoppingCart } from "lucide-react";
+import { SearchBar } from "@/components/elements";
 
 export const NavBar: React.FC = () => {
   const cartContent = 5;
@@ -95,8 +96,8 @@ export const NavBar: React.FC = () => {
                 </ul>
               </div>
 
-              <div className="flex-grow mx-1 lg:mx-4 max-w-xl hidden lg:block">
-                <p className="text-red-500">Search Input</p>
+              <div className="grow text-black mx-1 lg:mx-4 max-w-xl hidden lg:block">
+                <SearchBar title="product" />
               </div>
 
               <div className="flex items-center gap-4 lg:gap-1 lg:space-x-4 space-x-1">

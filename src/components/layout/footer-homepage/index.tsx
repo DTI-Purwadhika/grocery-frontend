@@ -9,9 +9,9 @@ export const FooterHome: React.FC = () => {
         <div className="grid grid-cols-1 gap-10 lg:gap-10 lg:grid-cols-2">
           <div className="flex flex-col gap-4 ">
             <p className="text-white font-semibold">
-              Grocery, your one-stop destination for all your shopping needs. Explore a large
-              variety of fresh and all natural fruits and vegetables. By shopping at Grocery,
-              you&apos;re also supporting our local farmers.
+              Grocery, a fresh supermarket that has been trusted by households, chefs, and farmers.
+              Explore a large variety of fresh and all natural fruits and vegetables. By shopping at
+              Grocery, you&apos;re also supporting our local farmers.
             </p>
           </div>
           <div className="flex flex-col gap-4 lg:justify-self-center">
