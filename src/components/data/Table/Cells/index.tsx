@@ -17,6 +17,9 @@ const Cell = (collectData: any, columnKey: Key, title: string) => {
     case "inventory":
       renderedCell = <Inventory row={collectData} title={title} />;
       break;
+    case "isVerified":
+      renderedCell = renderedCell ? "Yes" : "No";
+      break;
   }
 
   return renderedCell;

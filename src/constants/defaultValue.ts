@@ -1,4 +1,4 @@
-import { Category, Product } from "./entity";
+import { Admin, Category, Product } from "./entity";
 
 export const categories: Category = {
   name: "",
@@ -12,4 +12,13 @@ export const products: Product = {
   description: "",
   price: undefined,
   images: [],
+};
+
+export const admins: Admin = {
+  id: 0,
+  name: "",
+  password: "",
+  email: "",
+  profilePicture: "",
+  storeId: 0,
 };

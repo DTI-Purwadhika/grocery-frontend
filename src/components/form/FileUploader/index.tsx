@@ -107,6 +107,7 @@ const FileUploader = ({ setFiles, files, isUploading }: FileType) => {
                 alt={`Preview ${files[currentIndex]}`}
                 className="h-full w-full object-contain aspect-video"
                 src={URL.createObjectURL(files[currentIndex])}
+                width="100%"
               />
               <div className="absolute bottom-0 right-0 flex text-white gap-2 z-10">
                 <Tooltip content="Add More" placement="top">
@@ -175,7 +176,7 @@ const FileUploader = ({ setFiles, files, isUploading }: FileType) => {
           </>
         ) : (
           <label className="flex text-gray-500 w-full h-full cursor-pointer" htmlFor="fileInput">
-            <p className="m-auto">Drag and drop files here, or click to select files</p>
+            <p className="m-auto">Drag and drop images here, or click to select images</p>
           </label>
         )}
       </div>

@@ -11,7 +11,7 @@ import { products } from "@/constants/defaultValue";
 import { FormType } from "@/shares/types";
 import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
-import { FileUploader, CategorySelect, NumberInput } from "@/components/form";
+import { FileUploader, DataSelector, NumberInput } from "@/components/form";
 import { UploadFile } from "@/services/uploadService";
 import { Loading } from "@/components/elements";
 import { useData, useSaveData } from "@/hooks/useData";
@@ -178,13 +178,14 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                   control={control}
                   name="category"
                   render={({ field }) => (
-                    <CategorySelect
+                    <DataSelector
                       {...field}
                       defaultValue={tempData.category}
                       errorMessage={errors.category?.message?.toString()}
                       isInvalid={errors.category && true}
                       label="Category"
                       selectedKey={field.value}
+                      source="categories"
                       value={field.value}
                     />
                   )}

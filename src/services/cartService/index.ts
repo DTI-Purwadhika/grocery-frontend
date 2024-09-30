@@ -2,9 +2,9 @@ import restService from "@/services/restService";
 import { CartItem, CartType } from "@/providers/CartProviders/type";
 
 export const fetchCartItems = async (userId: string): Promise<CartType> => {
-  const { content } = await restService(`cart/user/${userId}`, "GET");
+  const { resultData } = await restService(`cart/user/${userId}`, "GET");
 
-  return content[0];
+  return resultData;
 };
 
 export const addItemToCart = async (cart: CartItem, storeId: string): Promise<CartType> => {

@@ -7,3 +7,4 @@ export { default as ProductCard } from "./ProductCard";
 export { default as SearchBar } from "./SearchBar/wrapper";
 export { default as PageSize } from "./PageSize/wrapper";
 export { default as Loading } from "./Loading";
+export { default as StoreSelect } from "./StoreSelect/wrapper";

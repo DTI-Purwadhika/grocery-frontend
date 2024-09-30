@@ -1,3 +1,4 @@
+"use client";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
 import { useState } from "react";

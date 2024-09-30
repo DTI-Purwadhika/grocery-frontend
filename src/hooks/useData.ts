@@ -2,14 +2,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { Category, Product } from "@/constants/entity";
+import { Admin, Category, Product } from "@/constants/entity";
 import { fetchById, saveData } from "@/services/dataService";
 
 type dataType = {
   title: string;
   type?: "create" | "update";
   id: number | undefined;
-  data?: Category | Product;
+  data?: Category | Product | Admin;
 };
 
 type saveType = {
