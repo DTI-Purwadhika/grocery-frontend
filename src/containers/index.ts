@@ -1,3 +1,9 @@
 export { default as ProductDetail } from "./Product";
 export { default as Catalog } from "./Catalog";
 export { default as CartPage } from "./Cart";
+export { default as Checkout } from "./Checkout";
+export { default as PaymentSuccess } from "./Checkout/Success";
+export { default as PaymentFailed } from "./Checkout/Failed";
+export { default as Payment } from "./Checkout/Payment";
+export { default as PurchaseList } from "./Purchase";
+export { default as Admin } from "./Admin";

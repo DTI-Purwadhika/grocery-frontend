@@ -4,55 +4,23 @@ import { Input, Textarea } from "@nextui-org/input";
 import { useDisclosure } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { toast } from "sonner";
 import { Card, CardBody } from "@nextui-org/card";
-import { useRouter } from "next/navigation";
 
 import { Product } from "@/constants/entity";
 import { products } from "@/constants/defaultValue";
 import { FormType } from "@/shares/types";
 import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
-import restService from "@/services/restService";
-import FileUploader from "@/components/form/FileUploader";
-import CategorySelect from "@/components/form/CategorySelect";
-import NumberInput from "@/components/form/NumberInput";
+import { FileUploader, DataSelector, NumberInput } from "@/components/form";
 import { UploadFile } from "@/services/uploadService";
 import { Loading } from "@/components/elements";
-
-import OnSave from "../services/onSave";
+import { useData, useSaveData } from "@/hooks/useData";
 
 const ProductForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [data, setData] = useState<Product>();
-  const [files, setFiles] = useState<File[]>([]);
-  const [currentName, setCurrentName] = useState("product");
+  const { data } = useData({ title: "products", id, type, data: products });
+  const [tempData, setTempData] = useState<Product>(data as Product);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { resultData } = await restService(`products/${id}`, "GET");
-
-        setData(resultData);
-
-        reset(resultData);
-      } catch (error) {
-        toast.error("Failed to fetch product");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (type === "update" && id) {
-      fetchData();
-    } else {
-      setData(products);
-      setLoading(false);
-    }
-  }, [id, type]);
 
   const {
     control,
@@ -60,40 +28,34 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     reset,
     formState: { errors },
   } = useForm<Product>({
-    defaultValues: data,
+    defaultValues: tempData,
   });
 
-  const onSubmit: SubmitHandler<Product> = (newData) => {
-    setData(newData);
-    onOpen();
-  };
+  const [files, setFiles] = useState<File[]>([]);
+  const [currentName, setCurrentName] = useState("product");
+  const [uploading, setUploading] = useState(false);
+  const [createNew, setCreateNew] = useState(false);
 
-  const onCreate = async (createNew: boolean) => {
-    setUploading(true);
-    const images = await onUpload();
-
-    setUploading(false);
-
-    const savedData = { ...data, images };
-
-    if (images) {
-      OnSave({
-        createNew,
-        type,
-        id,
-        data: savedData,
-        onClose,
-        reset: () => onReset(),
-        router,
-        title: "products",
-      });
-    }
-  };
+  useEffect(() => {
+    setLoading(true);
+    setTempData(data as Product);
+    reset(data as Product);
+    setLoading(false);
+  }, [data]);
 
   const onReset = () => {
     reset();
     setFiles([]);
   };
+
+  const { mutate: saveProduct } = useSaveData({
+    title: "products",
+    id,
+    type,
+    data: tempData,
+    createNew,
+    reset: onReset,
+  });
 
   const onUpload = async () => {
     if (files.length === 0) {
@@ -122,7 +84,30 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     }
   };
 
-  if (loading || !data) {
+  const onSubmit: SubmitHandler<Product> = (newData) => {
+    setTempData(newData);
+    onOpen();
+  };
+
+  const onCreate = async (createNew: boolean) => {
+    setUploading(true);
+    setCreateNew(createNew);
+
+    const images = await onUpload();
+
+    setUploading(false);
+
+    const savedData = { ...tempData, images };
+
+    setTempData(savedData as Product);
+
+    if (images) {
+      saveProduct();
+      onClose();
+    }
+  };
+
+  if (!data || loading) {
     return <Loading title="Product Form" />;
   }
 
@@ -152,7 +137,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                   render={({ field }) => (
                     <Input
                       {...field}
-                      defaultValue={data.name}
+                      defaultValue={tempData.name}
                       errorMessage={errors.name?.message?.toString()}
                       isInvalid={errors.name && true}
                       label={"Name"}
@@ -172,7 +157,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                   render={({ field }) => (
                     <Textarea
                       {...field}
-                      defaultValue={data.description}
+                      defaultValue={tempData.description}
                       errorMessage={errors.description?.message?.toString()}
                       isInvalid={errors.description && true}
                       label="Description"
@@ -193,13 +178,14 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                   control={control}
                   name="category"
                   render={({ field }) => (
-                    <CategorySelect
+                    <DataSelector
                       {...field}
-                      defaultValue={data.category}
+                      defaultValue={tempData.category}
                       errorMessage={errors.category?.message?.toString()}
                       isInvalid={errors.category && true}
                       label="Category"
                       selectedKey={field.value}
+                      source="categories"
                       value={field.value}
                     />
                   )}
@@ -212,7 +198,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                     <NumberInput
                       {...field}
                       isRequired
-                      defaultValue={data.price?.toString()}
+                      defaultValue={tempData.price?.toString()}
                       endContent=",-"
                       errorMessage={errors.price?.message?.toString()}
                       isInvalid={errors.price && true}
@@ -263,20 +249,20 @@ const ProductForm = ({ type = "create", id }: FormType) => {
               <div className="grid grid-cols-2">
                 <p className="mb-4">
                   Name: <br />
-                  <strong>{data.name}</strong>
+                  <strong>{tempData.name}</strong>
                 </p>
                 <p className="mb-4">
                   Category: <br />
-                  {data.category}
+                  {tempData.category}
                 </p>
               </div>
               <p className="mb-4">
                 Price: <br />
-                Rp {data.price},-
+                Rp {tempData.price},-
               </p>
               <p>
                 Description: <br />
-                {data.description}
+                {tempData.description}
               </p>
             </div>
           </Alert>

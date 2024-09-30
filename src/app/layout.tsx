@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: ChildType) => (
   <html className="text-foreground light" lang="en">
-    <body className={poppins.className}>
+    <body className={poppins.className} suppressHydrationWarning={true}>
       <Providers>{children}</Providers>
     </body>
   </html>

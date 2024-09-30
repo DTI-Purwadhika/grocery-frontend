@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardBody } from "@nextui-org/card";
 import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
-import { Barcode, Blocks, ChartArea, Group, House, Store, User } from "lucide-react";
+import { Barcode, Blocks, ChartArea, Group, House, Percent, Store, User } from "lucide-react";
 import { useState } from "react";
 
 import { useCurrentPath } from "@/hooks/useCurrentPath";
@@ -32,7 +32,7 @@ const Sidebar = () => {
           <ListboxSection showDivider>
             <ListboxItem
               key="/dashboard"
-              className={currentPath === "/dashboard" ? "bg-default-300" : ""}
+              className={currentPath === "/dashboard" ? "bg-primary p-2 text-background" : ""}
               href="/dashboard"
               startContent={<House />}
             >
@@ -41,34 +41,44 @@ const Sidebar = () => {
           </ListboxSection>
           <ListboxSection showDivider title="Product">
             <ListboxItem
-              key="/dashboard/products"
-              className={currentPath.includes("products") ? "bg-default-300" : ""}
-              href="/dashboard/products"
-              startContent={<Barcode />}
-            >
-              Manage Product
-            </ListboxItem>
-            <ListboxItem
               key="/dashboard/categories"
-              className={currentPath.includes("categories") ? "bg-default-300" : ""}
+              className={currentPath.includes("categories") ? "bg-primary p-2 text-background" : ""}
               href="/dashboard/categories"
               startContent={<Group />}
             >
               Product Category
             </ListboxItem>
             <ListboxItem
+              key="/dashboard/products"
+              className={currentPath.includes("products") ? "bg-primary p-2 text-background" : ""}
+              href="/dashboard/products"
+              startContent={<Barcode />}
+            >
+              Manage Product
+            </ListboxItem>
+            <ListboxItem
               key="/dashboard/inventories"
-              className={currentPath.includes("inventories") ? "bg-default-300" : ""}
+              className={
+                currentPath.includes("inventories") ? "bg-primary p-2 text-background" : ""
+              }
               href="/dashboard/inventories"
               startContent={<Blocks />}
             >
               Product Inventory
             </ListboxItem>
+            <ListboxItem
+              key="/dashboard/promotions"
+              className={currentPath.includes("promotions") ? "bg-primary p-2 text-background" : ""}
+              href="/dashboard/promotions"
+              startContent={<Percent />}
+            >
+              Promotion
+            </ListboxItem>
           </ListboxSection>
           <ListboxSection title="Staff">
             <ListboxItem
               key="/dashboard/admins"
-              className={currentPath.includes("admins") ? "bg-default-300" : ""}
+              className={currentPath.includes("admins") ? "bg-primary p-2 text-background" : ""}
               href="/dashboard/admins"
               startContent={<User />}
             >
@@ -76,7 +86,7 @@ const Sidebar = () => {
             </ListboxItem>
             <ListboxItem
               key="/dashboard/stores"
-              className={currentPath.includes("stores") ? "bg-default-300" : ""}
+              className={currentPath.includes("stores") ? "bg-primary p-2 text-background" : ""}
               href="/dashboard/stores"
               startContent={<Store />}
             >
@@ -86,7 +96,7 @@ const Sidebar = () => {
           <ListboxSection title="Management">
             <ListboxItem
               key="/dashboard/reports"
-              className={currentPath.includes("reports") ? "bg-default-300" : ""}
+              className={currentPath.includes("reports") ? "bg-primary p-2 text-background" : ""}
               href="/dashboard/reports"
               startContent={<ChartArea />}
             >

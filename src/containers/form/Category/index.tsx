@@ -2,51 +2,23 @@
 import { Button } from "@nextui-org/button";
 import { Input, Textarea } from "@nextui-org/input";
 import { useDisclosure } from "@nextui-org/modal";
-import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { useEffect, useState } from "react";
 
 import { Category } from "@/constants/entity";
 import { categories } from "@/constants/defaultValue";
 import { FormType } from "@/shares/types";
 import { toCapital } from "@/services/formatter";
 import Alert from "@/components/elements/Alert/SaveAlert";
-import restService from "@/services/restService";
 import { Loading } from "@/components/elements";
-
-import OnSave from "../services/onSave";
+import { useData, useSaveData } from "@/hooks/useData";
 
 const CategoryForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [data, setData] = useState<Category>();
+  const { data } = useData({ title: "categories", id, type, data: categories });
+  const [tempData, setTempData] = useState<Category>(data as Category);
   const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { resultData } = await restService(`categories/${id}`, "GET");
-
-        setData(resultData);
-        reset(resultData);
-      } catch (error) {
-        toast.error("Failed to fetch category");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (type === "update" && id) {
-      fetchData();
-    } else {
-      setData(categories);
-      setLoading(false);
-    }
-  }, [id, type]);
-
   const {
     control,
     handleSubmit,
@@ -56,16 +28,36 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
     defaultValues: data,
   });
 
+  useEffect(() => {
+    setLoading(true);
+    setTempData(data as Category);
+    reset(data as Category);
+    setLoading(false);
+  }, [data]);
+
+  const [createNew, setCreateNew] = useState(false);
+
+  const { mutate: saveCategory } = useSaveData({
+    title: "categories",
+    id,
+    type,
+    data: tempData,
+    createNew,
+    reset,
+  });
+
   const onSubmit: SubmitHandler<Category> = (newData) => {
-    setData(newData);
+    setTempData(newData);
     onOpen();
   };
 
   const onCreate = (createNew: boolean) => {
-    OnSave({ createNew, type, id, data, onClose, reset, router, title: "categories" });
+    setCreateNew(createNew);
+    saveCategory();
+    onClose();
   };
 
-  if (loading || !data) {
+  if (!data || loading) {
     return <Loading title="Category Form" />;
   }
 
@@ -89,7 +81,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
                 render={({ field }) => (
                   <Input
                     {...field}
-                    defaultValue={data.name}
+                    defaultValue={tempData.name}
                     errorMessage={errors.name?.message?.toString()}
                     isInvalid={errors.name && true}
                     label={"Name"}
@@ -109,12 +101,16 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
                 render={({ field }) => (
                   <Textarea
                     {...field}
-                    defaultValue={data.description}
+                    defaultValue={tempData.description}
                     errorMessage={errors.description?.message?.toString()}
                     isInvalid={errors.description && true}
                     label="Description"
                     labelPlacement="outside"
-                    placeholder="Essentials such as groceries, toiletries, and household supplies that are required for everyday living...."
+                    placeholder={
+                      type === "create"
+                        ? "Essentials such as groceries, toiletries, and household supplies that are required for everyday living...."
+                        : tempData.description
+                    }
                     radius={"sm"}
                     value={field.value}
                     variant="bordered"
@@ -150,11 +146,11 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
         <div>
           <p className="mb-4">
             Name: <br />
-            <strong>{data.name}</strong>
+            <strong>{tempData.name}</strong>
           </p>
           <p>
             Description: <br />
-            {data.description}
+            {tempData.description}
           </p>
         </div>
       </Alert>

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { StoreSelect } from "@/components/form";
+import { StoreSelect } from "@/components/elements";
 import { PageSize, SearchBar } from "@/components/elements";
 import { TitleType } from "@/shares/types";
 
