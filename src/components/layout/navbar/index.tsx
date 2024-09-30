@@ -14,10 +14,12 @@ import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Blocks, Heart, ShoppingCart } from "lucide-react";
 import { SearchBar } from "@/components/elements";
+import { useRouter } from "next/navigation";
 
 export const NavBar: React.FC = () => {
   const cartContent = 5;
   const { data: session } = useSession();
+  const router = useRouter();
   const { logout } = useLogout();
   const [openHamburgerMenu, setOpenHamburgerMenu] = useState<boolean>(false);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
@@ -132,7 +134,12 @@ export const NavBar: React.FC = () => {
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu>
-                          <DropdownItem startContent={<FaUser />}>Your Profile</DropdownItem>
+                          <DropdownItem
+                            onPress={() => router.push("/my-profile")}
+                            startContent={<FaUser />}
+                          >
+                            Your Profile
+                          </DropdownItem>
                           <DropdownItem
                             startContent={<TbLogout className="w-[20px] h-[20px]" />}
                             className="text-red-500"
@@ -162,7 +169,11 @@ export const NavBar: React.FC = () => {
                               Hello {session.user?.name}
                             </span>
                           </DropdownItem>
-                          <DropdownItem key="profile" startContent={<FaUser />}>
+                          <DropdownItem
+                            onPress={() => router.push("/my-profile")}
+                            key="profile"
+                            startContent={<FaUser />}
+                          >
                             Your Profile
                           </DropdownItem>
                           <DropdownItem
