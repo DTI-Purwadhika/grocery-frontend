@@ -1,5 +1,5 @@
-const page = () => {
-  return <div>page</div>;
-};
+import { Report } from "@/containers";
+
+const page = () => <Report />;
 
 export default page;

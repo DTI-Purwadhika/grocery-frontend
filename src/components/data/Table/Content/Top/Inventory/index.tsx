@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { StoreSelect } from "@/components/elements";
+import { DataSelect } from "@/components/elements";
 import { PageSize, SearchBar } from "@/components/elements";
 import { TitleType } from "@/shares/types";
 
@@ -12,7 +12,7 @@ const StockContent = ({ title = "data", columns }: TitleType & ColumnType) => {
     () => (
       <div className="grid grid-cols-3 gap-8 items-end">
         <SearchBar title={title} />
-        <StoreSelect source="stores" />
+        <DataSelect source="stores" />
         <div className="flex flex-row justify-between">
           <PageSize title={title} />
           <ColumnSelector columns={columns} />

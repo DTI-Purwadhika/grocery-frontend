@@ -33,3 +33,10 @@ export type Admin = {
   storeId: number;
   isVerified?: boolean;
 };
+
+export type StockReport = {
+  id: number;
+  totalAdditions: number;
+  totalDeductions: number;
+  finalStock: number;
+};

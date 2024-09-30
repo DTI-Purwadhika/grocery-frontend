@@ -4,7 +4,7 @@ export const UploadFile = async (file: File) => {
   const S3_BUCKET = process.env.NEXT_PUBLIC_STORAGE;
   const REGION = process.env.NEXT_PUBLIC_REGION;
   const KEY = process.env.NEXT_PUBLIC_KEY;
-  const SECRET = process.env.NEXT_PUBLIC_SECRET;
+  const SECRET = process.env.NEXT_PUBLIC_SERVICE;
 
   AWS.config.update({
     accessKeyId: KEY,

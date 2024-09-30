@@ -184,3 +184,24 @@ export const User = {
     },
   ],
 };
+
+export const StockReport = {
+  selected: ["totalAdditions", "totalDeductions", "finalStock"],
+  columns: [
+    {
+      key: "totalAdditions",
+      label: "Inbound",
+      sortable: true,
+    },
+    {
+      key: "totalDeductions",
+      label: "Outbound",
+      sortable: true,
+    },
+    {
+      key: "finalStock",
+      label: "Current Stock",
+      sortable: true,
+    },
+  ],
+};
