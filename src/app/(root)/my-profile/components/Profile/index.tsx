@@ -11,11 +11,11 @@ import { Avatar } from "@nextui-org/avatar";
 import { IoCamera } from "react-icons/io5";
 import { Chip } from "@nextui-org/chip";
 import { MdVerifiedUser } from "react-icons/md";
-import { IoIosWarning } from "react-icons/io";
 import { RxQuestionMarkCircled } from "react-icons/rx";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { toast } from "sonner";
 import { useProfile } from "@/hooks/useProfile";
+import { useLogout } from "@/hooks/useLogout";
 
 type profileData = {
   name: string | undefined;
@@ -26,15 +26,15 @@ type profileData = {
 };
 
 export const Profile: React.FC = () => {
-  const DEFAULT_PICTURE = "https://avatar.iran.liara.run/public/18";
   const cookieValue = getCookie("Sid");
   const { data: session } = useSession();
-  const [profilePic, setProfilePic] = useState<string>(DEFAULT_PICTURE);
+  const [profilePic, setProfilePic] = useState<string | undefined>();
   const [pictureFile, setPictureFile] = useState<File>();
   const [formDisabled, setFormDisabled] = useState<boolean>(true);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [fileError, setFileError] = useState<string>("");
   const { userProfile } = useProfile();
+  const { logout } = useLogout();
 
   const {
     setValue,
@@ -107,14 +107,44 @@ export const Profile: React.FC = () => {
         throw new Error("Failed to update profile");
       }
 
-      toast.success("Profile updated successfully", {
-        position: "top-center",
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update profile", {
-        position: "top-center",
-      });
+      const result = await response.json();
+
+      if (
+        result.data.error === "This email has been registered. Please update to a different email"
+      ) {
+        throw new Error("This email has been registered. Please update to a different email");
+      }
+
+      if (result.data.email !== session?.user?.email) {
+        toast.success(
+          "Profile updated successfully. Please verify your new email and login again.",
+          {
+            position: "top-center",
+            duration: 5000,
+          },
+        );
+        setTimeout(() => {
+          logout();
+        }, 5000);
+      } else {
+        toast.success("Profile updated successfully", {
+          position: "top-center",
+        });
+      }
+    } catch (error: any) {
+      console.error(error.message);
+      if (error.message === "Failed to update profile") {
+        toast.error("Failed to update profile", {
+          position: "top-center",
+        });
+      } else if (
+        error.message === "This email has been registered. Please update to a different email"
+      ) {
+        toast.error("Email has been registered", {
+          position: "top-center",
+          description: "This email has been registered. Please update to a different email",
+        });
+      }
     }
   };
 
@@ -123,41 +153,39 @@ export const Profile: React.FC = () => {
     setValue("email", userProfile?.email);
     setValue("referralCode", userProfile?.referralCode);
     // @ts-ignore
-    if (session.provider === "google") {
-      // @ts-ignore
-      setProfilePic(session?.user?.picture);
+    if (session?.provider === "google") {
+      if (!userProfile?.profilePicture) {
+        // @ts-ignore
+        setProfilePic(session?.user?.picture);
+      } else {
+        setProfilePic(userProfile?.profilePicture);
+      }
+    } else {
+      setProfilePic(userProfile?.profilePicture);
     }
   }, [userProfile, setValue]);
 
   return (
     <>
       <div className="relative max-w-md mx-auto p-4 bg-gray-50 shadow-lg rounded-lg">
-        <div className="absolute flex items-center gap-1 top-8 left-8 ">
-          {userProfile?.isVerified ? (
-            <Chip size="sm" color="primary" startContent={<MdVerifiedUser />}>
-              <span className="font-bold">Verified</span>
-            </Chip>
-          ) : (
-            <>
-              <Chip size="sm" color="warning" startContent={<IoIosWarning />}>
-                <span className="font-bold">Not Verified</span>
-              </Chip>
-              <Popover color="warning" placement="bottom" showArrow={true}>
-                <PopoverTrigger>
-                  <button type="button">
-                    <RxQuestionMarkCircled />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <div className="p-1">
-                    <p className="text-xs font-bold">
-                      Your account has not been verified and therefore unable to create orders.
-                    </p>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </>
-          )}
+        <div className="absolute flex flex-col lg:flex-row items-center gap-1 top-8 left-3 lg:left-8 ">
+          <Chip size="sm" color="primary" startContent={<MdVerifiedUser />}>
+            <span className="font-bold">Verified</span>
+          </Chip>
+          <Popover color="primary" placement="bottom" showArrow={true}>
+            <PopoverTrigger>
+              <button type="button">
+                <RxQuestionMarkCircled />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="p-1">
+                <p className="text-xs font-bold">
+                  Your account is verified and you&apos;re ready to create orders.
+                </p>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <Button
@@ -193,6 +221,7 @@ export const Profile: React.FC = () => {
               className="hidden"
             />
           </div>
+
           {/* Name */}
           <div>
             <Controller
@@ -202,7 +231,6 @@ export const Profile: React.FC = () => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  isRequired
                   isDisabled={formDisabled}
                   type="text"
                   label="Name"
@@ -221,15 +249,15 @@ export const Profile: React.FC = () => {
               name="email"
               control={control}
               rules={{
-                // required: "Email is required",
+                required: "Email is required",
                 pattern: { value: /\S+@\S+\.\S+/, message: "Email is invalid" },
               }}
               render={({ field }) => (
                 <Input
                   {...field}
-                  isRequired
                   // @ts-ignore
-                  isDisabled={formDisabled || session.provider === "google"}
+                  isReadOnly={session?.provider === "google"}
+                  isDisabled={formDisabled}
                   type="email"
                   label="Email"
                   labelPlacement="outside"
@@ -242,7 +270,6 @@ export const Profile: React.FC = () => {
           {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
 
           {/* Referral code */}
-
           {userProfile?.role === "CUSTOMER" && (
             <div>
               <Input
@@ -258,7 +285,6 @@ export const Profile: React.FC = () => {
           )}
 
           {/* Password */}
-
           {
             // @ts-ignore
             session?.provider !== "google" && (
