@@ -12,7 +12,9 @@ import { IoCamera } from "react-icons/io5";
 import { Chip } from "@nextui-org/chip";
 import { MdVerifiedUser } from "react-icons/md";
 import { RxQuestionMarkCircled } from "react-icons/rx";
+import { IoIosWarning } from "react-icons/io";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
+import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/modal";
 import { toast } from "sonner";
 import { useProfile } from "@/hooks/useProfile";
 import { useLogout } from "@/hooks/useLogout";
@@ -33,6 +35,7 @@ export const Profile: React.FC = () => {
   const [formDisabled, setFormDisabled] = useState<boolean>(true);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [fileError, setFileError] = useState<string>("");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { userProfile } = useProfile();
   const { logout } = useLogout();
 
@@ -145,6 +148,32 @@ export const Profile: React.FC = () => {
           description: "This email has been registered. Please update to a different email",
         });
       }
+    }
+  };
+
+  const deleteProfile = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users?email=${userProfile?.email}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${cookieValue}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete profile");
+      }
+
+      toast.error("Profile deleted", { position: "top-center", duration: 3000 });
+      setTimeout(() => {
+        logout();
+      }, 3000);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -347,7 +376,54 @@ export const Profile: React.FC = () => {
               Update Profile
             </Button>
           </div>
+          {/* Delete Profile Button */}
+          <div>
+            <Button
+              isDisabled={!formDisabled}
+              onPress={onOpen}
+              className="font-bold bg-red-600 text-white"
+              type="button"
+            >
+              Delete Profile
+            </Button>
+          </div>
         </form>
+        <Modal
+          backdrop="blur"
+          className="w-2/3 lg:w-max"
+          classNames={{
+            base: "bg-gray-50",
+            closeButton: "hover:bg-red-500 transition duration-300 text-black",
+          }}
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+          placement="center"
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent className="text-black">
+            {() => (
+              <>
+                <ModalHeader className="flex gap-1 lg:gap-2 items-center justify-center text-2xl font-bold">
+                  <IoIosWarning className="text-yellow-500 w-8 h-8" />
+                  Warning!
+                </ModalHeader>
+                <ModalBody className="flex items-center">
+                  <p className="font-semibold text-center text-sm lg:text-md">
+                    Are you sure you want to delete your profile? This action can't be undone!
+                  </p>
+                  <Button
+                    type="button"
+                    onPress={deleteProfile}
+                    className="w-2/3 lg:w-1/2 font-bold bg-red-600 text-white"
+                  >
+                    Delete Profile
+                  </Button>
+                </ModalBody>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </>
   );
