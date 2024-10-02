@@ -7,6 +7,7 @@ import "@/styles/globals.css";
 import { auth } from "../../auth";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
+import { CartProvider } from "@/providers/CartProviders";
 
 export const metadata: Metadata = {
   title: "Repo Starter",
@@ -20,7 +21,9 @@ const RootLayout = async ({ children }: ChildType) => {
     <html className="text-foreground light" lang="en">
       <SessionProvider session={session}>
         <body className={poppins.className}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <CartProvider> {children}</CartProvider>
+          </Providers>
         </body>
       </SessionProvider>
     </html>

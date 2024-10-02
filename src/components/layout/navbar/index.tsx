@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import { useLogout } from "@/hooks/useLogout";
 import { Button } from "@nextui-org/button";
 import { useSession } from "next-auth/react";
+import { Apple } from "lucide-react";
 import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { TbLogout } from "react-icons/tb";
@@ -15,9 +16,9 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-o
 import { Blocks, Heart, ShoppingCart } from "lucide-react";
 import { SearchBar } from "@/components/elements";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/providers/CartProviders";
 
 export const NavBar: React.FC = () => {
-  const cartContent = 5;
   const { data: session } = useSession();
   const router = useRouter();
   const { logout } = useLogout();
@@ -25,6 +26,7 @@ export const NavBar: React.FC = () => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [openDropdownMenu, setOpenDropdownMenu] = useState<boolean>(false);
   const [openSmallDropdownMenu, setSmallOpenDropdownMenu] = useState<boolean>(false);
+  const { cartCount } = useCart();
 
   console.log("Session: ", session);
 
@@ -71,7 +73,7 @@ export const NavBar: React.FC = () => {
         <div className="relative">
           <div className="relative z-40 text-white bg-no-repeat bg-cover py-4">
             <div className="flex px-4 items-center justify-between lg:px-10">
-              <div className="flex items-center space-x-40">
+              <div className="flex items-center gap-2">
                 <button
                   className="flex flex-col justify-center items-center w-10 h-10 bg-white rounded focus:outline-none lg:hidden"
                   onClick={toggleMenu}
@@ -87,7 +89,9 @@ export const NavBar: React.FC = () => {
                   ></span>
                 </button>
 
-                <h3 className="text-green-400 text-lg hidden lg:block">Logo</h3>
+                <span className="font-bold text-green-600 text-xl lg:text-2xl lg:ml-6 flex flex-row gap-1 lg:gap-2 items-center">
+                  <Apple /> Grocery App
+                </span>
               </div>
 
               <div>
@@ -104,11 +108,13 @@ export const NavBar: React.FC = () => {
 
               <div className="flex items-center gap-4 lg:gap-1 lg:space-x-4 space-x-1">
                 {!openHamburgerMenu && (
-                  <Badge content={cartContent} color="danger">
-                    <Button isIconOnly variant="bordered" color="warning">
-                      <FaShoppingCart className="h-6 w-6" />
-                    </Button>
-                  </Badge>
+                  <Link href="my-cart">
+                    <Badge content={cartCount} color="danger">
+                      <Button isIconOnly variant="bordered" color="warning">
+                        <FaShoppingCart className="h-6 w-6" />
+                      </Button>
+                    </Badge>
+                  </Link>
                 )}
                 {session ? (
                   <>
@@ -129,7 +135,7 @@ export const NavBar: React.FC = () => {
                             }
                           >
                             <h3 className="font-bold text-sm text-black line-clamp-1">
-                              Hello {session.user?.name}
+                              {session.user?.name}
                             </h3>
                           </Button>
                         </DropdownTrigger>
@@ -165,9 +171,7 @@ export const NavBar: React.FC = () => {
                         </DropdownTrigger>
                         <DropdownMenu disabledKeys={["greetings"]}>
                           <DropdownItem key="greetings">
-                            <span className="text-medium text-black">
-                              Hello {session.user?.name}
-                            </span>
+                            <span className="text-medium text-black">{session.user?.name}</span>
                           </DropdownItem>
                           <DropdownItem
                             onPress={() => router.push("/my-profile")}
@@ -219,7 +223,7 @@ export const NavBar: React.FC = () => {
                   </div>
                 </Link>
                 <Link href="/my-favorite">
-                  <div className="flex items-center px-5 py-2 gap-4 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
+                  <div className="flex justify-between items-center px-5 py-2 gap-4 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
                     <div className="flex gap-4 items-center">
                       <Heart />
                       <h3>Favorite</h3>
@@ -237,14 +241,14 @@ export const NavBar: React.FC = () => {
               </>
             ) : (
               <>
+                <Link href="/catalog">
+                  <h1 className="text-green-600 border-b-2 border-gray-100 px-5 py-4 hover:text-white hover:bg-green-600">
+                    Catalog
+                  </h1>
+                </Link>
                 <Link href="/login">
                   <h1 className="text-green-600 border-b-2 border-gray-100 px-5 py-4 hover:text-white hover:bg-green-600">
                     Login
-                  </h1>
-                </Link>
-                <Link href="/register">
-                  <h1 className="text-green-600 border-b-2 border-gray-100 px-5 py-4  hover:text-white hover:bg-green-600">
-                    Register
                   </h1>
                 </Link>
               </>
