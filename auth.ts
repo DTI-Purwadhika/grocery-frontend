@@ -37,6 +37,9 @@ export const authConfig: NextAuthConfig = {
               name: "",
               role: "",
               token: "",
+              picture: "",
+              referralCode: "",
+              isVerified: "",
             };
           }
 
@@ -48,6 +51,9 @@ export const authConfig: NextAuthConfig = {
             email: data.email,
             role: data.role,
             token: data.token,
+            picture: data.profilePicture,
+            referralCode: data.referralCode,
+            isVerified: data.isVerified,
           };
         } catch (error) {
           console.log(error);
@@ -69,7 +75,6 @@ export const authConfig: NextAuthConfig = {
                 name: profile?.name,
                 email: profile?.email,
                 role: "CUSTOMER",
-                profilePicture: profile?.picture,
               }),
             },
           );
@@ -83,6 +88,12 @@ export const authConfig: NextAuthConfig = {
 
           // @ts-ignore
           user.role = data.role;
+          // @ts-ignore
+          user.picture = profile?.picture;
+          // @ts-ignore
+          user.referralCode = data.referralCode;
+          // @ts-ignore
+          user.isVerified = data.isVerified;
 
           const useCookies = cookies();
           useCookies.set("Sid", data.token, { maxAge: 5 * 60 * 60 });
@@ -105,7 +116,7 @@ export const authConfig: NextAuthConfig = {
       return true;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         // @ts-ignore
         token.sub = user.email;
@@ -113,8 +124,13 @@ export const authConfig: NextAuthConfig = {
         token.role = user.role;
         // @ts-ignore
         token.token = user.token;
-
-        console.log(token);
+        // @ts-ignore
+        token.picture = user.picture;
+        token.provider = account?.provider;
+        // @ts-ignore
+        token.referralCode = user.referralCode;
+        // @ts-ignore
+        token.isVerified = user.isVerified;
       }
       return token;
     },
@@ -126,10 +142,29 @@ export const authConfig: NextAuthConfig = {
         // @ts-ignore
         session.user.role = token.role;
       }
+      if (token.picture) {
+        // @ts-ignore
+        session.user.picture = token.picture;
+      }
       if (token.token) {
         // @ts-ignore
         session.token = token.token;
+        // @ts-ignore
+        session.provider = token.provider;
       }
+      if (token.referralCode) {
+        // @ts-ignore
+        session.user.referralCode = token.referralCode;
+      } else {
+        // @ts-ignore
+        session.user.referralCode = null;
+      }
+
+      if (token.isVerified) {
+        // @ts-ignore
+        session.user.isVerified = token.isVerified;
+      }
+
       return session;
     },
   },

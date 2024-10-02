@@ -19,7 +19,7 @@ const DefaultContent = ({ title = "data", columns }: TitleType & ColumnType) => 
           <ColumnSelector columns={columns} />
           <Button
             as={Link}
-            className="bg-primary text-background"
+            className={`bg-primary text-background ${title === "users" && "hidden"}`}
             endContent={<Plus />}
             href={`${title}/create`}
           >

@@ -10,13 +10,13 @@ const CardCart = ({ cartId, item }: { cartId: number; item: CartItem }) => {
 
   return (
     <div className="grid grid-cols-7 gap-4">
-      <div className="col-span-2 bg-green-400 rounded-md">
+      <div className="col-span-2 rounded-md">
         <Image
           isZoomed
           alt={item.product.name}
           fallbackSrc="https://via.placeholder.com/500x500"
           height={100}
-          src={""}
+          src={item.product.images?.[0].url}
           width={100}
         />
       </div>

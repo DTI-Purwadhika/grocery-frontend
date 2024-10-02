@@ -5,7 +5,7 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Loading, ProductCard } from "@/components/elements";
 import { ProductType } from "@/shares/types/product";
 import { useParam } from "@/hooks/useParam";
-import { fetchData } from "@/services/fetchData";
+import { fetchData } from "@/services/dataService";
 
 import { BottomContent } from "../../Table/Content";
 

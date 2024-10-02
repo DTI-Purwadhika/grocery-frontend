@@ -8,3 +8,10 @@ export type FileType = {
   isUploading: boolean;
   images?: Product["images"][];
 };
+
+export type SingleFileType = {
+  file: File | null;
+  setFile: Dispatch<SetStateAction<File | null>>;
+  isUploading: boolean;
+  images?: Product["images"];
+};
