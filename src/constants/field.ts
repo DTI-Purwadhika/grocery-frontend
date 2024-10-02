@@ -205,3 +205,74 @@ export const StockReport = {
     },
   ],
 };
+
+export const Order = {
+  selected: ["status", "code", "totalPayment", "expiryDate", "createdAt", "order"],
+  columns: [
+    {
+      key: "code",
+      label: "Code",
+      sortable: true,
+    },
+    {
+      key: "user",
+      label: "User",
+      sortable: true,
+    },
+    {
+      key: "store",
+      label: "Store",
+      sortable: true,
+    },
+    {
+      key: "resiNumber",
+      label: "Resi Number",
+      sortable: true,
+    },
+    {
+      key: "totalAmount",
+      label: "Total Amount",
+      sortable: true,
+    },
+    {
+      key: "totalShipment",
+      label: "Total Shipment",
+      sortable: true,
+    },
+    {
+      key: "totalDiscount",
+      label: "Total Discount",
+      sortable: true,
+    },
+    {
+      key: "totalPayment",
+      label: "Total Payment",
+      sortable: true,
+    },
+    {
+      key: "expiryDate",
+      label: "Expiry Date",
+      sortable: true,
+    },
+    {
+      key: "createdAt",
+      label: "Purchase Date",
+      sortable: true,
+    },
+    {
+      key: "proofUrl",
+      label: "Proof URL",
+      sortable: true,
+    },
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+    },
+    {
+      key: "order",
+      label: "Action",
+      align: "end" as "end",
+    },
+  ],
+};

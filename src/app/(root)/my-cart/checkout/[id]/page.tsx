@@ -1,8 +1,8 @@
-import { ProductDetail } from "@/containers";
+import { Payment } from "@/containers";
 import { idType } from "@/shares/types";
 
 const page = ({ params: { id } }: idType) => {
-  return <ProductDetail id={id as number} />;
+  return <Payment id={id as string} />;
 };
 
 export default page;

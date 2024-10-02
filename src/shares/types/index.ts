@@ -6,12 +6,12 @@ export type ChildType = {
 
 export type FormType = {
   type: "create" | "update";
-  id?: number;
+  id?: number | string;
 };
 
 export type idType = {
   params: {
-    id: number;
+    id: number | string;
   };
 };
 

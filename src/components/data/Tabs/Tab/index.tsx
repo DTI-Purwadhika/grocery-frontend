@@ -1,6 +1,7 @@
 "use client";
 import { Key } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import React from "react";
 
 import { Loading, ProductCard } from "@/components/elements";
 import { ProductType } from "@/shares/types/product";
