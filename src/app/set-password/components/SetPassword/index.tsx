@@ -146,6 +146,7 @@ export const SetPasswordForm: React.FC = () => {
 
           <Modal
             backdrop="blur"
+            className="w-2/3 lg:w-max"
             classNames={{
               base: "bg-green-600",
               closeButton: "hover:bg-red-600 transition duration-300 text-white",
@@ -160,11 +161,11 @@ export const SetPasswordForm: React.FC = () => {
             <ModalContent className="text-white">
               {() => (
                 <>
-                  <ModalHeader className="flex justify-center font-bold text-2xl">
+                  <ModalHeader className="flex justify-center font-bold text-lg lg:text-xl">
                     Your Account Has Been Verified!
                   </ModalHeader>
                   <ModalBody className="flex items-center">
-                    <p className="font-semibold">
+                    <p className="font-semibold text-sm lg:text-medium">
                       Yay! Your account has been verified and you can close this modal to login.
                     </p>
                   </ModalBody>

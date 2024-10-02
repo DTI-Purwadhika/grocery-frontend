@@ -409,8 +409,8 @@ export const Profile: React.FC = () => {
                   Warning!
                 </ModalHeader>
                 <ModalBody className="flex items-center">
-                  <p className="font-semibold text-center text-sm lg:text-md">
-                    Are you sure you want to delete your profile? This action can't be undone!
+                  <p className="font-semibold text-center text-sm lg:text-medium">
+                    Are you sure you want to delete your profile? This action can&apos;t be undone!
                   </p>
                   <Button
                     type="button"
