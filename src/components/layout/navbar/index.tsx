@@ -5,7 +5,6 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useLogout } from "@/hooks/useLogout";
 import { Button } from "@nextui-org/button";
-import { useSession } from "next-auth/react";
 import { Apple } from "lucide-react";
 import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
@@ -14,9 +13,12 @@ import { Badge } from "@nextui-org/badge";
 import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Blocks, Heart, ShoppingCart } from "lucide-react";
+import { MdDashboard } from "react-icons/md";
 import { SearchBar } from "@/components/elements";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useCart } from "@/providers/CartProviders";
+import { useProfile } from "@/hooks/useProfile";
 
 export const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -26,9 +28,8 @@ export const NavBar: React.FC = () => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [openDropdownMenu, setOpenDropdownMenu] = useState<boolean>(false);
   const [openSmallDropdownMenu, setSmallOpenDropdownMenu] = useState<boolean>(false);
+  const { userProfile } = useProfile();
   const { cartCount } = useCart();
-
-  console.log("Session: ", session);
 
   const toggleMenu = () => {
     setOpenHamburgerMenu(!openHamburgerMenu);
@@ -107,7 +108,7 @@ export const NavBar: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-4 lg:gap-1 lg:space-x-4 space-x-1">
-                {!openHamburgerMenu && (
+                {!openHamburgerMenu && session && userProfile?.role === "CUSTOMER" && (
                   <Link href="my-cart">
                     <Badge content={cartCount} color="danger">
                       <Button isIconOnly variant="bordered" color="warning">
@@ -118,80 +119,171 @@ export const NavBar: React.FC = () => {
                 )}
                 {session ? (
                   <>
-                    <div className="hidden lg:block">
-                      <Dropdown isOpen={openDropdownMenu} onOpenChange={handleDropdown}>
-                        <DropdownTrigger>
-                          <Button
-                            className="hover:bg-gray-400"
-                            variant="light"
-                            // @ts-ignore
-                            startContent={<Avatar isBordered size="sm" src={session.user?.image} />}
-                            endContent={
-                              openDropdownMenu ? (
-                                <FaChevronUp height={40} width={40} className="text-black" />
-                              ) : (
-                                <FaChevronDown height={40} width={40} className="text-black" />
-                              )
-                            }
+                    {userProfile?.role === "CUSTOMER" ? (
+                      <>
+                        <div className="hidden lg:block">
+                          <Dropdown isOpen={openDropdownMenu} onOpenChange={handleDropdown}>
+                            <DropdownTrigger>
+                              <Button
+                                className="hover:bg-gray-400"
+                                variant="light"
+                                // @ts-ignore
+                                startContent={
+                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
+                                }
+                                endContent={
+                                  openDropdownMenu ? (
+                                    <FaChevronUp height={40} width={40} className="text-black" />
+                                  ) : (
+                                    <FaChevronDown height={40} width={40} className="text-black" />
+                                  )
+                                }
+                              >
+                                <h3 className="font-bold text-sm text-black line-clamp-1">
+                                  {userProfile?.name}
+                                </h3>
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu>
+                              <DropdownItem
+                                onPress={() => router.push("/my-profile")}
+                                startContent={<FaUser />}
+                              >
+                                Your Profile
+                              </DropdownItem>
+                              <DropdownItem
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
+                                className="text-red-500"
+                                color="danger"
+                                onPress={logout}
+                              >
+                                Logout
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
+                        <div className="lg:hidden">
+                          <Dropdown
+                            isOpen={openSmallDropdownMenu}
+                            onOpenChange={handleSmallDropdown}
                           >
-                            <h3 className="font-bold text-sm text-black line-clamp-1">
-                              {session.user?.name}
-                            </h3>
-                          </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu>
-                          <DropdownItem
-                            onPress={() => router.push("/my-profile")}
-                            startContent={<FaUser />}
+                            <DropdownTrigger>
+                              <Button isIconOnly className="hover:bg-gray-400" variant="light">
+                                <Avatar
+                                  isBordered
+                                  size="sm"
+                                  // @ts-ignore
+                                  src={userProfile?.profilePicture}
+                                />
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu disabledKeys={["name"]}>
+                              <DropdownItem key="name">
+                                <span className="text-medium text-black">{userProfile?.name}</span>
+                              </DropdownItem>
+                              <DropdownItem
+                                onPress={() => router.push("/my-profile")}
+                                key="profile"
+                                startContent={<FaUser />}
+                              >
+                                Your Profile
+                              </DropdownItem>
+                              <DropdownItem
+                                key="logout"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
+                                className="text-red-500"
+                                color="danger"
+                                onPress={logout}
+                              >
+                                Logout
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="hidden lg:block">
+                          <Dropdown isOpen={openDropdownMenu} onOpenChange={handleDropdown}>
+                            <DropdownTrigger>
+                              <Button
+                                className="hover:bg-gray-400"
+                                variant="light"
+                                // @ts-ignore
+                                startContent={
+                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
+                                }
+                                endContent={
+                                  openDropdownMenu ? (
+                                    <FaChevronUp height={40} width={40} className="text-black" />
+                                  ) : (
+                                    <FaChevronDown height={40} width={40} className="text-black" />
+                                  )
+                                }
+                              >
+                                <h3 className="font-bold text-sm text-black line-clamp-1">
+                                  {userProfile?.name}
+                                </h3>
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu>
+                              <DropdownItem
+                                onPress={() => router.push("/dashboard")}
+                                startContent={<MdDashboard />}
+                              >
+                                Dashboard
+                              </DropdownItem>
+                              <DropdownItem
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
+                                className="text-red-500"
+                                color="danger"
+                                onPress={logout}
+                              >
+                                Logout
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
+                        <div className="lg:hidden">
+                          <Dropdown
+                            isOpen={openSmallDropdownMenu}
+                            onOpenChange={handleSmallDropdown}
                           >
-                            Your Profile
-                          </DropdownItem>
-                          <DropdownItem
-                            startContent={<TbLogout className="w-[20px] h-[20px]" />}
-                            className="text-red-500"
-                            color="danger"
-                            onPress={logout}
-                          >
-                            Logout
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                    <div className="lg:hidden">
-                      <Dropdown isOpen={openSmallDropdownMenu} onOpenChange={handleSmallDropdown}>
-                        <DropdownTrigger>
-                          <Button isIconOnly className="hover:bg-gray-400" variant="light">
-                            <Avatar
-                              isBordered
-                              size="sm"
-                              // @ts-ignore
-                              src={session.user?.image}
-                            />
-                          </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu disabledKeys={["greetings"]}>
-                          <DropdownItem key="greetings">
-                            <span className="text-medium text-black">{session.user?.name}</span>
-                          </DropdownItem>
-                          <DropdownItem
-                            onPress={() => router.push("/my-profile")}
-                            key="profile"
-                            startContent={<FaUser />}
-                          >
-                            Your Profile
-                          </DropdownItem>
-                          <DropdownItem
-                            key="logout"
-                            startContent={<TbLogout className="w-[20px] h-[20px]" />}
-                            className="text-red-500"
-                            color="danger"
-                            onPress={logout}
-                          >
-                            Logout
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
+                            <DropdownTrigger>
+                              <Button isIconOnly className="hover:bg-gray-400" variant="light">
+                                <Avatar
+                                  isBordered
+                                  size="sm"
+                                  // @ts-ignore
+                                  src={userProfile?.profilePicture}
+                                />
+                              </Button>
+                            </DropdownTrigger>
+                            <DropdownMenu disabledKeys={["name"]}>
+                              <DropdownItem key="name">
+                                <span className="text-medium text-black">{userProfile?.name}</span>
+                              </DropdownItem>
+                              <DropdownItem
+                                onPress={() => router.push("/dashboard")}
+                                key="profile"
+                                startContent={<MdDashboard />}
+                              >
+                                Dashboard
+                              </DropdownItem>
+                              <DropdownItem
+                                key="logout"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
+                                className="text-red-500"
+                                color="danger"
+                                onPress={logout}
+                              >
+                                Logout
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </div>
+                      </>
+                    )}
                   </>
                 ) : (
                   <div className="hidden lg:block">
@@ -222,22 +314,26 @@ export const NavBar: React.FC = () => {
                     </div>
                   </div>
                 </Link>
-                <Link href="/my-favorite">
-                  <div className="flex justify-between items-center px-5 py-2 gap-4 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
-                    <div className="flex gap-4 items-center">
-                      <Heart />
-                      <h3>Favorite</h3>
-                    </div>
-                  </div>
-                </Link>
-                <Link href="/my-cart">
-                  <div className="flex justify-between items-center px-5 py-2 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
-                    <div className="flex gap-4 items-center">
-                      <ShoppingCart />
-                      <h3>Cart</h3>
-                    </div>
-                  </div>
-                </Link>
+                {userProfile?.role === "CUSTOMER" && (
+                  <>
+                    <Link href="/my-favorite">
+                      <div className="flex justify-between items-center px-5 py-2 gap-4 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
+                        <div className="flex gap-4 items-center">
+                          <Heart />
+                          <h3>Favorite</h3>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link href="/my-cart">
+                      <div className="flex justify-between items-center px-5 py-2 border-b-2 border-gray-100 hover:bg-green-600 hover:text-white">
+                        <div className="flex gap-4 items-center">
+                          <ShoppingCart />
+                          <h3>Cart</h3>
+                        </div>
+                      </div>
+                    </Link>
+                  </>
+                )}
               </>
             ) : (
               <>
