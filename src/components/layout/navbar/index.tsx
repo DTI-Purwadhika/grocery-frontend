@@ -69,7 +69,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 text-white bg-white">
+      <header className="fixed top-0 w-full z-50 text-white bg-gray-100">
         <div className="relative">
           <div className="relative z-40 text-white bg-no-repeat bg-cover py-4">
             <div className="flex px-4 items-center justify-between lg:px-10">

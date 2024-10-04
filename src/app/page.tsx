@@ -4,7 +4,7 @@ import { Hero } from "@/components/layout/hero";
 import { NavBar } from "@/components/layout/navbar";
 
 const Home = () => (
-  <main className="pt-32 bg-sky-200">
+  <main className="pt-24">
     <NavBar />
     <Hero />
     <FooterHome />
