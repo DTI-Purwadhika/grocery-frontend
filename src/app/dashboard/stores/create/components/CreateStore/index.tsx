@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useRef } from "react";
+import React, { Key, useCallback, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Input, Textarea } from "@nextui-org/input";
@@ -9,10 +9,13 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { getCookie } from "cookies-next";
 import { toast } from "sonner";
+import { City } from "@/constants/city";
+import useCities from "@/hooks/useCities";
 
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -25,6 +28,7 @@ L.Icon.Default.mergeOptions({
 type storeData = {
   name: string;
   address: string;
+  cityId: number;
   postcode: string;
   lat: number;
   lng: number;
@@ -84,7 +88,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
 
 export const CreateStoreForm: React.FC = () => {
   const cookieValue = getCookie("Sid");
-  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
+  const cities: City[] = useCities();
   const [position, setPosition] = useState<LatLng>({ lat: -7.257472, lng: 112.75209 });
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const {
@@ -99,6 +103,7 @@ export const CreateStoreForm: React.FC = () => {
       name: "",
       address: "",
       postcode: "",
+      cityId: 0,
       lat: position.lat,
       lng: position.lng,
     },
@@ -139,26 +144,28 @@ export const CreateStoreForm: React.FC = () => {
   );
 
   const onSubmit = async (data: storeData) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/create`, {
-        method: "POST",
-        body: JSON.stringify(data),
-        credentials: "include",
-        headers: {
-          Authorization: `Bearer ${cookieValue}`,
-          "Content-Type": "application/json",
-        },
-      });
+    // try {
+    //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/create`, {
+    //     method: "POST",
+    //     body: JSON.stringify(data),
+    //     credentials: "include",
+    //     headers: {
+    //       Authorization: `Bearer ${cookieValue}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
 
-      if (!response.ok) {
-        throw new Error("Failed to create a store");
-      }
-      reset();
-      toast.success("Store created successfully", { position: "top-center" });
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to create a store", { position: "top-center" });
-    }
+    //   if (!response.ok) {
+    //     throw new Error("Failed to create a store");
+    //   }
+    //   reset();
+    //   toast.success("Store created successfully", { position: "top-center" });
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error("Failed to create a store", { position: "top-center" });
+    // }
+
+    reset();
   };
 
   return (
@@ -238,6 +245,17 @@ export const CreateStoreForm: React.FC = () => {
                   ))}
                 </ul>
               )}
+              <Autocomplete
+                defaultItems={cities}
+                placeholder="Search a city"
+                onSelectionChange={(selected) => {
+                  setValue("cityId", Number(selected?.toString()));
+                }}
+                label="Select a city"
+                labelPlacement="outside"
+              >
+                {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
+              </Autocomplete>
             </div>
             <Button type="submit" className="w-full bg-green-600 text-white font-semibold">
               Save

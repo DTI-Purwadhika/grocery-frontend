@@ -184,3 +184,34 @@ export const User = {
     },
   ],
 };
+
+export const Store = {
+  selected: ["name", "address", "postcode", "latitude", "longitude"],
+  columns: [
+    {
+      key: "name",
+      label: "Name",
+      sortable: true,
+    },
+    {
+      key: "address",
+      label: "Address",
+      sortable: true,
+    },
+    {
+      key: "postcode",
+      label: "Postcode",
+      sortable: true,
+    },
+    {
+      key: "latitude",
+      label: "Latitude",
+      sortable: true,
+    },
+    {
+      key: "longitude",
+      label: "Longitude",
+      sortable: true,
+    },
+  ],
+};
