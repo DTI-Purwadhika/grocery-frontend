@@ -186,7 +186,7 @@ export const User = {
 };
 
 export const Store = {
-  selected: ["name", "address", "postcode", "latitude", "longitude"],
+  selected: ["name", "address", "city", "postcode", "latitude", "longitude"],
   columns: [
     {
       key: "name",
@@ -196,6 +196,11 @@ export const Store = {
     {
       key: "address",
       label: "Address",
+      sortable: true,
+    },
+    {
+      key: "city",
+      label: "City",
       sortable: true,
     },
     {
