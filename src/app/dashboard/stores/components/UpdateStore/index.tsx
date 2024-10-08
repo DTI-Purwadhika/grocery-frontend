@@ -11,6 +11,7 @@ import { getCookie } from "cookies-next";
 import { toast } from "sonner";
 import { City } from "@/constants/city";
 import useCities from "@/hooks/useCities";
+import { useRouter } from "next/navigation";
 
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -90,6 +91,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
 
 export const UpdateStoreForm: React.FC = () => {
   const { id } = useParams();
+  const router = useRouter();
   const cookieValue = getCookie("Sid");
   const cities: City[] = useCities();
   const [position, setPosition] = useState<LatLng>({ lat: -7.257472, lng: 112.75209 });
@@ -166,7 +168,10 @@ export const UpdateStoreForm: React.FC = () => {
         throw new Error("Failed to update store");
       }
       reset();
-      toast.success("Store updated successfully", { position: "top-center" });
+      toast.success("Store updated successfully", { position: "top-center", duration: 3000 });
+      setTimeout(() => {
+        router.push("/dashboard/stores");
+      }, 3000);
     } catch (error) {
       console.error(error);
       toast.error("Failed to update store", { position: "top-center" });
