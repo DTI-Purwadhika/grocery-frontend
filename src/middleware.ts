@@ -23,9 +23,9 @@ export default auth( async (request : NextRequest) => {
   const path = reqUrl.pathname
 
     const session = await auth();
-    const publicRoutes = ['/', '/login', '/register', '/catalog', '/catalog/:id','/reset-password', '/reset-password-request', '/set-password',];
+    const publicRoutes = ['/', '/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
 
-    if (publicRoutes.includes(path)) {
+    if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
         return NextResponse.next()
       }
 
