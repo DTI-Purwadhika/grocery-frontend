@@ -70,9 +70,9 @@ export const NavBar: React.FC = () => {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 text-white bg-white">
+      <header className="fixed top-0 w-full z-50">
         <div className="relative">
-          <div className="relative z-40 text-white bg-no-repeat bg-cover py-4">
+          <div className="relative z-40 bg-gray-100 bg-no-repeat bg-cover py-4">
             <div className="flex px-4 items-center justify-between lg:px-10">
               <div className="flex items-center gap-2">
                 <button
@@ -300,7 +300,13 @@ export const NavBar: React.FC = () => {
               </div>
             </div>
           </div>
-
+          <div
+            className={`text-black absolute w-full px-4 py-2 items-center justify-center bg-white shadow-md transition-all duration-300 ease-in-out
+                         ${isDesktop ? "-translate-y-full" : "-translate-y-0"}
+                         ${isDesktop ? "z-20" : "z-30"}`}
+          >
+            <SearchBar title="product" />
+          </div>
           <div
             className={`absolute z-30 text-2xl text-green-600 font-bold w-screen left-[-100%] bg-white transition-transform duration-500 ease-in-out ${openHamburgerMenu ? "translate-x-full h-screen" : "-translate-x-full h-screen"}`}
           >
