@@ -16,6 +16,8 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+import { useStore } from "@/hooks/useStore";
+import { useParams } from "next/navigation";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -26,12 +28,12 @@ L.Icon.Default.mergeOptions({
 });
 
 type storeData = {
-  name: string;
-  address: string;
+  name: string | undefined;
+  address: string | undefined;
   cityId: number;
-  postcode: string;
-  lat: number;
-  lng: number;
+  postcode: string | undefined;
+  lat: number | undefined;
+  lng: number | undefined;
 };
 
 interface Suggestion {
@@ -86,11 +88,13 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
   return <Marker draggable={true} position={position} ref={markerRef} />;
 };
 
-export const CreateStoreForm: React.FC = () => {
+export const UpdateStoreForm: React.FC = () => {
+  const { id } = useParams();
   const cookieValue = getCookie("Sid");
   const cities: City[] = useCities();
   const [position, setPosition] = useState<LatLng>({ lat: -7.257472, lng: 112.75209 });
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const { store } = useStore(id);
   const {
     control,
     reset,
@@ -111,9 +115,12 @@ export const CreateStoreForm: React.FC = () => {
   const postcode = watch("postcode");
 
   useEffect(() => {
-    setValue("lat", position.lat);
-    setValue("lng", position.lng);
-  }, [position, setValue]);
+    setValue("name", store?.name);
+    setValue("address", store?.address);
+    setValue("postcode", store?.postcode);
+    setValue("lat", store?.lat);
+    setValue("lng", store?.lng);
+  }, [store, setValue]);
 
   const handlePostcodeChange = async (postcode: string) => {
     if (postcode.length > 2) {
@@ -145,8 +152,8 @@ export const CreateStoreForm: React.FC = () => {
 
   const onSubmit = async (data: storeData) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/create`, {
-        method: "POST",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/${id}`, {
+        method: "PUT",
         body: JSON.stringify(data),
         credentials: "include",
         headers: {
@@ -156,20 +163,20 @@ export const CreateStoreForm: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create a store");
+        throw new Error("Failed to update store");
       }
       reset();
-      toast.success("Store created successfully", { position: "top-center" });
+      toast.success("Store updated successfully", { position: "top-center" });
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create a store", { position: "top-center" });
+      toast.error("Failed to update store", { position: "top-center" });
     }
   };
 
   return (
     <>
       <div className="p-4">
-        <h2 className="text-xl font-bold text-center">Create a Store</h2>
+        <h2 className="text-xl font-bold text-center">Update Store Details</h2>
         <div className="flex mt-3 gap-4 flex-col lg:flex-row">
           <form onSubmit={handleSubmit(onSubmit)} className="gap-6 flex flex-col w-full">
             <div className="flex flex-col gap-2 lg:gap-4">
