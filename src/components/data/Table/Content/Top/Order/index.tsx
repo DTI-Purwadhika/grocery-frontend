@@ -1,18 +1,17 @@
 import { useMemo } from "react";
 
 import { PageSize, SearchBar } from "@/components/elements";
-import { TitleType } from "@/shares/types";
 
 import ColumnSelector from "../ColumnSelector";
 import { ColumnType } from "../type";
 
-const OrderContent = ({ title = "data", columns }: TitleType & ColumnType) => {
+const OrderContent = ({ columns }: ColumnType) => {
   const topContent = useMemo(
     () => (
-      <div className="grid grid-cols-3 gap-8 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-end">
         <SearchBar title={"order code"} />
-        <div className="flex flex-row justify-between">
-          <PageSize title={title} />
+        <div className="flex flex-row justify-end gap-4">
+          <PageSize />
           <ColumnSelector columns={columns} />
         </div>
       </div>

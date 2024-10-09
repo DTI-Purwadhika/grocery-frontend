@@ -115,21 +115,21 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     <Card>
       <CardBody>
         <form className="flex flex-col gap-4 p-4 items-start" onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-6 gap-4 w-full">
-            <Card className="col-span-2" shadow="sm">
-              <CardBody className="flex gap-8 p-6 aspect-[3/4]">
+          <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 w-full">
+            <Card className="lg:col-span-2" shadow="sm">
+              <CardBody className="flex gap-8 p-6 lg:aspect-[3/4]">
                 <h2 className="text-2xl font-bold">{toCapital(type)} Product</h2>
                 <p className="text-sm">
                   {toCapital(type)} a new product by filling in the fields below.
                 </p>
               </CardBody>
             </Card>
-            <Card className="col-span-4" shadow="sm">
-              <CardBody className="flex gap-4 p-4">
+            <Card className="lg:col-span-4" shadow="sm">
+              <CardBody className="flex gap-4 p-4 aspect-square lg:aspect-video">
                 <FileUploader files={files} isUploading={uploading} setFiles={setFiles} />
               </CardBody>
             </Card>
-            <Card className="col-span-3" shadow="sm">
+            <Card className="lg:col-span-3" shadow="sm">
               <CardBody className="flex gap-4 p-4">
                 <Controller
                   control={control}
@@ -172,7 +172,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
               </CardBody>
             </Card>
 
-            <Card className="col-span-3 h-fit" shadow="sm">
+            <Card className="lg:col-span-3 h-fit" shadow="sm">
               <CardBody className="flex gap-4 p-4">
                 <Controller
                   control={control}
@@ -212,7 +212,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                 />
               </CardBody>
             </Card>
-            <Card className="col-span-6 h-fit" shadow="sm">
+            <Card className="lg:col-span-6 h-fit" shadow="sm">
               <CardBody className="flex gap-4 p-4">
                 <h3 className="font-semibold text-lg">
                   {toCapital(currentName || "product")} Inventory

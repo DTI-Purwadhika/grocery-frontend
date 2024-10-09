@@ -9,7 +9,7 @@ import { useParam } from "@/hooks/useParam";
 
 import { SelectorType } from "./type";
 
-const StoreSelect = ({ source = "" }: SelectorType) => {
+const StoreSelect = ({ source = "", noLabel = false }: SelectorType) => {
   const { getQueryParam, setQueryParam } = useParam();
   const [isOpen, setIsOpen] = useState(false);
   const [currentKeyword, setCurrentKeyword] = useState(getQueryParam(source) || "");
@@ -31,7 +31,7 @@ const StoreSelect = ({ source = "" }: SelectorType) => {
       className="w-full"
       defaultItems={collectData}
       isLoading={isLoading}
-      label={toCapital(source)}
+      label={noLabel ? "" : toCapital(source)}
       labelPlacement="outside"
       listboxProps={{
         emptyContent: "Data not found",

@@ -17,7 +17,12 @@ const LoadingInput = ({ source }: SelectorType) => (
 
 const StoreSelectWrapper = ({ source = "" }: SelectorType) => (
   <Suspense fallback={<LoadingInput source={source} />}>
-    <StoreSelect source={source} />
+    <div className="hidden md:flex">
+      <StoreSelect source={source} />
+    </div>
+    <div className="md:hidden">
+      <StoreSelect noLabel={true} source={source} />
+    </div>
   </Suspense>
 );
 

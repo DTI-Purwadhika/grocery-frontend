@@ -1,5 +1,5 @@
 export const Category = {
-  selected: ["name", "description", "totalProduct", "actions"],
+  selected: ["name", "totalProduct", "actions"],
   columns: [
     {
       key: "name",

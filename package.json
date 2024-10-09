@@ -12,8 +12,8 @@
     "check-test": "jest",
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
-    "test": "npm run check-format && npm run lint && npm run check-types && npm run check-test && npm run build",
-    "fix": "npm run lint --fix && npm run format",
+    "test": "pnpm check-format && pnpm lint && pnpm check-types && pnpm check-test && pnpm build",
+    "fix": "pnpm lint --fix && pnpm format",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -32,6 +32,7 @@
     "@nextui-org/link": "^2.0.34",
     "@nextui-org/listbox": "^2.1.25",
     "@nextui-org/modal": "^2.0.39",
+    "@nextui-org/navbar": "^2.0.37",
     "@nextui-org/pagination": "^2.0.35",
     "@nextui-org/scroll-shadow": "^2.1.19",
     "@nextui-org/select": "^2.2.7",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.6.1",
+    "@faker-js/faker": "^9.0.3",
     "@storybook/addon-essentials": "^8.2.6",
     "@storybook/addon-interactions": "^8.2.6",
     "@storybook/addon-links": "^8.2.6",

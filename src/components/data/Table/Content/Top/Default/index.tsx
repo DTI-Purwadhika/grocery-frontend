@@ -12,10 +12,10 @@ import ColumnSelector from "../ColumnSelector";
 const DefaultContent = ({ title = "data", columns }: TitleType & ColumnType) => {
   const topContent = useMemo(
     () => (
-      <div className="grid grid-cols-2 gap-8 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-end">
         <SearchBar title={title} />
-        <div className="flex flex-row justify-end gap-4">
-          <PageSize title={title} />
+        <div className="flex flex-row justify-between md:justify-end gap-4">
+          <PageSize />
           <ColumnSelector columns={columns} />
           <Button
             as={Link}

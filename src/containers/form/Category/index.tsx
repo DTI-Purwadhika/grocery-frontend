@@ -64,7 +64,7 @@ const CategoryForm = ({ type = "create", id }: FormType) => {
   return (
     <form id={type + "category"} onSubmit={handleSubmit(onSubmit)}>
       <Card>
-        <CardBody className="w-full gap-4 p-7 grid grid-cols-3">
+        <CardBody className="w-full gap-4 p-7 grid grid-cols-1 lg:grid-cols-3">
           <Card shadow="sm">
             <CardBody className="flex gap-8 p-6 ">
               <h2 className="text-2xl font-bold">{toCapital(type)} Category</h2>

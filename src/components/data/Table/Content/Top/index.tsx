@@ -16,7 +16,7 @@ const TopContent = ({ title = "data", columns }: TitleType & ColumnType) => {
         {title === "inventory" ? (
           <StockContent columns={columns} title={title} />
         ) : title === "checkouts" ? (
-          <OrderContent columns={columns} title={title} />
+          <OrderContent columns={columns} />
         ) : (
           <DefaultContent columns={columns} title={title} />
         )}

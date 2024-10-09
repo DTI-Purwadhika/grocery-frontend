@@ -3,11 +3,9 @@
 import { Input } from "@nextui-org/input";
 import { useEffect, useState } from "react";
 
-import { toCapital } from "@/services/formatter";
 import { useParam } from "@/hooks/useParam";
-import { TitleType } from "@/shares/types";
 
-const PageSize = ({ title }: TitleType) => {
+const PageSize = () => {
   const [size, setSize] = useState("10");
   const { setQueryParam, getQueryParam } = useParam();
 
@@ -32,8 +30,11 @@ const PageSize = ({ title }: TitleType) => {
 
   return (
     <Input
-      className="w-32"
-      label={`${toCapital(title)} per page`}
+      className="w-32 hidden md:flex"
+      classNames={{
+        label: "text-2xs",
+      }}
+      label={`Data per page`}
       labelPlacement="outside-left"
       min={1}
       size="sm"

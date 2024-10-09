@@ -10,11 +10,11 @@ import { ColumnType } from "../type";
 const StockContent = ({ title = "data", columns }: TitleType & ColumnType) => {
   const topContent = useMemo(
     () => (
-      <div className="grid grid-cols-3 gap-8 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 items-end">
         <SearchBar title={title} />
         <DataSelect source="stores" />
         <div className="flex flex-row justify-between">
-          <PageSize title={title} />
+          <PageSize />
           <ColumnSelector columns={columns} />
         </div>
       </div>
