@@ -11,9 +11,12 @@ export const useAutoComplete = ({ title = "", keyword = "" }) => {
   const size = 8;
 
   const fetchData = async ({ pageParam = 0 }) => {
-    const endpoint = `${title}?keyword=${keyword}&size=${size}&page=${pageParam}`;
-    const { content, totalData, resultData } = await restService(endpoint);
-    const data = title === "stores" ? resultData : content;
+    let endpoint = `${title}?size=${size}&page=${pageParam}`;
+
+    if (keyword) endpoint += `&keyword=${keyword}`;
+    const { content, totalData } = await restService(endpoint);
+
+    const data = content;
 
     return {
       data,
