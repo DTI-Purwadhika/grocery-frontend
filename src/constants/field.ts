@@ -276,3 +276,43 @@ export const Order = {
     },
   ],
 };
+
+export const Store = {
+  selected: ["name", "address", "city", "postcode", "lat", "lng", "actions"],
+  columns: [
+    {
+      key: "name",
+      label: "Name",
+      sortable: true,
+    },
+    {
+      key: "address",
+      label: "Address",
+      sortable: true,
+    },
+    {
+      key: "city",
+      label: "City",
+      sortable: true,
+    },
+    {
+      key: "postcode",
+      label: "Postcode",
+      sortable: true,
+    },
+    {
+      key: "lat",
+      label: "Latitude",
+      sortable: true,
+    },
+    {
+      key: "lng",
+      label: "Longitude",
+      sortable: true,
+    },
+    {
+      key: "actions",
+      label: "Actions ",
+    },
+  ],
+};

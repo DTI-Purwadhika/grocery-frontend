@@ -1,13 +1,19 @@
 "use server";
 import { API_URL } from "@/constants";
+import { cookies } from "next/headers";
 
 // * data?: any, karena kita tidak tahu bentuk data yang akan kita terima
 const restService = async (endpoint: string, method: string = "GET", data?: any) => {
+  const cookieStore = cookies();
+  const token = cookieStore.get("Sid");
+  
   try {
     const response = await fetch(`${API_URL}/${endpoint}`, {
       method: method,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
       },
       body: JSON.stringify(data),
     });
