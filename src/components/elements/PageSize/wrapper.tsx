@@ -1,8 +1,6 @@
 import { Suspense } from "react";
 import { Input } from "@nextui-org/input";
 
-import { TitleType } from "@/shares/types";
-
 import PageSize from ".";
 
 const LoadingInput = () => (
@@ -15,9 +13,9 @@ const LoadingInput = () => (
   />
 );
 
-const SizeWrapper = ({ title }: TitleType) => (
+const SizeWrapper = () => (
   <Suspense fallback={<LoadingInput />}>
-    <PageSize title={title} />
+    <PageSize />
   </Suspense>
 );
 

@@ -7,3 +7,4 @@ export { default as PaymentFailed } from "./Checkout/Failed";
 export { default as Payment } from "./Checkout/Payment";
 export { default as PurchaseList } from "./Purchase";
 export { default as Admin } from "./Admin";
+export { default as Report } from "./Report";

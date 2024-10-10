@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import { Button } from "@nextui-org/button";
+import React from "react";
 
 import { Datatabs } from "@/components/data";
 import { SearchBar } from "@/components/elements";

@@ -23,15 +23,13 @@ const ColumnSelectorCom = ({ columns }: ColumnType) => {
 
   const dropdownItem = useMemo(() => {
     return columns.map((column) => (
-      <DropdownItem key={column.key} className="capitalize">
-        {toCapital(column.label)}
-      </DropdownItem>
+      <DropdownItem key={column.key}>{toCapital(column.label)}</DropdownItem>
     ));
   }, [columns]);
 
   return (
     <Dropdown>
-      <DropdownTrigger className="hidden sm:flex">
+      <DropdownTrigger>
         <Button endContent={<ChevronDown className="text-small" />} variant="flat">
           Columns
         </Button>

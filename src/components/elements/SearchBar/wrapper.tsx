@@ -17,7 +17,12 @@ const LoadingInput = () => (
 
 const SearchWrapper = ({ title, noLabel = false }: SearchBarType) => (
   <Suspense fallback={<LoadingInput />}>
-    <SearchBar noLabel={noLabel} title={title} />
+    <div className="hidden md:block">
+      <SearchBar noLabel={noLabel} title={title} />
+    </div>
+    <div className="block md:hidden">
+      <SearchBar noLabel={true} title={title} />
+    </div>
   </Suspense>
 );
 

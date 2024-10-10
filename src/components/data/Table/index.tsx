@@ -89,60 +89,59 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   };
 
   return (
-    <Table
-      removeWrapper
-      aria-label={`Data of ${title}`}
-      bottomContent={
-        data?.totalPage > 0 ? (
-          <BottomContent
-            selectedSize={selected.size}
-            totalData={data?.totalData}
-            totalPages={data?.totalPage}
-          />
-        ) : null
-      }
-      bottomContentPlacement="outside"
-      classNames={{
-        table: "min-h-[400px]",
-      }}
-      color={"primary"}
-      isHeaderSticky={true}
-      selectedKeys={selected}
-      selectionMode="multiple"
-      shadow="md"
-      sortDescriptor={sort}
-      topContent={<TopContent columns={columns} title={title} />}
-      topContentPlacement="outside"
-      onSelectionChange={(keys) => handleSelectionChange(keys)}
-      onSortChange={(sortDescriptor) => {
-        handleSortChange(sortDescriptor);
-      }}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.key}
-            align={column.align}
-            allowsSorting={column.sortable && true}
-            id={column.key}
-          >
-            {column?.label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        emptyContent={`No ${title} to display.`}
-        isLoading={isLoading}
-        items={data?.content || []}
-        loadingContent={<Loading title={title} />}
+    <div className="w-full flex flex-col gap-4">
+      <TopContent columns={columns} title={title} />
+      <Table
+        isHeaderSticky
+        removeWrapper
+        aria-label={`Data of ${title}`}
+        classNames={{
+          base: "overflow-scroll",
+          table: "min-h-[400px]",
+        }}
+        color={"primary"}
+        selectedKeys={selected}
+        selectionMode="multiple"
+        shadow="md"
+        sortDescriptor={sort}
+        onSelectionChange={(keys) => handleSelectionChange(keys)}
+        onSortChange={(sortDescriptor) => {
+          handleSortChange(sortDescriptor);
+        }}
       >
-        {(item: { id: string }) => (
-          <TableRow key={item.id} id={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.key}
+              align={column.align}
+              allowsSorting={column.sortable && true}
+              id={column.key}
+            >
+              {column?.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          emptyContent={`No ${title} to display.`}
+          isLoading={isLoading}
+          items={data?.content || []}
+          loadingContent={<Loading title={title} />}
+        >
+          {(item: { id: string }) => (
+            <TableRow key={item.id} id={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {data?.totalPage > 0 ? (
+        <BottomContent
+          selectedSize={selected.size}
+          totalData={data?.totalData}
+          totalPages={data?.totalPage}
+        />
+      ) : null}
+    </div>
   );
 };
 

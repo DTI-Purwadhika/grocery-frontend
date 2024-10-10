@@ -1,4 +1,4 @@
-import { Category, Product, Admin } from "@/constants/entity";
+import { Category, Product, Admin, Order } from "@/constants/entity";
 import restService from "@/services/restService";
 
 export const fetchData = async ({
@@ -26,7 +26,10 @@ export const fetchData = async ({
   };
 };
 
-export const fetchById = async (title: string, id: number): Promise<Category | Product | Admin> => {
+export const fetchById = async (
+  title: string,
+  id: number | string,
+): Promise<Category | Product | Admin | Order> => {
   const { resultData } = await restService(`${title}/${id}`, "GET");
 
   return resultData;
@@ -35,8 +38,8 @@ export const fetchById = async (title: string, id: number): Promise<Category | P
 export const saveData = async (
   title: string,
   type: "create" | "update",
-  id: number | undefined,
-  data: Category | Product | Admin,
+  id: number | string | undefined,
+  data: Category | Product | Admin | Order,
 ) => {
   const url = type === "update" ? `${title}/${id}` : `${title}`;
   const method = type === "update" ? "PUT" : "POST";

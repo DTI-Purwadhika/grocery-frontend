@@ -33,3 +33,36 @@ export type Admin = {
   storeId: number;
   isVerified?: boolean;
 };
+
+export type StockReport = {
+  id: number;
+  totalAdditions: number;
+  totalDeductions: number;
+  finalStock: number;
+};
+
+export type Order = {
+  id: number;
+  status: string;
+  code: string;
+  invoiceUrl: string;
+  proofUrl?: string;
+  resiNumber?: string;
+  description?: string;
+  totalAmount: number;
+  totalShipment: number;
+  totalDiscount: number;
+  totalPayment: number;
+  expiryDate: string;
+  createdAt: string;
+  items: OrderDetail[];
+};
+
+export type OrderDetail = {
+  id: number;
+  name: string;
+  image?: string | null;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+};

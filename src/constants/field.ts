@@ -1,5 +1,5 @@
 export const Category = {
-  selected: ["name", "description", "totalProduct", "actions"],
+  selected: ["name", "totalProduct", "actions"],
   columns: [
     {
       key: "name",
@@ -185,6 +185,98 @@ export const User = {
   ],
 };
 
+export const StockReport = {
+  selected: ["totalAdditions", "totalDeductions", "finalStock"],
+  columns: [
+    {
+      key: "totalAdditions",
+      label: "Inbound",
+      sortable: true,
+    },
+    {
+      key: "totalDeductions",
+      label: "Outbound",
+      sortable: true,
+    },
+    {
+      key: "finalStock",
+      label: "Current Stock",
+      sortable: true,
+    },
+  ],
+};
+
+export const Order = {
+  selected: ["status", "code", "totalPayment", "expiryDate", "createdAt", "order"],
+  columns: [
+    {
+      key: "code",
+      label: "Code",
+      sortable: true,
+    },
+    {
+      key: "user",
+      label: "User",
+      sortable: true,
+    },
+    {
+      key: "store",
+      label: "Store",
+      sortable: true,
+    },
+    {
+      key: "resiNumber",
+      label: "Resi Number",
+      sortable: true,
+    },
+    {
+      key: "totalAmount",
+      label: "Total Amount",
+      sortable: true,
+    },
+    {
+      key: "totalShipment",
+      label: "Total Shipment",
+      sortable: true,
+    },
+    {
+      key: "totalDiscount",
+      label: "Total Discount",
+      sortable: true,
+    },
+    {
+      key: "totalPayment",
+      label: "Total Payment",
+      sortable: true,
+    },
+    {
+      key: "expiryDate",
+      label: "Expiry Date",
+      sortable: true,
+    },
+    {
+      key: "createdAt",
+      label: "Purchase Date",
+      sortable: true,
+    },
+    {
+      key: "proofUrl",
+      label: "Proof URL",
+      sortable: true,
+    },
+    {
+      key: "status",
+      label: "Status",
+      sortable: true,
+    },
+    {
+      key: "order",
+      label: "Action",
+      align: "end" as "end",
+    },
+  ],
+};
+
 export const Store = {
   selected: ["name", "address", "city", "postcode", "lat", "lng", "actions"],
   columns: [
@@ -221,7 +313,6 @@ export const Store = {
     {
       key: "actions",
       label: "Actions ",
-      align: "end" as "end",
     },
   ],
 };

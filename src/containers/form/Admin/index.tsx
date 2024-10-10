@@ -101,7 +101,7 @@ const AdminForm = ({ type = "create", id }: FormType) => {
   return (
     <form id={type + "admin"} onSubmit={handleSubmit(onSubmit)}>
       <Card>
-        <CardBody className="w-full gap-4 p-7 grid grid-cols-3">
+        <CardBody className="w-full gap-4 p-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card shadow="sm">
             <CardBody className="flex gap-8 p-6 ">
               <h2 className="text-2xl font-bold">{toCapital(type)} Admin</h2>
@@ -210,8 +210,8 @@ const AdminForm = ({ type = "create", id }: FormType) => {
               </CardBody>
             </Card>
           </div>
-          <Card shadow="sm">
-            <CardBody className="flex gap-4 p-4">
+          <Card className="md:col-span-2 lg:col-span-1" shadow="sm">
+            <CardBody className="flex gap-4 p-4 aspect-square md:aspect-video lg:aspect-square">
               <SingleFileUploader file={file} isUploading={uploading} setFile={setFile} />
             </CardBody>
           </Card>
