@@ -14,14 +14,15 @@ import {
 import { Pin, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FaTrash } from "react-icons/fa";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Delivery = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [deleteAddressModal, setDeleteAddressModal] = useState<boolean>(false);
+  const [willDeleteAddressId, setWillDeleteAddressId] = useState<number>(0);
   const primaryAddressData: PrimaryAddress | undefined = getPrimaryAddress();
   const addresses: AddressDataResponse[] | undefined = useAddress();
   const [primaryAddressId, setPrimaryAddressId] = useState<number>();
@@ -69,6 +70,34 @@ const Delivery = () => {
     }
   };
 
+  const deleteAddress = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/addresses/${willDeleteAddressId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            // @ts-ignore
+            Authorization: `Bearer ${cookieValue}`,
+          },
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete address");
+      }
+
+      setWillDeleteAddressId(0);
+      closeDeleteAddressModal();
+      onClose();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const addressContent = (
     <div className="flex flex-col gap-2 ">
       {addresses.length > 0 ? (
@@ -102,9 +131,22 @@ const Delivery = () => {
                       </Button>
                     </>
                   )}
-                  <Button size="sm" color="danger" isIconOnly>
+                  <Button
+                    size="sm"
+                    color="danger"
+                    isIconOnly
+                    onPress={() => {
+                      setWillDeleteAddressId(address.id);
+                      setDeleteAddressModal(true);
+                    }}
+                  >
                     <FaTrash />
                   </Button>
+                  <Link href={`/my-cart/checkout/${address.id}/update-address`}>
+                    <Button size="sm" isIconOnly color="default">
+                      <FaPencilAlt />
+                    </Button>
+                  </Link>
                 </div>
               </CardBody>
             </Card>
@@ -159,7 +201,14 @@ const Delivery = () => {
           )}
         </ModalContent>
       </Modal>
-      <Modal backdrop={"blur"} isOpen={deleteAddressModal} onClose={closeDeleteAddressModal}>
+      <Modal
+        classNames={{
+          closeButton: "hover:bg-red-500 transition duration-300 text-black",
+        }}
+        backdrop={"blur"}
+        isOpen={deleteAddressModal}
+        onClose={closeDeleteAddressModal}
+      >
         <ModalContent>
           {(onClose) => (
             <>
@@ -170,11 +219,9 @@ const Delivery = () => {
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Link href="/my-cart/checkout/create-address">
-                  <Button color="success" variant="light">
-                    Add New Address
-                  </Button>
-                </Link>
+                <Button color="danger" variant="solid" onPress={deleteAddress}>
+                  Yes
+                </Button>
               </ModalFooter>
             </>
           )}
