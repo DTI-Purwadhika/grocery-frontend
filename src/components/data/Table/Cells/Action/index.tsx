@@ -38,12 +38,22 @@ const Action = ({ title, row }: ActionType) => {
     router.replace(`${title}/${row.id}`);
   };
 
-  const handleDetail = () => {};
+  const handleDetail = () => {
+    if (title === "categories") router.replace(`/dashboard/products?category=${row.name}`);
+
+    if (title === "products") router.replace(`/catalog/${row.id}`);
+  };
 
   return (
     <div className="flex flex-row justify-end">
       <Tooltip content={`${toCapital(row.name)} Details`}>
-        <Button isIconOnly color="primary" variant="light" onClick={handleDetail}>
+        <Button
+          isIconOnly
+          className={`${title === "admins" && "hidden"}`}
+          color="primary"
+          variant="light"
+          onClick={handleDetail}
+        >
           <Eye className="text-default-400 cursor-pointer active:opacity-50" />
         </Button>
       </Tooltip>

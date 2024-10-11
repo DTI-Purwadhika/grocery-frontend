@@ -8,13 +8,12 @@ import {
   TableCell,
   SortDescriptor,
 } from "@nextui-org/table";
-import { Key, useCallback, useEffect, useMemo, useState } from "react";
+import { Key, useCallback, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import { fetchData } from "@/services/dataService";
 import { useParam } from "@/hooks/useParam";
 import { Loading } from "@/components/elements";
-import restService from "@/services/restService";
 
 import { TableType } from "./type";
 import Cell from "./Cells";
@@ -51,10 +50,6 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
     queryFn: fetchData,
     placeholderData: keepPreviousData,
   });
-
-  useEffect(() => {
-    if (title === "inventory") restService("inventory/generate-stock", "POST");
-  }, []);
 
   const renderCell = useCallback(
     (data: any, columnKey: Key) => {
@@ -96,7 +91,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
         removeWrapper
         aria-label={`Data of ${title}`}
         classNames={{
-          base: "overflow-scroll",
+          base: "overflow-x-auto",
           table: "min-h-[400px]",
         }}
         color={"primary"}

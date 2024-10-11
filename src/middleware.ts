@@ -24,8 +24,10 @@ export default auth( async (request : NextRequest) => {
 
     const session = await auth();
     const publicRoutes = ['/', '/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
+    const noSessionRoutes = ['/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
+    const superAdminRoutes = ['/dashboard/admins', '/dashboard/stores']
 
-    if(session && (path.startsWith("/login") || path.startsWith("/register") || path.startsWith("/reset-password") || path.startsWith("/reset-password-request") || path.startsWith("/set-password"))){
+    if(session && noSessionRoutes.includes(path)){
       return NextResponse.redirect(new URL("/", request.url))
     }
 
@@ -45,7 +47,11 @@ export default auth( async (request : NextRequest) => {
         return NextResponse.next();
       }
 
-      if (!path.startsWith("/dashboard")) {
+      if(userRole === "ADMIN" && superAdminRoutes.includes(path)){
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      }
+
+      if (userRole === "ADMIN" && !path.startsWith("/dashboard")) {
           return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }

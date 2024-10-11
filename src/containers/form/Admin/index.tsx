@@ -20,6 +20,7 @@ const AdminForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useData({ title: "admins", id, type, data: admins });
   const [tempData, setTempData] = useState<Admin>(data as Admin);
+  const [readyData, setReadyData] = useState<Admin>();
   const [loading, setLoading] = useState(true);
 
   const {
@@ -37,6 +38,19 @@ const AdminForm = ({ type = "create", id }: FormType) => {
 
   useEffect(() => {
     setLoading(true);
+    if (type === "update") {
+      const image = (data as Admin)?.profilePicture;
+
+      fetch(image)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const file = new File([blob], image?.split("/")?.pop() || "image.jpg", {
+            type: "image/jpeg",
+          });
+
+          setFile(file);
+        });
+    }
     setTempData(data as Admin);
     reset(data as Admin);
     setLoading(false);
@@ -55,6 +69,10 @@ const AdminForm = ({ type = "create", id }: FormType) => {
     createNew,
     reset: onReset,
   });
+
+  useEffect(() => {
+    if (readyData) saveAdmin();
+  }, [readyData]);
 
   const onUpload = async () => {
     if (file === null) {
@@ -89,7 +107,7 @@ const AdminForm = ({ type = "create", id }: FormType) => {
     setTempData(newTempData as Admin);
     setUploading(false);
     if (profilePicture) {
-      saveAdmin();
+      setReadyData(newTempData as Admin);
       onClose();
     }
   };
@@ -172,7 +190,7 @@ const AdminForm = ({ type = "create", id }: FormType) => {
                       errorMessage={errors.storeId?.message?.toString()}
                       isInvalid={errors.storeId && true}
                       label="Store"
-                      selectedKey={field.value}
+                      selectedKey={tempData?.storeId || field.value}
                       source="stores"
                       value={field.value}
                     />
@@ -200,11 +218,11 @@ const AdminForm = ({ type = "create", id }: FormType) => {
                   )}
                   rules={{
                     required: "Password is required",
-                    // pattern: {
-                    //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
-                    //   message:
-                    //     "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
-                    // },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
+                      message:
+                        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+                    },
                   }}
                 />
               </CardBody>

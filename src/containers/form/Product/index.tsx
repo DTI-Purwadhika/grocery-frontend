@@ -5,6 +5,7 @@ import { useDisclosure } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Card, CardBody } from "@nextui-org/card";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { Product } from "@/constants/entity";
 import { products } from "@/constants/defaultValue";
@@ -15,11 +16,20 @@ import { FileUploader, DataSelector, NumberInput } from "@/components/form";
 import { UploadFile } from "@/services/uploadService";
 import { Loading } from "@/components/elements";
 import { useData, useSaveData } from "@/hooks/useData";
+import { fetchData } from "@/services/dataService";
 
 const ProductForm = ({ type = "create", id }: FormType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data } = useData({ title: "products", id, type, data: products });
+  const { data: stores, isLoading } = useQuery({
+    queryKey: [`stores`, "", 1, 100, "id", "asc", "", ""],
+    queryFn: fetchData,
+    placeholderData: keepPreviousData,
+    staleTime: 10000,
+  });
   const [tempData, setTempData] = useState<Product>(data as Product);
+  const [readyData, setReadyData] = useState<Product>();
+  const [tempStock, setTempStock] = useState<Product["stocks"]>();
   const [loading, setLoading] = useState(true);
 
   const {
@@ -38,10 +48,41 @@ const ProductForm = ({ type = "create", id }: FormType) => {
 
   useEffect(() => {
     setLoading(true);
+    if (type === "update") {
+      const images = (data as Product)?.images;
+
+      images.map((image: { url: string }) =>
+        fetch(image.url)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const file = new File([blob], image?.url?.split("/")?.pop() || "image.jpg", {
+              type: "image/jpeg",
+            });
+
+            setFiles((prevFiles) => [...prevFiles, file]);
+          }),
+      );
+    }
     setTempData(data as Product);
     reset(data as Product);
     setLoading(false);
   }, [data]);
+
+  useEffect(() => {
+    if (type === "create") {
+      const newStocks: Product["stocks"] = stores?.content?.map(
+        (store: { id: string; name: string }) => ({
+          storeId: store.id,
+          storeName: store.name,
+          stock: 0,
+        }),
+      );
+
+      setTempStock(newStocks);
+    } else {
+      setTempStock(tempData.stocks);
+    }
+  }, [stores]);
 
   const onReset = () => {
     reset();
@@ -56,6 +97,10 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     createNew,
     reset: onReset,
   });
+
+  useEffect(() => {
+    if (readyData) saveProduct();
+  }, [readyData]);
 
   const onUpload = async () => {
     if (files.length === 0) {
@@ -97,14 +142,28 @@ const ProductForm = ({ type = "create", id }: FormType) => {
 
     setUploading(false);
 
-    const savedData = { ...tempData, images };
-
-    setTempData(savedData as Product);
-
     if (images) {
-      saveProduct();
+      const savedData = { ...tempData, images, stocks: tempStock };
+
+      setTempData(savedData as Product);
+      setReadyData(savedData as Product);
       onClose();
     }
+  };
+
+  const onStockInput = ({ storeId, stock }: { storeId: string; stock: number }) => {
+    const newStocks = tempStock?.map((stocky) => {
+      if (stocky.storeId === storeId) {
+        return {
+          ...stocky,
+          stock,
+        };
+      }
+
+      return stocky;
+    });
+
+    setTempStock(newStocks);
   };
 
   if (!data || loading) {
@@ -125,7 +184,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
               </CardBody>
             </Card>
             <Card className="lg:col-span-4" shadow="sm">
-              <CardBody className="flex gap-4 p-4 aspect-square lg:aspect-video">
+              <CardBody className="flex gap-4 p-4 aspect-square lg:aspect-[7/5]">
                 <FileUploader files={files} isUploading={uploading} setFiles={setFiles} />
               </CardBody>
             </Card>
@@ -205,19 +264,40 @@ const ProductForm = ({ type = "create", id }: FormType) => {
                       label="Price"
                       placeholder="10000..."
                       startContent="Rp"
-                      value={field.value?.toString()}
+                      value={
+                        type === "update" ? tempData?.price?.toString() : field.value?.toString()
+                      }
                     />
                   )}
                   rules={{ required: "Price is required" }}
                 />
               </CardBody>
             </Card>
-            <Card className="lg:col-span-6 h-fit" shadow="sm">
+            <Card className={`lg:col-span-6 h-fit ${isLoading ? "hidden" : ""}`} shadow="sm">
               <CardBody className="flex gap-4 p-4">
                 <h3 className="font-semibold text-lg">
                   {toCapital(currentName || "product")} Inventory
                 </h3>
                 <p className="text-sm">Manage the stock of {currentName} for your store</p>
+                <div className="md:grid md:grid-cols-2 gap-4 md:gap-x-8">
+                  {tempStock?.map((stock) => (
+                    <div
+                      key={stock?.storeId}
+                      className="flex flex-col md:grid md:grid-cols-2 gap-2 items-center"
+                    >
+                      <p>{stock?.storeName}</p>
+                      <NumberInput
+                        value={stock?.stock?.toString() || "0"}
+                        onChange={(e) =>
+                          onStockInput({
+                            storeId: stock?.storeId,
+                            stock: parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
               </CardBody>
             </Card>
           </div>
