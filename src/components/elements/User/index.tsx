@@ -4,11 +4,15 @@ import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-o
 import { User } from "@nextui-org/user";
 import { User2 } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
+import { useRouter } from "next/navigation";
 
 import { ThemeButton, Notification } from "..";
+import { useLogout } from "@/hooks/useLogout";
 
 const UserCard = () => {
   const { userProfile } = useProfile();
+  const router = useRouter();
+  const { logout } = useLogout();
 
   return (
     <>
@@ -37,9 +41,15 @@ const UserCard = () => {
             </Card>
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
-            <DropdownItem key="dashboard">Dashboard</DropdownItem>
-            <DropdownItem key="profile">Profile</DropdownItem>
-            <DropdownItem key="logout">Logout</DropdownItem>
+            <DropdownItem onPress={() => router.push("/dashboard")} key="dashboard">
+              Dashboard
+            </DropdownItem>
+            <DropdownItem onPress={() => router.push("/my-profile")} key="profile">
+              Profile
+            </DropdownItem>
+            <DropdownItem onPress={logout} key="logout">
+              Logout
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
