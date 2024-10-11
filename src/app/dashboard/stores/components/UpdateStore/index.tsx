@@ -124,6 +124,11 @@ export const UpdateStoreForm: React.FC = () => {
     setValue("lng", store?.lng);
   }, [store, setValue]);
 
+  useEffect(() => {
+    setValue("lat", position?.lat);
+    setValue("lng", position?.lng);
+  }, [position, setValue]);
+
   const handlePostcodeChange = async (postcode: string) => {
     if (postcode.length > 2) {
       try {

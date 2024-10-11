@@ -17,7 +17,7 @@ export const useProfile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
