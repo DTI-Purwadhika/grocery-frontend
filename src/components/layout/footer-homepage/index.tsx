@@ -36,13 +36,13 @@ export const FooterHome: React.FC = () => {
         <div className="flex flex-col gap-8 mt-8 lg:mt-4">
           <div className="payment flex flex-col gap-4">
             <h2 className="font-bold text-white text-lg lg:text-xl">Payment Method</h2>
-            <div className="flex flex-wrap gap-8 items-center"></div>
+            <div className="flex flex-wrap gap-8 items-center" />
           </div>
           <div className="service flex flex-col gap-4">
             <h2 className="font-bold text-white text-lg lg:text-xl">Delivery Service</h2>
-            <div className="flex  flex-wrap gap-4"></div>
+            <div className="flex  flex-wrap gap-4" />
           </div>
-          <hr></hr>
+          <hr />
         </div>
         <h3 className="text-black text-center font-extralight text-[11px] mt-4">
           Copyright © 2024 Grocery

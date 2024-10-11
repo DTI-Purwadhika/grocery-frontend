@@ -3,6 +3,7 @@ import { Card, CardBody } from "@nextui-org/card";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { User } from "@nextui-org/user";
 import { User2 } from "lucide-react";
+
 import { useProfile } from "@/hooks/useProfile";
 
 import { ThemeButton, Notification } from "..";
@@ -24,13 +25,13 @@ const UserCard = () => {
             <Card className="cursor-pointer">
               <CardBody>
                 <User
-                  className="hidden md:flex md:flex-nowrap w-fit"
-                  description={userProfile?.role}
-                  name={userProfile?.name}
                   avatarProps={{
                     src: `
                     ${userProfile?.profilePicture}`,
                   }}
+                  className="hidden md:flex md:flex-nowrap w-fit"
+                  description={userProfile?.role}
+                  name={userProfile?.name}
                 />
                 <User2 className="md:hidden" />
               </CardBody>

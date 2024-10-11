@@ -1,4 +1,3 @@
-import { Construction } from "lucide-react";
 import { Profile } from "./components/Profile";
 
 const page = () => {

@@ -17,6 +17,7 @@ export const RequestNewVerification = () => {
           },
         },
       );
+
       if (!response.ok) {
         throw new Error("Failed to send new verification link");
       }
@@ -24,6 +25,7 @@ export const RequestNewVerification = () => {
       setIsSending(false);
       setIsSent(true);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
       setIsSending(false);
     }

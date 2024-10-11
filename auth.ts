@@ -56,6 +56,7 @@ export const authConfig: NextAuthConfig = {
             isVerified: data.isVerified,
           };
         } catch (error) {
+          /* eslint-disable-next-line no-console */
           console.log(error);
           return null;
         }
@@ -98,6 +99,7 @@ export const authConfig: NextAuthConfig = {
           const useCookies = cookies();
           useCookies.set("Sid", data.token, { maxAge: 5 * 60 * 60 });
         } catch (error) {
+          /* eslint-disable-next-line no-console */
           console.log(error);
           return false;
         }

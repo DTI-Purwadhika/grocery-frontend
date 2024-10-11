@@ -16,17 +16,21 @@ export const RequestResetPassword = () => {
           },
         },
       );
+
       if (!response.ok) {
         throw new Error("Failed to send reset pasword link");
       }
 
       const result = await response.json();
+
       setIsLoading(false);
 
       return result.data;
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
       setIsLoading(false);
+
       return null;
     }
   };

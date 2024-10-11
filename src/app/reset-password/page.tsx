@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+
 import { ResetPasswordForm } from "./components/ResetPassword";
 
 const resetPassword: React.FC = () => {

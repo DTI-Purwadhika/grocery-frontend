@@ -53,7 +53,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/categories"
               className={currentPath.includes("categories") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/categories"
+              href="/dashboard/categories?keyword="
               startContent={<Group />}
             >
               Product Category
@@ -61,7 +61,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/products"
               className={currentPath.includes("products") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/products"
+              href="/dashboard/products?keyword="
               startContent={<Barcode />}
             >
               Manage Product
@@ -71,7 +71,7 @@ const Sidebar = () => {
               className={
                 currentPath.includes("inventories") ? "bg-primary p-2 text-background" : ""
               }
-              href="/dashboard/inventories"
+              href="/dashboard/inventories?keyword="
               startContent={<Blocks />}
             >
               Product Inventory
@@ -79,7 +79,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/promotions"
               className={currentPath.includes("promotions") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/promotions"
+              href="/dashboard/promotions?keyword="
               startContent={<Percent />}
             >
               Promotion
@@ -89,7 +89,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/admins"
               className={currentPath.includes("admins") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/admins"
+              href="/dashboard/admins?keyword="
               startContent={<User />}
             >
               Store Admin
@@ -105,7 +105,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/orders"
               className={currentPath.includes("orders") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/orders"
+              href="/dashboard/orders?keyword="
               startContent={<ReceiptText />}
             >
               Order
@@ -115,7 +115,7 @@ const Sidebar = () => {
             <ListboxItem
               key="/dashboard/reports"
               className={currentPath.includes("reports") ? "bg-primary p-2 text-background" : ""}
-              href="/dashboard/reports"
+              href="/dashboard/reports?keyword="
               startContent={<ChartArea />}
             >
               Report

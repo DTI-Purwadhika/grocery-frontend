@@ -32,8 +32,10 @@ export const useProfile = () => {
         }
 
         const data = await response.json();
+
         setUserProfile(data.data);
       } catch (error) {
+        /* eslint-disable-next-line no-console */
         console.error(error);
       }
     };

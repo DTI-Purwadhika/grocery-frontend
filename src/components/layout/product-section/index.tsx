@@ -1,5 +1,6 @@
-import { Datatabs } from "@/components/data";
 import React from "react";
+
+import { Datatabs } from "@/components/data";
 
 export const ProductSection: React.FC = () => {
   return (

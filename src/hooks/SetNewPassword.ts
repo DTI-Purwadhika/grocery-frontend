@@ -17,17 +17,21 @@ export const SetNewPassword = () => {
           body: JSON.stringify(formData),
         },
       );
+
       if (!response.ok) {
         throw new Error("Set password failed");
       }
 
       const result = await response.json();
+
       setIsLoading(false);
 
       return result;
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
       setIsLoading(false);
+
       return null;
     }
   };

@@ -3,10 +3,11 @@ import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { RequestResetPassword } from "@/hooks/RequestResetPassword";
-import { RequestNewVerification } from "@/hooks/RequestNewVerification";
 import { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/modal";
+
+import { RequestResetPassword } from "@/hooks/RequestResetPassword";
+import { RequestNewVerification } from "@/hooks/RequestNewVerification";
 
 type resetPasswordData = {
   email: string;
@@ -31,6 +32,7 @@ export const ResetPasswordRequestForm: React.FC = () => {
     try {
       SendNewVerification(email);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
     }
   };
@@ -48,11 +50,13 @@ export const ResetPasswordRequestForm: React.FC = () => {
   const onSubmit = async (data: resetPasswordData) => {
     try {
       const result = await SendResetPasswordLink(data.email);
+
       setStatus(result);
       setEmail(data.email);
       onOpen();
       reset();
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
     }
   };
@@ -70,10 +74,10 @@ export const ResetPasswordRequestForm: React.FC = () => {
           <form className="flex flex-col gap-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
             <div className="relative w-full">
               <input
-                id="email"
-                type="text"
-                placeholder="Email"
                 className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="email"
+                placeholder="Email"
+                type="text"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -84,16 +88,16 @@ export const ResetPasswordRequestForm: React.FC = () => {
               />
               {errors.email && <div className="text-red-500 text-xs">{errors.email.message}</div>}
               <button
-                type="submit"
                 className="mt-2 py-2 px-4 text-sm font-semibold w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
                 disabled={isLoading}
+                type="submit"
               >
                 {isLoading ? "Loading ... " : "Send Reset Password Link"}
               </button>
             </div>
             <Link
-              href="/login"
               className="text-blue-500 text-sm text-center font-semibold hover:underline"
+              href="/login"
             >
               Return to log in
             </Link>
@@ -107,10 +111,10 @@ export const ResetPasswordRequestForm: React.FC = () => {
           }}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
-          placement="center"
           isOpen={isOpen}
-          onOpenChange={onOpenChange}
+          placement="center"
           onClose={closeModal}
+          onOpenChange={onOpenChange}
         >
           <ModalContent className="text-black">
             {() => (
@@ -131,10 +135,10 @@ export const ResetPasswordRequestForm: React.FC = () => {
                   </p>
                   {status === "User not verified" && (
                     <button
-                      type="button"
-                      disabled={isSending || isSent}
-                      onClick={sendVericationLinnk}
                       className="mt-2 py-2 px-4 text-sm font-semibold w-auto text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
+                      disabled={isSending || isSent}
+                      type="button"
+                      onClick={sendVericationLinnk}
                     >
                       {isSending ? "Loading..." : "Request New Link"}
                     </button>

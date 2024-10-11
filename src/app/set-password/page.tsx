@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+
 import { SetPasswordForm } from "./components/SetPassword";
 // import { SetPasswordForm } from "./components/SetPassword/index2";
 

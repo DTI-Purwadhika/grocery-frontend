@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 import { getCookie } from "cookies-next";
 import { Button } from "@nextui-org/button";
@@ -16,6 +17,7 @@ import { IoIosWarning } from "react-icons/io";
 import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/popover";
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/modal";
 import { toast } from "sonner";
+
 import { useProfile } from "@/hooks/useProfile";
 import { useLogout } from "@/hooks/useLogout";
 
@@ -61,11 +63,13 @@ export const Profile: React.FC = () => {
     if (file) {
       if (!validTypes.includes(file.type)) {
         setFileError("Only jpg, png, jpeg, and gif files are allowed");
+
         return;
       }
 
       if (file.size > 1048576) {
         setFileError("File size must be less than 1 MB");
+
         return;
       }
 
@@ -74,6 +78,7 @@ export const Profile: React.FC = () => {
       setPictureFile(file);
 
       const reader = new FileReader();
+
       reader.onloadend = () => {
         setProfilePic(reader.result as string);
       };
@@ -84,6 +89,7 @@ export const Profile: React.FC = () => {
   const onSubmit = async (data: profileData) => {
     try {
       const formData = new FormData();
+
       if (data.name) {
         formData.append("name", data.name);
       }
@@ -198,7 +204,7 @@ export const Profile: React.FC = () => {
     <>
       <div className="relative max-w-md mx-auto p-4 bg-gray-50 shadow-lg rounded-lg">
         <div className="absolute flex flex-col lg:flex-row items-center gap-1 top-8 left-3 lg:left-8 ">
-          <Chip size="sm" color="primary" startContent={<MdVerifiedUser />}>
+          <Chip color="primary" size="sm" startContent={<MdVerifiedUser />}>
             <span className="font-bold">Verified</span>
           </Chip>
           <Popover color="primary" placement="bottom" showArrow={true}>
@@ -218,56 +224,56 @@ export const Profile: React.FC = () => {
         </div>
 
         <Button
-          onPress={() => setFormDisabled(!formDisabled)}
-          variant="light"
           className="absolute font-bold text-green-600 top-1 right-3"
+          variant="light"
+          onPress={() => setFormDisabled(!formDisabled)}
         >
           {formDisabled ? `Edit` : `Done`}
         </Button>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           {/* Profile Picture */}
           <div className="flex flex-col items-center">
             <div className="relative">
               {!formDisabled && (
                 <label
-                  htmlFor="profile-picture"
                   className="z-10 opacity-0 hover:opacity-100 transition-opacity duration-200 absolute top-7 right-8 p-2 cursor-pointer"
+                  htmlFor="profile-picture"
                 >
                   <IoCamera className="w-5 h-5" />
                 </label>
               )}
-              <Avatar isBordered src={profilePic} className="w-24 h-24 text-large z-0" />
+              <Avatar isBordered className="w-24 h-24 text-large z-0" src={profilePic} />
             </div>
             {fileError && <span className="text-red-500 text-xs">{fileError}</span>}
             <input
               disabled={formDisabled}
               {...register("picture")}
+              accept=".jpg,.jpeg,.png,.gif"
+              className="hidden"
               id="profile-picture"
               type="file"
-              accept=".jpg,.jpeg,.png,.gif"
               onChange={handleProfilePicChange}
-              className="hidden"
             />
           </div>
 
           {/* Name */}
           <div>
             <Controller
-              name="name"
               control={control}
-              rules={{ required: "Name is required" }}
+              name="name"
               render={({ field }) => (
                 <Input
                   {...field}
+                  className="font-bold"
                   isDisabled={formDisabled}
-                  type="text"
                   label="Name"
                   labelPlacement="outside"
                   placeholder="Enter your name"
-                  className="font-bold"
+                  type="text"
                 />
               )}
+              rules={{ required: "Name is required" }}
             />
           </div>
           {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
@@ -275,25 +281,25 @@ export const Profile: React.FC = () => {
           {/* Email */}
           <div>
             <Controller
-              name="email"
               control={control}
+              name="email"
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  className="font-bold"
+                  isDisabled={formDisabled}
+                  // @ts-ignore
+                  isReadOnly={session?.provider === "google"}
+                  label="Email"
+                  labelPlacement="outside"
+                  placeholder="Enter your email"
+                  type="email"
+                />
+              )}
               rules={{
                 required: "Email is required",
                 pattern: { value: /\S+@\S+\.\S+/, message: "Email is invalid" },
               }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  // @ts-ignore
-                  isReadOnly={session?.provider === "google"}
-                  isDisabled={formDisabled}
-                  type="email"
-                  label="Email"
-                  labelPlacement="outside"
-                  placeholder="Enter your email"
-                  className="font-bold"
-                />
-              )}
             />
           </div>
           {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
@@ -304,11 +310,11 @@ export const Profile: React.FC = () => {
               <Input
                 {...register("referralCode")}
                 isReadOnly
-                type="text"
+                className="font-bold"
                 label="Referral code"
                 labelPlacement="outside"
-                className="font-bold"
                 placeholder="Referral"
+                type="text"
               />
             </div>
           )}
@@ -329,15 +335,11 @@ export const Profile: React.FC = () => {
                         /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s)(?=.*[!@#$*])/.test(value),
                     },
                   })}
-                  type={showPassword ? "text" : "password"}
-                  label="Password"
-                  labelPlacement="outside"
-                  placeholder="Enter your password"
                   endContent={
                     <Button
                       isIconOnly
-                      variant="light"
                       className="absolute bottom-0 right-3 flex items-center"
+                      variant="light"
                       onPress={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -347,6 +349,10 @@ export const Profile: React.FC = () => {
                       )}
                     </Button>
                   }
+                  label="Password"
+                  labelPlacement="outside"
+                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
                 />
               </div>
             )
@@ -367,10 +373,10 @@ export const Profile: React.FC = () => {
           {/* Submit Button */}
           <div>
             <Button
-              isDisabled={!formDisabled}
               fullWidth
-              color="primary"
               className="font-bold text-white"
+              color="primary"
+              isDisabled={!formDisabled}
               type="submit"
             >
               Update Profile
@@ -379,10 +385,10 @@ export const Profile: React.FC = () => {
           {/* Delete Profile Button */}
           <div>
             <Button
-              isDisabled={!formDisabled}
-              onPress={onOpen}
               className="font-bold bg-red-600 text-white"
+              isDisabled={!formDisabled}
               type="button"
+              onPress={onOpen}
             >
               Delete Profile
             </Button>
@@ -397,8 +403,8 @@ export const Profile: React.FC = () => {
           }}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
-          placement="center"
           isOpen={isOpen}
+          placement="center"
           onOpenChange={onOpenChange}
         >
           <ModalContent className="text-black">
@@ -413,9 +419,9 @@ export const Profile: React.FC = () => {
                     Are you sure you want to delete your profile? This action can&apos;t be undone!
                   </p>
                   <Button
+                    className="w-2/3 lg:w-1/2 font-bold bg-red-600 text-white"
                     type="button"
                     onPress={deleteProfile}
-                    className="w-2/3 lg:w-1/2 font-bold bg-red-600 text-white"
                   >
                     Delete Profile
                   </Button>

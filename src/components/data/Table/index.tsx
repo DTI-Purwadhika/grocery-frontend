@@ -36,6 +36,11 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   const category = getQueryParam("category") || "";
   const store = getQueryParam("stores") || "";
 
+  // useEffect(() => {
+  //   setQueryParam("visibleColumns", Array.from(visibleColumns).join(","));
+  //   setQueryParam("keyword", "a");
+  // }, []);
+
   const { data, isLoading } = useQuery({
     queryKey: [
       title,
@@ -49,6 +54,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
     ],
     queryFn: fetchData,
     placeholderData: keepPreviousData,
+    staleTime: 10000,
   });
 
   const renderCell = useCallback(

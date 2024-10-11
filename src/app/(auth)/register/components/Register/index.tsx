@@ -3,12 +3,13 @@ import React from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Controller, useForm } from "react-hook-form";
 import { Select, SelectItem } from "@nextui-org/select";
-import { roles } from "@/constants/role";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+
+import { roles } from "@/constants/role";
 
 type registerData = {
   name: string;
@@ -72,6 +73,7 @@ export const RegisterForm: React.FC = () => {
     } catch (error: any) {
       reset();
       setIsLoading(false);
+      /* eslint-disable-next-line no-console */
       console.error(error.message);
 
       if (error.message === "Email already registered with social account") {
@@ -100,10 +102,10 @@ export const RegisterForm: React.FC = () => {
           <form className="flex flex-col gap-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
             <div className="relative w-full">
               <input
-                id="email"
-                type="text"
-                placeholder="Email"
                 className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="email"
+                placeholder="Email"
+                type="text"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -117,10 +119,10 @@ export const RegisterForm: React.FC = () => {
 
             <div className="relative w-full">
               <input
-                id="name"
-                type="text"
-                placeholder="Fullname"
                 className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="name"
+                placeholder="Fullname"
+                type="text"
                 {...register("name", {
                   required: true,
                   validate: {
@@ -146,18 +148,17 @@ export const RegisterForm: React.FC = () => {
 
             <div className="relative w-full">
               <Controller
-                name="role"
                 control={control}
-                rules={{ required: "Role is required." }}
+                name="role"
                 render={({ field }) => (
                   <Select
                     {...field}
+                    className="w-full"
+                    color="default"
                     label="Role"
                     placeholder="Select a role"
                     size="sm"
-                    color="default"
                     variant="faded"
-                    className="w-full"
                     onChange={(e) => {
                       field.onChange(e.target.value);
                       setRole(e.target.value);
@@ -170,6 +171,7 @@ export const RegisterForm: React.FC = () => {
                     ))}
                   </Select>
                 )}
+                rules={{ required: "Role is required." }}
               />
               {errors.role && <p className="text-red-500 text-xs">{errors.role.message}</p>}
             </div>
@@ -177,10 +179,10 @@ export const RegisterForm: React.FC = () => {
             {role === "CUSTOMER" && (
               <div className="relative w-full">
                 <input
-                  id="referralCode"
-                  type="text"
-                  placeholder="Referral Code"
                   className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="referralCode"
+                  placeholder="Referral Code"
+                  type="text"
                   {...register("referralCode", {
                     validate: {
                       checkLength: (value) => value.length == 0 || value.length == 8,
@@ -194,9 +196,9 @@ export const RegisterForm: React.FC = () => {
             )}
 
             <button
-              type="submit"
-              disabled={isLoading}
               className="mt-2 py-2 px-4 text-sm font-semibold w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
+              disabled={isLoading}
+              type="submit"
             >
               {isLoading ? "Loading..." : "Register"}
             </button>
@@ -207,15 +209,15 @@ export const RegisterForm: React.FC = () => {
           </div>
 
           <button
-            onClick={() => signIn("google", { redirectTo: "/" })}
             className="flex gap-2 items-center justify-center w-full border border-gray-300 rounded-md p-2 hover:bg-gray-50 transition duration-300"
+            onClick={() => signIn("google", { redirectTo: "/" })}
           >
             <FcGoogle className="w-6 h-6" />
             <span className="text-black text-sm font-bold">Google</span>
           </button>
           <div className="text-center w-full text-sm mt-4">
             <span className="text-black">Already have an account? </span>
-            <Link href="/login" className="text-blue-500 font-semibold hover:underline">
+            <Link className="text-blue-500 font-semibold hover:underline" href="/login">
               Login
             </Link>
           </div>

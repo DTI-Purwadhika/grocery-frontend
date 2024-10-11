@@ -7,13 +7,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { ChildType } from "@/shares/types";
 
+import { CartProvider } from "./CartProviders";
+
 const queryClient = new QueryClient();
 
 export const Providers = ({ children }: ChildType) => (
   <NextUIProvider>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
-        {children}
+        <CartProvider>{children}</CartProvider>
       </ThemeProvider>
       <Toaster richColors />
     </QueryClientProvider>
