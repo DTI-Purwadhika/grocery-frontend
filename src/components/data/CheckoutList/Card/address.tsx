@@ -16,11 +16,9 @@ import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 
 const Delivery = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
   const [deleteAddressModal, setDeleteAddressModal] = useState<boolean>(false);
   const [willDeleteAddressId, setWillDeleteAddressId] = useState<number>(0);
   const primaryAddressData: PrimaryAddress | undefined = getPrimaryAddress();
@@ -65,6 +63,7 @@ const Delivery = () => {
       setPrimaryAddressName(data.data.addressName);
       setPrimaryAddressCity(data.data.city);
       onClose();
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -106,7 +105,6 @@ const Delivery = () => {
             <Card key={address.id} shadow="sm">
               <CardBody className="flex flex-col justify-between px-5 py-4 items-end">
                 <div className="flex flex-col gap-2">
-                  {/* <h3 className="font-semibold text-md">Primary Address</h3> */}
                   <div className="flex flex-row items-start gap-2 text-xs">
                     {primaryAddressId === address.id && (
                       <Pin className="text-primary text-sm w-6 h-6" />
