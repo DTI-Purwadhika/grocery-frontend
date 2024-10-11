@@ -31,17 +31,29 @@ const Shipping = () => {
             <Card key={shipment.id} shadow="sm">
               <CardBody className="relative flex flex-col gap-4 justify-between px-5 py-4">
                 {selectedShippingId === shipment.id && (
-                  <FaCheck className="text-primary absolute top-1 right-3" />
+                  <FaCheck className="text-primary absolute top-2 right-4" />
                 )}
 
                 {upperCase(shipment.courier) === "POS" && (
-                  <Image src={pos} alt="pos" className="absolute right-8 top-16 w-14 h-12" />
+                  <Image
+                    src={pos}
+                    alt="pos"
+                    className="absolute right-8 top-16 w-10 h-10 lg:w-14 lg:h-12"
+                  />
                 )}
                 {upperCase(shipment.courier) === "TIKI" && (
-                  <Image src={tiki} alt="tiki" className="absolute right-8 top-16 w-14 h-12" />
+                  <Image
+                    src={tiki}
+                    alt="tiki"
+                    className="absolute right-8 top-16 w-14 h-10 lg:w-20 lg:h-12"
+                  />
                 )}
                 {upperCase(shipment.courier) === "JNE" && (
-                  <Image src={jne} alt="jne" className="absolute right-8 top-16 w-14 h-12" />
+                  <Image
+                    src={jne}
+                    alt="jne"
+                    className="absolute right-8 top-16 w-12 h-10 lg:w-16 lg:h-12"
+                  />
                 )}
 
                 <div className="flex flex-col gap-2">

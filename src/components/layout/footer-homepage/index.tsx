@@ -40,10 +40,10 @@ export const FooterHome: React.FC = () => {
         <div className="flex flex-col gap-8 mt-8 lg:mt-4">
           <div className="service flex flex-col gap-4">
             <h2 className="font-bold text-white text-lg lg:text-xl">Our Delivery Partners</h2>
-            <div className="flex flex-row gap-5">
-              <Image src={pos} alt="pos" className="w-20 h-16" />
-              <Image src={tiki} alt="tiki" className="w-20 h-16" />
-              <Image src={jne} alt="jne" className="w-20 h-16" />
+            <div className="flex flex-row gap-7 lg:gap-10">
+              <Image src={pos} alt="pos" className="w-16 h-12 lg:w-20 lg:h-16" />
+              <Image src={tiki} alt="tiki" className="w-24 h-12 lg:w-32 lg:h-16" />
+              <Image src={jne} alt="jne" className="w-20 h-12 lg:w-24 lg:h-16" />
             </div>
             <div className="flex  flex-wrap gap-4"></div>
           </div>
