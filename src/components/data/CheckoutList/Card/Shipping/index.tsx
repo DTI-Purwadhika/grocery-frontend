@@ -7,6 +7,10 @@ import { useState } from "react";
 import { ShippingDataResponse, useShipping } from "@/hooks/useShipping";
 import { FaCheck, FaTruckMoving } from "react-icons/fa6";
 import { useShippingFee } from "@/providers/ShippingProvider";
+import Image from "next/image";
+import pos from "../../../../../../public/pos.png";
+import tiki from "../../../../../../public/tiki.png";
+import jne from "../../../../../../public/jne.png";
 
 const Shipping = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -28,6 +32,16 @@ const Shipping = () => {
               <CardBody className="relative flex flex-col gap-4 justify-between px-5 py-4">
                 {selectedShippingId === shipment.id && (
                   <FaCheck className="text-primary absolute top-1 right-3" />
+                )}
+
+                {upperCase(shipment.courier) === "POS" && (
+                  <Image src={pos} alt="pos" className="absolute right-8 top-16 w-14 h-12" />
+                )}
+                {upperCase(shipment.courier) === "TIKI" && (
+                  <Image src={tiki} alt="tiki" className="absolute right-8 top-16 w-14 h-12" />
+                )}
+                {upperCase(shipment.courier) === "JNE" && (
+                  <Image src={jne} alt="jne" className="absolute right-8 top-16 w-14 h-12" />
                 )}
 
                 <div className="flex flex-col gap-2">
