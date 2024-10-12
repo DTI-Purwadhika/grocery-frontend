@@ -12,11 +12,13 @@ import pos from "../../../../../../public/pos.png";
 import tiki from "../../../../../../public/tiki.png";
 import jne from "../../../../../../public/jne.png";
 import { Spinner } from "@nextui-org/spinner";
+import { AddressDataResponse, useAddress } from "@/hooks/useAddress";
 
 const Shipping = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { shipping, isLoading } = useShipping();
   const [selectedShipping, setSelectedShipping] = useState<ShippingDataResponse>();
+  const addresses: AddressDataResponse[] | undefined = useAddress();
   const [selectedShippingId, setSelectedShippingId] = useState<number>();
   const { setShippingCost } = useShippingFee();
 
@@ -151,7 +153,15 @@ const Shipping = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 font-bold">Choose Shipping</ModalHeader>
-              <ModalBody>{shippingContent}</ModalBody>
+              {addresses.length > 0 ? (
+                <ModalBody>{shippingContent}</ModalBody>
+              ) : (
+                <ModalBody>
+                  <p className="font-semibold text-sm">
+                    No shipping available. Please add a new address first.
+                  </p>
+                </ModalBody>
+              )}
             </>
           )}
         </ModalContent>
