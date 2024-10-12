@@ -1,24 +1,25 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
-type UserProfile = {
-  name: string;
-  email: string;
-  role: string;
-  profilePicture: string;
-  referralCode: string;
-  isVerified: boolean;
+export type AddressDataResponse = {
+  id: number;
+  addressName: string;
+  postcode: string;
+  city: string;
+  lat: number;
+  lng: number;
+  isPrimary: boolean;
 };
 
-export const useProfile = () => {
+export const getAddress = (id: number) => {
   const cookieValue = getCookie("Sid");
-  const [userProfile, setUserProfile] = useState<UserProfile>();
+  const [address, setAddress] = useState<AddressDataResponse>();
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchAddresses = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/profile`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/addresses/${id}`,
           {
             method: "GET",
             headers: {
@@ -31,20 +32,20 @@ export const useProfile = () => {
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch user profile");
+          throw new Error("Failed to fetch address data");
         }
 
         const data = await response.json();
 
-        setUserProfile(data.data);
+        setAddress(data.data);
       } catch (error) {
-        /* eslint-disable-next-line no-console */
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     };
 
-    fetchUserProfile();
+    fetchAddresses();
   }, []);
 
-  return { userProfile };
+  return address;
 };

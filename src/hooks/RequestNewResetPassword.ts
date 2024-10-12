@@ -9,7 +9,7 @@ export const RequestNewResetPassword = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/new-reset-password-link?email=${email}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/new-reset-password-link?email=${email}`,
         {
           method: "POST",
           headers: {

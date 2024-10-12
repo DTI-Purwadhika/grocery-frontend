@@ -29,7 +29,9 @@ export const useCart = (): CartContextType => {
 export const CartProvider = ({ children }: ChildType) => {
   const queryClient = useQueryClient();
 
-  // ! This is a dummy userId
+  //! session still not working! Plan B instead
+  // const { data: session } = useSession();
+  // const userId = session?.user?.id || "1";
   const userId = "1";
 
   const { data } = useQuery<CartType>({

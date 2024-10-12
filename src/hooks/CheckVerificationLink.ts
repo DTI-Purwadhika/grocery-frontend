@@ -6,7 +6,7 @@ export type emailToken = {
 export const CheckVerificationLink = async (data: emailToken) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/check-verification-link`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/check-verification-link`,
       {
         method: "POST",
         headers: {

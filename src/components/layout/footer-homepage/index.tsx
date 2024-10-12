@@ -1,6 +1,11 @@
+import Image from "next/image";
 import React from "react";
 import { IoMdMail } from "react-icons/io";
 import { RiCustomerService2Fill } from "react-icons/ri";
+
+import jne from "../../../../public/jne.png";
+import tiki from "../../../../public/tiki.png";
+import pos from "../../../../public/pos.png";
 
 export const FooterHome: React.FC = () => {
   return (
@@ -34,12 +39,13 @@ export const FooterHome: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col gap-8 mt-8 lg:mt-4">
-          <div className="payment flex flex-col gap-4">
-            <h2 className="font-bold text-white text-lg lg:text-xl">Payment Method</h2>
-            <div className="flex flex-wrap gap-8 items-center" />
-          </div>
           <div className="service flex flex-col gap-4">
-            <h2 className="font-bold text-white text-lg lg:text-xl">Delivery Service</h2>
+            <h2 className="font-bold text-white text-lg lg:text-xl">Our Delivery Partners</h2>
+            <div className="flex flex-row gap-7 lg:gap-10">
+              <Image alt="pos" className="w-16 h-12 lg:w-20 lg:h-16" src={pos} />
+              <Image alt="tiki" className="w-24 h-12 lg:w-32 lg:h-16" src={tiki} />
+              <Image alt="jne" className="w-20 h-12 lg:w-24 lg:h-16" src={jne} />
+            </div>
             <div className="flex  flex-wrap gap-4" />
           </div>
           <hr />

@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.NEXT_PUBLIC_SECRET,
-  debug: true,
+  debug: false,
   providers: [
     google({
       clientId: process.env.GOOGLE_CLIENT_ID,

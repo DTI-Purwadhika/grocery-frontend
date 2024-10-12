@@ -1,5 +1,5 @@
 "use client";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Key } from "react";
 
 import { useParam } from "@/hooks/useParam";
@@ -23,8 +23,7 @@ const PurchasesList = () => {
   const { data, isLoading } = useQuery({
     queryKey: [`checkouts`, keyword, page, size, sortBy, sortDir, "", ""],
     queryFn: fetchData,
-    placeholderData: keepPreviousData,
-    staleTime: 10000,
+    staleTime: 0,
   });
 
   if (isLoading) {

@@ -33,6 +33,19 @@ export default auth(async (request: NextRequest) => {
     "/reset-password-request",
     "/set-password",
   ];
+  const noSessionRoutes = [
+    "/login",
+    "/register",
+    "/catalog",
+    "/reset-password",
+    "/reset-password-request",
+    "/set-password",
+  ];
+  const superAdminRoutes = ["/dashboard/admins", "/dashboard/stores"];
+
+  if (session && noSessionRoutes.includes(path)) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
     return NextResponse.next();
@@ -44,6 +57,34 @@ export default auth(async (request: NextRequest) => {
 
   // @ts-ignore
   const userRole = session.user?.role;
+
+  if (userRole === "SUPER" || userRole === "ADMIN") {
+    if (path.startsWith("/my-profile")) {
+      return NextResponse.next();
+    }
+
+    if (userRole === "ADMIN" && superAdminRoutes.includes(path)) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    if (userRole === "ADMIN" && !path.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  if (userRole === "CUSTOMER") {
+    if (!path.match(/^\/my-/)) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
+    return NextResponse.next();
+  }
+
+  if (!session) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   if (userRole === "SUPER" || userRole === "ADMIN") {
     if (!path.startsWith("/dashboard")) {

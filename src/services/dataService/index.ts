@@ -7,8 +7,7 @@ export const fetchData = async ({
   queryKey: [string, string, number, number, string, string, string, string];
 }) => {
   const [title, keyword, page, size, sortBy, sortDir, category, stores] = queryKey;
-
-  let endpoint = title.toLowerCase() === "users" ? `admins?` : `${title.toLowerCase()}?`;
+  let endpoint = `${title.toLowerCase()}?`;
 
   if (category.length > 0) endpoint += `category=${encodeURIComponent(category)}&`;
   if (stores.length > 0) endpoint += `storeId=${stores}&`;
