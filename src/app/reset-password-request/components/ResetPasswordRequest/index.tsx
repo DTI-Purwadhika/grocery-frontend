@@ -27,7 +27,7 @@ export const ResetPasswordRequestForm: React.FC = () => {
   const { isSending, isSent, SendNewVerification } = RequestNewVerification();
   const { SendResetPasswordLink, isLoading } = RequestResetPassword();
 
-  const sendVericationLinnk = () => {
+  const sendVerificationLink = () => {
     try {
       SendNewVerification(email);
     } catch (error) {
@@ -133,7 +133,7 @@ export const ResetPasswordRequestForm: React.FC = () => {
                     <button
                       type="button"
                       disabled={isSending || isSent}
-                      onClick={sendVericationLinnk}
+                      onClick={sendVerificationLink}
                       className="mt-2 py-2 px-4 text-sm font-semibold w-auto text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
                     >
                       {isSending ? "Loading..." : "Request New Link"}
