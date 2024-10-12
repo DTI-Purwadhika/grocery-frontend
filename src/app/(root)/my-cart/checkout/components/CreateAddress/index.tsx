@@ -17,8 +17,6 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
-import { useStore } from "@/hooks/useStore";
-import { useParams } from "next/navigation";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -28,13 +26,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-type storeData = {
-  name: string | undefined;
-  address: string | undefined;
+type addressData = {
+  addressName: string;
   cityId: number;
-  postcode: string | undefined;
-  lat: number | undefined;
-  lng: number | undefined;
+  postcode: string;
+  lat: number;
+  lng: number;
 };
 
 interface Suggestion {
@@ -89,14 +86,12 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
   return <Marker draggable={true} position={position} ref={markerRef} />;
 };
 
-export const UpdateStoreForm: React.FC = () => {
-  const { id } = useParams();
-  const router = useRouter();
+export const AddAddressForm: React.FC = () => {
   const cookieValue = getCookie("Sid");
+  const router = useRouter();
   const cities: City[] = useCities();
   const [position, setPosition] = useState<LatLng>({ lat: -7.257472, lng: 112.75209 });
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const { store } = useStore(id);
   const {
     control,
     reset,
@@ -104,10 +99,9 @@ export const UpdateStoreForm: React.FC = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<storeData>({
+  } = useForm<addressData>({
     defaultValues: {
-      name: "",
-      address: "",
+      addressName: "",
       postcode: "",
       cityId: 0,
       lat: position.lat,
@@ -117,16 +111,8 @@ export const UpdateStoreForm: React.FC = () => {
   const postcode = watch("postcode");
 
   useEffect(() => {
-    setValue("name", store?.name);
-    setValue("address", store?.address);
-    setValue("postcode", store?.postcode);
-    setValue("lat", store?.lat);
-    setValue("lng", store?.lng);
-  }, [store, setValue]);
-
-  useEffect(() => {
-    setValue("lat", position?.lat);
-    setValue("lng", position?.lng);
+    setValue("lat", position.lat);
+    setValue("lng", position.lng);
   }, [position, setValue]);
 
   const handlePostcodeChange = async (postcode: string) => {
@@ -149,7 +135,7 @@ export const UpdateStoreForm: React.FC = () => {
     (suggestion: Suggestion) => {
       const selectedPostCode = suggestion.address?.postcode || postcode;
       setValue("postcode", selectedPostCode);
-      setValue("address", suggestion.display_name);
+      setValue("addressName", suggestion.display_name);
       const newPosition = { lat: parseFloat(suggestion.lat), lng: parseFloat(suggestion.lon) };
       setPosition(newPosition);
       setSuggestions([]);
@@ -157,10 +143,10 @@ export const UpdateStoreForm: React.FC = () => {
     [setValue, postcode],
   );
 
-  const onSubmit = async (data: storeData) => {
+  const onSubmit = async (data: addressData) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/${id}`, {
-        method: "PUT",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/addresses/create`, {
+        method: "POST",
         body: JSON.stringify(data),
         credentials: "include",
         headers: {
@@ -170,46 +156,28 @@ export const UpdateStoreForm: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update store");
+        throw new Error("Failed to create an address");
       }
       reset();
-      toast.success("Store updated successfully", { position: "top-center", duration: 3000 });
+      toast.success("Address created successfully", { position: "top-center", duration: 3000 });
       setTimeout(() => {
-        router.push("/dashboard/stores");
+        router.push("/my-cart/checkout");
       }, 3000);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update store", { position: "top-center" });
+      toast.error("Failed to create an address", { position: "top-center" });
     }
   };
 
   return (
     <>
       <div className="p-4">
-        <h2 className="text-xl font-bold text-center">Update Store Details</h2>
+        <h2 className="text-xl font-bold text-center">Create an Address</h2>
         <div className="flex mt-3 gap-4 flex-col lg:flex-row">
           <form onSubmit={handleSubmit(onSubmit)} className="gap-6 flex flex-col w-full">
             <div className="flex flex-col gap-2 lg:gap-4">
               <Controller
-                name="name"
-                control={control}
-                rules={{ required: "Name is required" }}
-                render={({ field }) => (
-                  <Input
-                    isRequired
-                    {...field}
-                    type="text"
-                    label="Name"
-                    labelPlacement="outside"
-                    placeholder="Enter store name"
-                    autoComplete="off"
-                  />
-                )}
-              />
-              {errors.name?.message && <div className="text-red-500">{errors.name.message}</div>}
-
-              <Controller
-                name="address"
+                name="addressName"
                 rules={{ required: "Address is required" }}
                 control={control}
                 render={({ field }) => (
@@ -218,13 +186,13 @@ export const UpdateStoreForm: React.FC = () => {
                     {...field}
                     label="Address"
                     labelPlacement="outside"
-                    placeholder="Enter store address"
+                    placeholder="Enter your address"
                     autoComplete="off"
                   />
                 )}
               />
-              {errors.address?.message && (
-                <div className="text-red-500">{errors.address.message}</div>
+              {errors.addressName?.message && (
+                <div className="text-red-500">{errors.addressName.message}</div>
               )}
 
               <Controller

@@ -97,7 +97,7 @@ export const Profile: React.FC = () => {
         formData.append("profilePicture", pictureFile);
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/update`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/update`, {
         method: "PUT",
         body: formData,
         credentials: "include",
@@ -154,7 +154,7 @@ export const Profile: React.FC = () => {
   const deleteProfile = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users?email=${userProfile?.email}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users?email=${userProfile?.email}`,
         {
           method: "DELETE",
           credentials: "include",

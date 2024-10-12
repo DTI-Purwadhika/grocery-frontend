@@ -1,23 +1,24 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
-type UserProfile = {
-  name: string;
-  email: string;
-  role: string;
-  profilePicture: string;
-  referralCode: string;
-  isVerified: boolean;
-};
+export type ShippingDataResponse = {
+    id: number;
+    origin: string;
+    destination: string;
+    courier: string;
+    cost: number;
+    description: string;
+    etd: string;
+  };
 
-export const useProfile = () => {
+export const useShipping = () => {
   const cookieValue = getCookie("Sid");
-  const [userProfile, setUserProfile] = useState<UserProfile>();
+  const [shipping, setShipping] = useState<ShippingDataResponse[]>([]);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchShipping = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/profile`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/shipping`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -28,18 +29,19 @@ export const useProfile = () => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch user profile");
+          throw new Error("Failed to fetch shipping data");
         }
 
         const data = await response.json();
-        setUserProfile(data.data);
+
+        setShipping(data.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchUserProfile();
+    fetchShipping();
   }, []);
 
-  return { userProfile };
+  return shipping;
 };
