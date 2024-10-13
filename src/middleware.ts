@@ -42,17 +42,13 @@ export default auth( async (request : NextRequest) => {
     // @ts-ignore
     const userRole = session.user?.role;
         
-    if (userRole === "SUPER" || userRole === "ADMIN" ) {
+    if (userRole === "ADMIN") {
       if(path.startsWith("/my-profile")){
         return NextResponse.next();
       }
-
-      if(userRole === "ADMIN" && superAdminRoutes.includes(path)){
+      
+      if(superAdminRoutes.includes(path) || !path.startsWith("/dashboard")){
         return NextResponse.redirect(new URL("/dashboard", request.url));
-      }
-
-      if (userRole === "ADMIN" && !path.startsWith("/dashboard")) {
-          return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }
 
