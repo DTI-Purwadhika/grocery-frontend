@@ -7,7 +7,7 @@ const restService = async (endpoint: string, method: string = "GET", data?: any)
   const cookieStore = cookies();
   const token = cookieStore.get("Sid");
 
-  if(endpoint.startsWith("products") || endpoint.startsWith("categories")){
+  if (endpoint.startsWith("products") || endpoint.startsWith("categories")) {
     try {
       const response = await fetch(`${API_URL}/${endpoint}`, {
         method: method,
@@ -16,7 +16,7 @@ const restService = async (endpoint: string, method: string = "GET", data?: any)
         },
         body: JSON.stringify(data),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to ${method} ${endpoint}`);
       }
@@ -25,12 +25,12 @@ const restService = async (endpoint: string, method: string = "GET", data?: any)
       const totalData = resultData.totalElements;
       const totalPage = resultData.totalPages;
       const content = resultData.content;
-  
+
       return { content, totalData, totalPage, resultData };
     } catch (error) {
       throw new Error(`Can't catch ${endpoint}: ${error}`);
     }
-  }else{
+  } else {
     try {
       const response = await fetch(`${API_URL}/${endpoint}`, {
         method: method,
@@ -41,7 +41,7 @@ const restService = async (endpoint: string, method: string = "GET", data?: any)
         },
         body: JSON.stringify(data),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to ${method} ${endpoint}`);
       }
@@ -50,14 +50,12 @@ const restService = async (endpoint: string, method: string = "GET", data?: any)
       const totalData = resultData.totalElements;
       const totalPage = resultData.totalPages;
       const content = resultData.content;
-  
+
       return { content, totalData, totalPage, resultData };
     } catch (error) {
       throw new Error(`Can't catch ${endpoint}: ${error}`);
     }
   }
-  
-  
 };
 
 export default restService;

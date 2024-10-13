@@ -17,15 +17,18 @@ export const useProfile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/profile`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // @ts-ignore
-            Authorization: `Bearer ${cookieValue}`,
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/profile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // @ts-ignore
+              Authorization: `Bearer ${cookieValue}`,
+            },
+            credentials: "include",
           },
-          credentials: "include",
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user profile");
