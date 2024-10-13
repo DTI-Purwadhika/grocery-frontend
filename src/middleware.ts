@@ -43,6 +43,10 @@ export default auth( async (request : NextRequest) => {
     const userRole = session.user?.role;
         
     if (userRole === "ADMIN") {
+      if(path.startsWith("/my-profile")){
+        return NextResponse.next();
+      }
+      
       if(superAdminRoutes.includes(path) || !path.startsWith("/dashboard")){
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
