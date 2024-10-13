@@ -1,6 +1,6 @@
 "use client";
 import { Key } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 import { Loading, ProductCard } from "@/components/elements";
@@ -33,8 +33,7 @@ const TabContent = ({ category }: TabType) => {
       "",
     ],
     queryFn: fetchData,
-    placeholderData: keepPreviousData,
-    staleTime: 10000,
+    staleTime: 0,
   });
 
   if (isLoading) {
@@ -61,7 +60,7 @@ const TabContent = ({ category }: TabType) => {
 
   return (
     <>
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 ">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 lg:gap-6 ">
         {collectData?.map((data: ProductType) => <ProductCard key={data.id} {...data} />)}
       </div>
       <div className={`${totalPages > 1 ? "block" : "hidden"} my-8 w-full`}>

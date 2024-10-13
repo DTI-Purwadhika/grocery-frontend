@@ -28,6 +28,7 @@ const StoreSelect = ({ source = "", noLabel = false }: SelectorType) => {
 
   return (
     <Autocomplete
+      aria-labelledby={source}
       className="w-full"
       defaultItems={collectData}
       isLoading={isLoading}
