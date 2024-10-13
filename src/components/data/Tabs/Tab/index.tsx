@@ -18,8 +18,9 @@ const TabContent = ({ category }: TabType) => {
   const keyword = getQueryParam("keyword") || "";
   const page = Number(getQueryParam("page")) || 1;
   const size = Number(getQueryParam("size")) || 10;
-  const sortBy: Key = "id";
-  const sortDir: "ascending" | "descending" = "ascending";
+  const sortBy: Key = getQueryParam("sort")?.split(",")[0] || "id";
+  const sortDir: "ascending" | "descending" =
+    (getQueryParam("sort")?.split(",")[1] as "ascending" | "descending") || "ascending";
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [

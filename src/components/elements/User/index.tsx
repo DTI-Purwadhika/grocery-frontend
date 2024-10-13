@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useProfile } from "@/hooks/useProfile";
 import { useLogout } from "@/hooks/useLogout";
 
-import { ThemeButton, Notification } from "..";
+import { ThemeButton } from "..";
 
 const UserCard = () => {
   const { userProfile } = useProfile();
@@ -21,7 +21,7 @@ const UserCard = () => {
         <Card className="hidden md:flex">
           <CardBody className="flex flex-row gap-2">
             <ThemeButton />
-            <Notification />
+            {/* <Notification /> */}
           </CardBody>
         </Card>
         <Dropdown>
