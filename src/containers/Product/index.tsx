@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import { Image } from "@nextui-org/image";
 import { Button, ButtonGroup } from "@nextui-org/button";
-import { Heart, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { useDisclosure } from "@nextui-org/modal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { toCapital } from "@/services/formatter";
 import { Product } from "@/constants/entity";
@@ -19,9 +21,13 @@ import { ProductDetailType } from "./type";
 const ProductDetail = ({ id }: ProductDetailType) => {
   const [collectData, setCollectData] = useState<Product>();
   const [quantity, setQuantity] = useState(1);
+  const [availableStock, setAvailableStock] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const { data: session } = useSession();
   const { addItemToCart } = useCart();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const userEmail = session?.user?.email || "1";
 
   useEffect(() => {
     setIsLoading(true);
@@ -31,8 +37,11 @@ const ProductDetail = ({ id }: ProductDetailType) => {
   const fetchData = async () => {
     const endpoint = `products/${id}`;
     const { resultData } = await restService(endpoint);
+    let totalStock = 0;
 
     setCollectData(resultData);
+    (resultData as Product)?.stocks?.map((store) => (totalStock += store.stock));
+    setAvailableStock(totalStock);
     setIsLoading(false);
   };
 
@@ -53,41 +62,37 @@ const ProductDetail = ({ id }: ProductDetailType) => {
     </ButtonGroup>
   );
 
+  const handleOpen = () => {
+    if (userEmail === "1") router.push("/login");
+    else onOpen();
+  };
+
   const alert = (
-    <StockList isOpen={isOpen} title={`Select Store did you want from`} onClose={onClose}>
+    <StockList isOpen={isOpen} title={`Put the quantity of ${collectData?.name}`} onClose={onClose}>
       <div>
         <div className="flex flex-row justify-between border-1 p-2 items-center rounded-lg mb-4">
           <h3 className="text-lg font-semibold">Quantity :</h3>
           {quantityButton}
         </div>
-        {collectData?.stocks?.map((store) => (
-          <div
-            key={store.storeId}
-            className="flex flex-row justify-between border-1 p-2 items-center rounded-lg"
-          >
-            <div>
-              <h3 className="text-lg font-semibold">{store.storeName}</h3>
-              <span>Stock : {store.stock}</span>
-            </div>
-            <Button
-              key={store.storeId}
-              color="primary"
-              isDisabled={store.stock < quantity}
-              variant="solid"
-              onClick={() => handleAddtoCart(store.storeId)}
-            >
-              <ShoppingCart /> Add {quantity} to cart
-            </Button>
-          </div>
-        ))}
+
+        <Button
+          key={"buy"}
+          className="w-full"
+          color="primary"
+          isDisabled={availableStock < quantity}
+          variant="solid"
+          onClick={() => handleAddtoCart()}
+        >
+          <ShoppingCart /> Add {quantity} to cart
+        </Button>
       </div>
     </StockList>
   );
 
-  const handleAddtoCart = (storeId: string) => {
+  const handleAddtoCart = () => {
     const cartItem: CartItem = { product: collectData!, quantity };
 
-    addItemToCart(cartItem, storeId);
+    addItemToCart(cartItem, userEmail);
     onClose();
   };
 
@@ -108,14 +113,14 @@ const ProductDetail = ({ id }: ProductDetailType) => {
             width={500}
           />
         </div>
-        <div className="flex flex-row justify-between text-xl font-bold items-start mt-4">
+        <div className="flex flex-row justify-start text-xl font-bold items-start mt-4">
           <h1>{toCapital(collectData?.name || "")}</h1>
-          <Heart />
         </div>
         <p className="text-2xs">{collectData?.category}</p>
         <br />
         <div className="flex flex-row justify-between items-center">
           <p className="text-secondary font-semibold text-lg">Rp {collectData?.price},-</p>
+          <p className="text-foreground font-medium text-lg">{availableStock} Available</p>
         </div>
         <br />
         <div className="mb-4">
@@ -126,11 +131,17 @@ const ProductDetail = ({ id }: ProductDetailType) => {
       <Button
         className="w-full opacity-90 hover:opacity-100"
         color="primary"
+        isDisabled={availableStock === 0}
         radius="sm"
         size="lg"
-        onClick={() => onOpen()}
+        onClick={handleOpen}
       >
-        <ShoppingCart /> Add {quantity > 1 && quantity} to cart
+        <ShoppingCart />{" "}
+        {availableStock === 0
+          ? "Out of stock"
+          : userEmail === "1"
+            ? "Login to buy"
+            : `Add ${quantity > 1 && quantity} to cart`}
       </Button>
       {alert}
     </div>

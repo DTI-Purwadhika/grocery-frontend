@@ -36,7 +36,6 @@ export default auth(async (request: NextRequest) => {
   const noSessionRoutes = [
     "/login",
     "/register",
-    "/catalog",
     "/reset-password",
     "/reset-password-request",
     "/set-password",

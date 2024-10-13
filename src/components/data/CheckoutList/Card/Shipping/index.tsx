@@ -121,18 +121,22 @@ const Shipping = () => {
             <div className="flex flex-row items-start gap-2 text-xs">
               <FaTruckMoving className="text-primary w-6 h-6" />
               <p>
-                <span className="font-bold">Courier:</span> {upperCase(selectedShipping?.courier)}
+                <span className="font-bold">Courier:</span>{" "}
+                {upperCase(selectedShipping?.courier || "Store Courier")}
                 <br />
-                <span className="font-bold">Description:</span> {selectedShipping?.description}
+                <span className="font-bold">Description:</span>{" "}
+                {selectedShipping?.description || "A Store Courier at your door"}
                 <br />
-                <span className="font-bold">Origin:</span> {selectedShipping?.origin}
+                <span className="font-bold">Origin:</span>{" "}
+                {selectedShipping?.origin || "Nearest Store"}
                 <br />
-                <span className="font-bold">Destination:</span> {selectedShipping?.destination}
+                <span className="font-bold">Destination:</span>{" "}
+                {selectedShipping?.destination || "Your Location"}
                 <br />
-                <span className="font-bold">Cost: </span>Rp. {selectedShipping?.cost}
+                <span className="font-bold">Cost: </span>Rp. {selectedShipping?.cost || 11500}
                 <br />
                 <span className="font-bold">Estimated time of delivery:</span>{" "}
-                {selectedShipping?.etd}
+                {selectedShipping?.etd || "2-3 days"}
               </p>
             </div>
           </div>

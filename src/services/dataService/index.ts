@@ -4,15 +4,16 @@ import restService from "@/services/restService";
 export const fetchData = async ({
   queryKey,
 }: {
-  queryKey: [string, string, number, number, string, string, string, string];
+  queryKey: [string, string, number, number, string, string, string, string, string?];
 }) => {
-  const [title, keyword, page, size, sortBy, sortDir, category, stores] = queryKey;
+  const [title, keyword, page, size, sortBy, sortDir, category, stores, userId] = queryKey;
   let endpoint = `${title.toLowerCase()}?`;
 
   if (category.length > 0) endpoint += `category=${encodeURIComponent(category)}&`;
   if (stores.length > 0) endpoint += `storeId=${stores}&`;
   if (title.toLowerCase() === "users") endpoint += `roleKeyword=CUSTOMER&`;
   if (title.toLowerCase() === "admins") endpoint += `roleKeyword=ADMIN&`;
+  if (userId) endpoint += `userId=${userId}&`;
 
   const url = `${endpoint}page=${page - 1}&keyword=${encodeURIComponent(keyword?.toLowerCase())}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir.replace("ending", "")}`;
   const { content, totalData, totalPage } = await restService(url);

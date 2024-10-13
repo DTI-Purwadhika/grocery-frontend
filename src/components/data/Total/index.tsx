@@ -16,30 +16,29 @@ const Total = ({ source }: TotalType) => {
 
   const subtotal =
     cart?.items?.reduce((acc, item) => acc + (item?.product.price || 0) * item.quantity, 0) || 0;
-  const total = subtotal + shippingFee;
+  const currentShipFee = shippingFee ? shippingFee : 11500;
+  const total = subtotal + currentShipFee;
 
   return (
-    <>
-      <div className="flex flex-col gap-4">
-        <Shipping />
-        <div>
-          <div className="flex flex-row justify-between">
-            <span>Subtotal</span>
-            <span>: Rp {subtotal},-</span>
-          </div>
-          <div className="flex flex-row justify-between my-2">
-            <span>Shipping</span>
-            <span>: Rp {shippingFee},-</span>
-          </div>
-          <hr className="my-3" />
-          <div className="flex flex-row justify-between font-semibold text-lg">
-            <span>Total</span>
-            <span>: Rp {total},-</span>
-          </div>
-          {source === "cart" ? <CheckoutButton /> : <PaymentButtonWrapper />}
+    <div className="flex flex-col gap-4">
+      <Shipping />
+      <div>
+        <div className="flex flex-row justify-between">
+          <span>Subtotal</span>
+          <span>: Rp {subtotal},-</span>
         </div>
+        <div className="flex flex-row justify-between my-2">
+          <span>Shipping</span>
+          <span>: Rp {currentShipFee},-</span>
+        </div>
+        <hr className="my-3" />
+        <div className="flex flex-row justify-between font-semibold text-lg">
+          <span>Total</span>
+          <span>: Rp {total},-</span>
+        </div>
+        {source === "cart" ? <CheckoutButton /> : <PaymentButtonWrapper />}
       </div>
-    </>
+    </div>
   );
 };
 

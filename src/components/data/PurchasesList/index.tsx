@@ -1,6 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { Key } from "react";
+import { useSession } from "next-auth/react";
 
 import { useParam } from "@/hooks/useParam";
 import { fetchData } from "@/services/dataService";
@@ -17,11 +18,22 @@ const PurchasesList = () => {
   const keyword = getQueryParam("keyword") || "";
   const page = Number(getQueryParam("page")) || 1;
   const size = Number(getQueryParam("size")) || 10;
-  const sortBy: Key = "id";
-  const sortDir: "ascending" | "descending" = "ascending";
+  const sortBy: Key = "createdAt";
+  const sortDir: "ascending" | "descending" = "descending";
+  const { data: session } = useSession();
 
   const { data, isLoading } = useQuery({
-    queryKey: [`checkouts`, keyword, page, size, sortBy, sortDir, "", ""],
+    queryKey: [
+      `checkouts`,
+      keyword,
+      page,
+      size,
+      sortBy,
+      sortDir,
+      "",
+      "",
+      session?.user?.email || "",
+    ],
     queryFn: fetchData,
     staleTime: 0,
   });
