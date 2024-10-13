@@ -10,7 +10,7 @@ const CheckoutButton = () => {
         as={Link}
         className="w-full mt-6 mb-4"
         color="primary"
-        href="/my-cart/checkout?method=auto"
+        href="/my-cart/checkout"
         radius="sm"
         size="lg"
       >

@@ -3,21 +3,24 @@ import { CreditCard } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { useParam } from "@/hooks/useParam";
 import restService from "@/services/restService";
 import { useCart } from "@/providers/CartProviders";
 
 const PaymentButton = () => {
-  const { getQueryParam } = useParam();
   const { cart } = useCart();
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const fetchUrl = async () => {
-    const endpoint = `checkouts/${cart.id}?method=${getQueryParam("method")}`;
+  const fetchUrl = () => {
+    const currentMethod = localStorage.getItem("method") ? localStorage.getItem("method") : "auto";
+    const endpoint: string = `checkouts/${cart.id}?method=${currentMethod}`;
+
+    sendUrl(endpoint);
+  };
+
+  const sendUrl = async (endpoint: string) => {
     const { resultData } = await restService(endpoint, "POST");
-    // await restService(`cart/${cart.id}/clear`, "DELETE");
 
     router.push(resultData.invoiceUrl);
   };
