@@ -89,6 +89,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
 
 export const CreateStoreForm: React.FC = () => {
   const cookieValue = getCookie("Sid");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const cities: City[] = useCities();
   const [position, setPosition] = useState<LatLng>({ lat: -7.257472, lng: 112.75209 });
@@ -147,6 +148,7 @@ export const CreateStoreForm: React.FC = () => {
 
   const onSubmit = async (data: storeData) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/create`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -160,6 +162,7 @@ export const CreateStoreForm: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to create a store");
       }
+      setIsLoading(false);
       reset();
       toast.success("Store created successfully", { position: "top-center", duration: 3000 });
       setTimeout(() => {
@@ -264,8 +267,12 @@ export const CreateStoreForm: React.FC = () => {
                 {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
               </Autocomplete>
             </div>
-            <Button type="submit" className="w-full bg-green-600 text-white font-semibold">
-              Save
+            <Button
+              isDisabled={isLoading}
+              type="submit"
+              className="w-full bg-green-600 text-white font-semibold"
+            >
+              {isLoading ? "Loading..." : "Save"}
             </Button>
           </form>
           <div className="w-full h-64 lg:h-auto">

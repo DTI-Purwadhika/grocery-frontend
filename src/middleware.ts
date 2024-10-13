@@ -25,7 +25,7 @@ export default auth( async (request : NextRequest) => {
     const session = await auth();
     const publicRoutes = ['/', '/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
     const noSessionRoutes = ['/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
-    const superAdminRoutes = ['/dashboard/admins', '/dashboard/stores']
+    const superAdminRoutes = ['/dashboard/admins', '/dashboard/stores', '/my-profile']
 
     if(session && noSessionRoutes.includes(path)){
       return NextResponse.redirect(new URL("/", request.url))

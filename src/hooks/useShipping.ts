@@ -12,12 +12,14 @@ export type ShippingDataResponse = {
   };
 
 export const useShipping = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const cookieValue = getCookie("Sid");
   const [shipping, setShipping] = useState<ShippingDataResponse[]>([]);
 
   useEffect(() => {
     const fetchShipping = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/shipping`, {
           method: "GET",
           headers: {
@@ -32,6 +34,8 @@ export const useShipping = () => {
           throw new Error("Failed to fetch shipping data");
         }
 
+        setIsLoading(false);
+        
         const data = await response.json();
 
         setShipping(data.data);
@@ -43,5 +47,5 @@ export const useShipping = () => {
     fetchShipping();
   }, []);
 
-  return shipping;
+  return {shipping, isLoading};
 };
