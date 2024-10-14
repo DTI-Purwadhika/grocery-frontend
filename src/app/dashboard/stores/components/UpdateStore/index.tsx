@@ -94,6 +94,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
 
 export const UpdateStoreForm: React.FC = () => {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const cookieValue = getCookie("Sid");
   const cities: City[] = useCities();
@@ -165,6 +166,7 @@ export const UpdateStoreForm: React.FC = () => {
 
   const onSubmit = async (data: storeData) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/stores/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
@@ -178,6 +180,7 @@ export const UpdateStoreForm: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to update store");
       }
+      setIsLoading(false);
       reset();
       toast.success("Store updated successfully", { position: "top-center", duration: 3000 });
       setTimeout(() => {
@@ -282,8 +285,12 @@ export const UpdateStoreForm: React.FC = () => {
                 {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
               </Autocomplete>
             </div>
-            <Button className="w-full bg-green-600 text-white font-semibold" type="submit">
-              Save
+            <Button
+              isDisabled={isLoading}
+              type="submit"
+              className="w-full bg-green-600 text-white font-semibold"
+            >
+              {isLoading ? "Loading..." : "Save"}
             </Button>
           </form>
           <div className="w-full h-64 lg:h-auto">

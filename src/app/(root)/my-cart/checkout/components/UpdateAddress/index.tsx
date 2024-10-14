@@ -93,6 +93,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
 
 export const UpdateAddressForm: React.FC = () => {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const address: AddressDataResponse | undefined = getAddress(Number(id));
   const router = useRouter();
   const cookieValue = getCookie("Sid");
@@ -160,6 +161,7 @@ export const UpdateAddressForm: React.FC = () => {
 
   const onSubmit = async (data: addressData) => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/addresses/${Number(id)}`,
         {
@@ -176,6 +178,7 @@ export const UpdateAddressForm: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to update address");
       }
+      setIsLoading(false);
       reset();
       toast.success("Address updated successfully", { position: "top-center", duration: 3000 });
       setTimeout(() => {
@@ -263,8 +266,13 @@ export const UpdateAddressForm: React.FC = () => {
                 {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
               </Autocomplete>
             </div>
-            <Button className="w-full bg-green-600 text-white font-semibold" type="submit">
-              Save
+
+            <Button
+              isDisabled={isLoading}
+              type="submit"
+              className="w-full bg-green-600 text-white font-semibold"
+            >
+              {isLoading ? "Loading..." : "Save"}
             </Button>
           </form>
           <div className="w-full h-64 lg:h-auto">

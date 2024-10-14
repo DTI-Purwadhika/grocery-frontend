@@ -31,6 +31,7 @@ type profileData = {
 
 export const Profile: React.FC = () => {
   const cookieValue = getCookie("Sid");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const [profilePic, setProfilePic] = useState<string | undefined>();
   const [pictureFile, setPictureFile] = useState<File>();
@@ -88,6 +89,7 @@ export const Profile: React.FC = () => {
 
   const onSubmit = async (data: profileData) => {
     try {
+      setIsLoading(true);
       const formData = new FormData();
 
       if (data.name) {
@@ -115,6 +117,8 @@ export const Profile: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to update profile");
       }
+
+      setIsLoading(false);
 
       const result = await response.json();
 
@@ -203,25 +207,27 @@ export const Profile: React.FC = () => {
   return (
     <>
       <div className="relative max-w-md mx-auto p-4 bg-gray-50 shadow-lg rounded-lg">
-        <div className="absolute flex flex-col lg:flex-row items-center gap-1 top-8 left-3 lg:left-8 ">
-          <Chip color="primary" size="sm" startContent={<MdVerifiedUser />}>
-            <span className="font-bold">Verified</span>
-          </Chip>
-          <Popover color="primary" placement="bottom" showArrow={true}>
-            <PopoverTrigger>
-              <button type="button">
-                <RxQuestionMarkCircled />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="p-1">
-                <p className="text-xs font-bold">
-                  Your account is verified and you&apos;re ready to create orders.
-                </p>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+        {userProfile?.role === "CUSTOMER" && (
+          <div className="absolute flex flex-col lg:flex-row items-center gap-1 top-8 left-3 lg:left-8 ">
+            <Chip size="sm" color="primary" startContent={<MdVerifiedUser />}>
+              <span className="font-bold">Verified</span>
+            </Chip>
+            <Popover color="primary" placement="bottom" showArrow={true}>
+              <PopoverTrigger>
+                <button type="button">
+                  <RxQuestionMarkCircled />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="p-1">
+                  <p className="text-xs font-bold">
+                    Your account is verified and you&apos;re ready to create orders.
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
 
         <Button
           className="absolute font-bold text-green-600 top-1 right-3"
@@ -323,7 +329,7 @@ export const Profile: React.FC = () => {
           {
             // @ts-ignore
             session?.provider !== "google" && (
-              <div className="relative">
+              <div>
                 <Input
                   className="font-bold"
                   isDisabled={formDisabled}
@@ -338,7 +344,6 @@ export const Profile: React.FC = () => {
                   endContent={
                     <Button
                       isIconOnly
-                      className="absolute bottom-0 right-3 flex items-center"
                       variant="light"
                       onPress={() => setShowPassword(!showPassword)}
                     >
@@ -379,7 +384,7 @@ export const Profile: React.FC = () => {
               isDisabled={!formDisabled}
               type="submit"
             >
-              Update Profile
+              {isLoading ? "Loading..." : "Update Profile"}
             </Button>
           </div>
           {/* Delete Profile Button */}

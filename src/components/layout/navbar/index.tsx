@@ -21,6 +21,7 @@ import { SearchBar } from "@/components/elements";
 import { useLogout } from "@/hooks/useLogout";
 import { useCart } from "@/providers/CartProviders";
 import { useProfile } from "@/hooks/useProfile";
+import { Location } from "@/components/data/Location";
 
 export const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -73,6 +74,7 @@ export const NavBar: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 w-full z-50">
+        <Location />
         <div className="relative">
           <div className="relative z-40 bg-gray-100 bg-no-repeat bg-cover py-4">
             <div className="flex px-4 items-center justify-between lg:px-10">
