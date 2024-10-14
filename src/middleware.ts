@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+
 import { auth } from "../auth";
 
 export const config = {
@@ -35,7 +36,6 @@ export default auth(async (request: NextRequest) => {
   const noSessionRoutes = [
     "/login",
     "/register",
-    "/catalog",
     "/reset-password",
     "/reset-password-request",
     "/set-password",
