@@ -141,7 +141,7 @@ const ProductDetail = ({ id }: ProductDetailType) => {
           ? "Out of stock"
           : userEmail === "1"
             ? "Login to buy"
-            : `Add ${quantity > 1 && quantity} to cart`}
+            : `Add ${quantity > 1 ? quantity : ""} to cart`}
       </Button>
       {alert}
     </div>

@@ -24,7 +24,7 @@ const ProductCard = ({ id, name, price, images }: ProductType) => {
             <h3 className={`${fontSizeClass} font-semibold mt-2`}>{productName}</h3>
             <div className="flex flex-row justify-between items-end">
               <span className="text-secondary text-xs">Rp {price},-</span>
-              <span className="text-default text-2xs">/gram</span>
+              <span className="text-default text-2xs">/100 gram</span>
             </div>
           </div>
         </CardBody>

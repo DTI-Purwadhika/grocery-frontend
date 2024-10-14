@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
+import React from "react";
+import { SessionProvider } from "next-auth/react";
+
 import { Providers } from "@/providers";
 import { ChildType } from "@/shares/types";
 import { poppins } from "@/shares/assets/fonts";
-
-import { auth } from "../../auth";
-
-import React from "react";
-import { SessionProvider } from "next-auth/react";
 import { CartProvider } from "@/providers/CartProviders";
 import { LocationProvider } from "@/providers/LocationProvider";
+
+import { auth } from "../../auth";
 
 import "@/styles/globals.css";
 

@@ -24,7 +24,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
   const { data: stores, isLoading } = useQuery({
     queryKey: [`stores`, "", 1, 100, "id", "asc", "", ""],
     queryFn: fetchData,
-    staleTime: 0,
+    staleTime: 10000,
   });
   const [tempData, setTempData] = useState<Product>(data as Product);
   const [readyData, setReadyData] = useState<Product>();
