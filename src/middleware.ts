@@ -40,7 +40,7 @@ export default auth(async (request: NextRequest) => {
     "/reset-password-request",
     "/set-password",
   ];
-  const superAdminRoutes = ["/dashboard/admins", "/dashboard/stores", "/my-profile"];
+  const superAdminRoutes = ["/dashboard/stores"];
 
   if (session && noSessionRoutes.includes(path)) {
     return NextResponse.redirect(new URL("/", request.url));
@@ -63,6 +63,16 @@ export default auth(async (request: NextRequest) => {
     }
 
     if (superAdminRoutes.includes(path) || !path.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  if(userRole === "SUPER"){
+    if (path.startsWith("/my-profile")) {
+      return NextResponse.next();
+    }
+
+    if(!path.startsWith("/dashboard")){
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
