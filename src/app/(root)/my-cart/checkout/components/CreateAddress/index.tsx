@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 import React, { useCallback, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -9,14 +10,14 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { getCookie } from "cookies-next";
 import { toast } from "sonner";
-import { City } from "@/constants/city";
-import useCities from "@/hooks/useCities";
 import { useRouter } from "next/navigation";
-
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
+
+import useCities from "@/hooks/useCities";
+import { City } from "@/constants/city";
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 
@@ -74,8 +75,10 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
     if (markerRef.current) {
       markerRef.current.on("dragend", () => {
         const marker = markerRef.current;
+
         if (marker != null) {
           const newPosition = marker.getLatLng();
+
           setPosition(newPosition);
           map.panTo(newPosition);
         }
@@ -83,7 +86,7 @@ const DraggableMarker: React.FC<DraggableMarkerProps> = ({ position, setPosition
     }
   }, [map, setPosition]);
 
-  return <Marker draggable={true} position={position} ref={markerRef} />;
+  return <Marker ref={markerRef} draggable={true} position={position} />;
 };
 
 export const AddAddressForm: React.FC = () => {
@@ -123,6 +126,7 @@ export const AddAddressForm: React.FC = () => {
           `https://nominatim.openstreetmap.org/search?format=json&country=id&addressdetails=1&postalcode=${postcode}`,
         );
         const data: Suggestion[] = await response.json();
+
         setSuggestions(data);
       } catch (error) {
         console.error("Error fetching postcode suggestions");
@@ -135,9 +139,11 @@ export const AddAddressForm: React.FC = () => {
   const selectSuggestion = useCallback(
     (suggestion: Suggestion) => {
       const selectedPostCode = suggestion.address?.postcode || postcode;
+
       setValue("postcode", selectedPostCode);
       setValue("addressName", suggestion.display_name);
       const newPosition = { lat: parseFloat(suggestion.lat), lng: parseFloat(suggestion.lon) };
+
       setPosition(newPosition);
       setSuggestions([]);
     },
@@ -177,45 +183,45 @@ export const AddAddressForm: React.FC = () => {
       <div className="p-4">
         <h2 className="text-xl font-bold text-center">Create an Address</h2>
         <div className="flex mt-3 gap-4 flex-col lg:flex-row">
-          <form onSubmit={handleSubmit(onSubmit)} className="gap-6 flex flex-col w-full">
+          <form className="gap-6 flex flex-col w-full" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-2 lg:gap-4">
               <Controller
-                name="addressName"
-                rules={{ required: "Address is required" }}
                 control={control}
+                name="addressName"
                 render={({ field }) => (
                   <Textarea
                     isRequired
                     {...field}
+                    autoComplete="off"
                     label="Address"
                     labelPlacement="outside"
                     placeholder="Enter your address"
-                    autoComplete="off"
                   />
                 )}
+                rules={{ required: "Address is required" }}
               />
               {errors.addressName?.message && (
                 <div className="text-red-500">{errors.addressName.message}</div>
               )}
 
               <Controller
-                name="postcode"
-                rules={{ required: "Postcode is required" }}
                 control={control}
+                name="postcode"
                 render={({ field }) => (
                   <Input
                     isRequired
                     {...field}
+                    autoComplete="off"
+                    label="Postcode"
+                    labelPlacement="outside"
+                    placeholder="Enter postcode"
                     onChange={(e) => {
                       field.onChange(e.target.value);
                       handlePostcodeChange(e.target.value);
                     }}
-                    label="Postcode"
-                    labelPlacement="outside"
-                    placeholder="Enter postcode"
-                    autoComplete="off"
                   />
                 )}
+                rules={{ required: "Postcode is required" }}
               />
               {errors.postcode?.message && (
                 <div className="text-red-500">{errors.postcode.message}</div>
@@ -237,16 +243,17 @@ export const AddAddressForm: React.FC = () => {
               <Autocomplete
                 isRequired
                 defaultItems={cities}
+                label="Select a city"
+                labelPlacement="outside"
                 placeholder="Search a city"
                 onSelectionChange={(selected) => {
                   setValue("cityId", Number(selected?.toString()));
                 }}
-                label="Select a city"
-                labelPlacement="outside"
               >
                 {(city) => <AutocompleteItem key={city.id}>{city.name}</AutocompleteItem>}
               </Autocomplete>
             </div>
+
             <Button
               isDisabled={isLoading}
               type="submit"
@@ -258,12 +265,12 @@ export const AddAddressForm: React.FC = () => {
           <div className="w-full h-64 lg:h-auto">
             <MapContainer
               center={[position.lat, position.lng]}
-              zoom={13}
               style={{ height: "100%", width: "100%" }}
+              zoom={13}
             >
               <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <DraggableMarker position={position} setPosition={setPosition} />
             </MapContainer>

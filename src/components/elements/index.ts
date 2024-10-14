@@ -8,3 +8,4 @@ export { default as SearchBar } from "./SearchBar/wrapper";
 export { default as PageSize } from "./PageSize/wrapper";
 export { default as Loading } from "./Loading";
 export { default as DataSelect } from "./DataSelect/wrapper";
+export { default as Filter } from "./Filter";

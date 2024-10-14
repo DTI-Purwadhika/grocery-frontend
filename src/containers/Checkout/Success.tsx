@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/button";
 import { ReceiptText, PackageCheck } from "lucide-react";
+import Link from "next/link";
 
 const Success = () => {
   return (
@@ -11,7 +12,7 @@ const Success = () => {
           Your order has been placed succesfully and is on it&apos;s way to being processed.
         </p>
       </div>
-      <Button color="primary" radius="sm" size="lg">
+      <Button as={Link} color="primary" href="/my-profile/my-purchases" radius="sm" size="lg">
         <ReceiptText /> Track my order
       </Button>
     </div>

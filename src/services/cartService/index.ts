@@ -7,9 +7,9 @@ export const fetchCartItems = async (userId: string): Promise<CartType> => {
   return resultData;
 };
 
-export const addItemToCart = async (cart: CartItem, storeId: string): Promise<CartType> => {
-  const payload = { productId: cart.product.id, quantity: cart.quantity, storeId: storeId };
-  const { resultData } = await restService(`cart?userId=${1}`, "POST", payload);
+export const addItemToCart = async (cart: CartItem, userEmail: string): Promise<CartType> => {
+  const payload = { productId: cart.product.id, quantity: cart.quantity };
+  const { resultData } = await restService(`cart?userId=${userEmail}`, "POST", payload);
 
   return resultData;
 };

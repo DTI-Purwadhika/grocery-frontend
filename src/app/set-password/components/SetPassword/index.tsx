@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/modal";
 import { PiEyeBold } from "react-icons/pi";
 import { PiEyeClosedBold } from "react-icons/pi";
+
 import { SetNewPassword } from "@/hooks/SetNewPassword";
 import { CheckVerificationLink } from "@/hooks/CheckVerificationLink";
 import { RequestNewVerification } from "@/hooks/RequestNewVerification";
@@ -37,6 +38,7 @@ export const SetPasswordForm: React.FC = () => {
     const checkStatus = async () => {
       try {
         const status = await CheckVerificationLink(emailToken);
+
         setLoading(false);
         setStatus(status);
       } catch (error) {
@@ -59,6 +61,7 @@ export const SetPasswordForm: React.FC = () => {
     try {
       SendNewVerification(email);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
     }
   };
@@ -67,10 +70,12 @@ export const SetPasswordForm: React.FC = () => {
     try {
       const formDataWithEmail = { ...data, email: email };
       const result = await SetPassword(formDataWithEmail);
+
       if (result) {
         onOpen();
       }
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
     }
   };
@@ -95,10 +100,10 @@ export const SetPasswordForm: React.FC = () => {
             <form className="flex flex-col gap-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
               <div className="relative">
                 <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
                   className="w-full py-2 px-3 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  id="password"
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
                   {...register("password", {
                     required: true,
                     validate: {
@@ -109,9 +114,9 @@ export const SetPasswordForm: React.FC = () => {
                   })}
                 />
                 <button
+                  className="absolute inset-y-0 right-3 flex items-center"
                   type="button"
                   onClick={handlePasswordVisibility}
-                  className="absolute inset-y-0 right-3 flex items-center"
                 >
                   {showPassword ? (
                     <PiEyeBold className="h-5 w-5 text-gray-600" />
@@ -136,8 +141,8 @@ export const SetPasswordForm: React.FC = () => {
               )}
 
               <button
-                type="submit"
                 className="mt-2 py-2 px-4 text-sm font-semibold w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
+                type="submit"
               >
                 {isLoading ? "Loading..." : "Save Password"}
               </button>
@@ -153,10 +158,10 @@ export const SetPasswordForm: React.FC = () => {
             }}
             isDismissable={false}
             isKeyboardDismissDisabled={true}
-            placement="center"
             isOpen={isOpen}
-            onOpenChange={onOpenChange}
+            placement="center"
             onClose={closeModal}
+            onOpenChange={onOpenChange}
           >
             <ModalContent className="text-white">
               {() => (
@@ -177,15 +182,15 @@ export const SetPasswordForm: React.FC = () => {
       ) : status === "User verified" ? (
         <Modal
           backdrop="transparent"
-          size="3xl"
           classNames={{
             base: "bg-green-600",
           }}
+          hideCloseButton={true}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
-          placement="center"
-          hideCloseButton={true}
           isOpen={true}
+          placement="center"
+          size="3xl"
           onOpenChange={onOpenChange}
         >
           <ModalContent className="text-white">
@@ -201,8 +206,8 @@ export const SetPasswordForm: React.FC = () => {
                     <span>
                       {" "}
                       <Link
-                        href={"/login"}
                         className="text-blue-300 font-semibold mt-2 hover:underline"
+                        href={"/login"}
                       >
                         here
                       </Link>{" "}
@@ -217,15 +222,15 @@ export const SetPasswordForm: React.FC = () => {
       ) : (
         <Modal
           backdrop="transparent"
-          size="3xl"
           classNames={{
             base: "bg-red-700",
           }}
+          hideCloseButton={true}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
-          placement="center"
-          hideCloseButton={true}
           isOpen={true}
+          placement="center"
+          size="3xl"
           onOpenChange={onOpenChange}
         >
           <ModalContent className="text-white">
@@ -239,10 +244,10 @@ export const SetPasswordForm: React.FC = () => {
                     Please click the button below to request a new verification link.
                   </p>
                   <button
-                    type="button"
-                    disabled={isSending || isSent}
-                    onClick={sendLink}
                     className="mt-2 py-2 px-4 text-sm font-semibold w-auto text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
+                    disabled={isSending || isSent}
+                    type="button"
+                    onClick={sendLink}
                   >
                     {isSending ? "Loading..." : "Request New Link"}
                   </button>

@@ -14,9 +14,10 @@ const CardCart = ({ cartId, item }: { cartId: number; item: CartItem }) => {
         <Image
           isZoomed
           alt={item.product.name}
+          className="object-contain"
           fallbackSrc="https://via.placeholder.com/500x500"
           height={100}
-          src={item.product.images?.[0].url}
+          src={item.product.images.toString()}
           width={100}
         />
       </div>

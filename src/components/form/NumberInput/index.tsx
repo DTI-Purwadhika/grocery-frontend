@@ -17,6 +17,11 @@ const NumberInput = ({ value = "", ...fields }: InputProps) => {
   return (
     <Input
       className="w-full"
+      classNames={{
+        label: "text-xs",
+        input: "text-2xs",
+        innerWrapper: "text-xs",
+      }}
       labelPlacement="outside"
       min={0}
       type="number"

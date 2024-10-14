@@ -40,9 +40,6 @@ const Inventory = ({ title, row }: InventoryType) => {
       <span>Current Stock</span>
       <span>: {row.totalStock}</span>
       <div className="mt-6 col-span-2 flex flex-row gap-4">
-        {/* <Button isIconOnly color="danger" onClick={() => setStock(stock - 10)}>
-          <Minus className="text-background cursor-pointer active:opacity-50" />
-        </Button> */}
         <Input
           max={1000}
           min={0}
@@ -51,9 +48,6 @@ const Inventory = ({ title, row }: InventoryType) => {
           value={stock.toString()}
           onChange={(e) => setStock(parseInt(e.target.value))}
         />
-        {/* <Button isIconOnly color="primary" onClick={() => setStock(stock + 10)}>
-          <Plus className="text-background cursor-pointer active:opacity-50" />
-        </Button> */}
       </div>
     </div>
   );
@@ -103,12 +97,18 @@ const Inventory = ({ title, row }: InventoryType) => {
   return (
     <div className="flex flex-row justify-end">
       <Tooltip content={`Update ${row.name} Stock from ${row.storeName}`}>
-        <Button isIconOnly color="primary" variant="light" onClick={openUpdate}>
+        <Button
+          isIconOnly
+          color="primary"
+          title="Update Stock"
+          variant="light"
+          onClick={openUpdate}
+        >
           <PackageSearch className="text-primary-400 cursor-pointer active:opacity-50" />
         </Button>
       </Tooltip>
       <Tooltip color="danger" content={`Empty ${row.name} Stock from ${row.storeName}`}>
-        <Button isIconOnly color="danger" variant="light" onClick={openRemove}>
+        <Button isIconOnly color="danger" title="Clear Stock" variant="light" onClick={openRemove}>
           <PackageX className="text-danger cursor-pointer active:opacity-50" />
         </Button>
       </Tooltip>

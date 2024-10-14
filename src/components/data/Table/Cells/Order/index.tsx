@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Image } from "@nextui-org/image";
+import { Input } from "@nextui-org/input";
 
 import restService from "@/services/restService";
 import StockAlert from "@/components/elements/Alert/StockAlert";
@@ -15,38 +16,52 @@ import { TitleType } from "@/shares/types";
 const OrderCell = ({ title, row }: { row: Order } & TitleType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [status, setStatus] = useState(row.status);
+  const [resi, setResi] = useState("");
   // const [update, setUpdate] = useState("");
   const queryClient = useQueryClient();
 
   const updateContent = (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full items-center lg:grid lg:grid-cols-2">
       <Image
         alt={row?.code + " payment proof"}
-        className="w-full aspect-square object-cover"
+        className="w-full aspect-square object-cover mx-auto"
         src={row?.proofUrl}
       />
-      <Button color="danger" onClick={() => handleUpdate("reject")}>
-        <PackageX /> Reject Payment
-      </Button>
-      <Button
-        color="secondary"
-        isDisabled={status !== "Menunggu_Konfirmasi_Pembayaran"}
-        onClick={() => handleUpdate("confirm_payment")}
-      >
-        <PackageCheck /> Process Order
-      </Button>
-      <Button
-        color="primary"
-        isDisabled={status !== "confirm_payment" && status !== "Diproses"}
-        onClick={() => handleUpdate("ready_to_send")}
-      >
-        <Truck /> Send Order
-      </Button>
+      <div className="flex flex-col gap-4">
+        <Button
+          color="danger"
+          isDisabled={status !== "Menunggu_Konfirmasi_Pembayaran"}
+          onClick={() => handleUpdate("reject")}
+        >
+          <PackageX /> Reject Payment
+        </Button>
+        <Button
+          color="secondary"
+          isDisabled={status !== "Menunggu_Konfirmasi_Pembayaran"}
+          onClick={() => handleUpdate("confirm_payment")}
+        >
+          <PackageCheck /> Process Order
+        </Button>
+        <Input
+          isDisabled={status !== "confirm_payment" && status !== "Diproses"}
+          placeholder="No Resi..."
+          radius="sm"
+          variant="bordered"
+          onChange={(e) => setResi(e.target.value)}
+        />
+        <Button
+          color="primary"
+          isDisabled={(status !== "confirm_payment" && status !== "Diproses") || resi === ""}
+          onClick={() => handleUpdate("deliver")}
+        >
+          <Truck /> Send Order
+        </Button>
+      </div>
     </div>
   );
 
   const updateMutation = useMutation({
-    mutationFn: () => restService(`${title}/${row.code}?status=${status}`, "PUT"),
+    mutationFn: () => restService(`${title}/${row.id}?status=${status}&update=${resi}`, "PUT"),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [title] });
       toast.success(`Invoice of ${row.code} has been updated`);
@@ -68,7 +83,7 @@ const OrderCell = ({ title, row }: { row: Order } & TitleType) => {
 
   return (
     <div
-      className={`flex flex-row justify-end ${row.status === "Pesanan_Dikonfirmasi" || row.status === "Dibatalkan" ? "hidden" : ""}`}
+      className={`flex flex-row justify-end ${row.status === "Pesanan_Dikonfirmasi" || row.status === "Dibatalkan" || row.status === "Dikirim" ? "hidden" : ""}`}
     >
       <Tooltip content={`Update ${row.code}`}>
         <Button isIconOnly color="primary" variant="light" onClick={openUpdate}>

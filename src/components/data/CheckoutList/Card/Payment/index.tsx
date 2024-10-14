@@ -12,13 +12,10 @@ import {
 import { Button } from "@nextui-org/button";
 import React, { useMemo, useState } from "react";
 
-import { useParam } from "@/hooks/useParam";
-
 const Payment = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { getQueryParam, setQueryParam } = useParam();
 
-  const [automatic, setAutomatic] = useState<string>(getQueryParam("method") || "auto");
+  const [automatic, setAutomatic] = useState<string>("auto");
 
   const automaticContent = useMemo(
     () => (
@@ -44,7 +41,7 @@ const Payment = () => {
 
   const handleChoose = (value: string) => {
     setAutomatic(value);
-    setQueryParam("method", value || "auto");
+    localStorage.setItem("method", value);
     onClose();
   };
 

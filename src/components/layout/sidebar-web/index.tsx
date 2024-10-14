@@ -8,13 +8,13 @@ import { useMemo } from "react";
 import { useCurrentPath } from "@/hooks/useCurrentPath";
 import { useCart } from "@/providers/CartProviders";
 
-const Footer = () => {
+const SideBar = () => {
   const { cartCount } = useCart();
   const { isCurrentPath } = useCurrentPath();
 
-  const footer = useMemo(
+  const aside = useMemo(
     () => (
-      <footer className="bg-background w-full border-t-1 grid grid-cols-5 text-xs md:text-lg lg:hidden">
+      <aside className="sticky top-0 bg-background h-fit w-1/2 mx-auto mt-4 hidden lg:grid-cols-1 text-xs md:text-lg lg:grid">
         <Button
           as={Link}
           className="w-full h-full py-4 rounded-lg flex flex-col gap-1 items-center"
@@ -63,12 +63,12 @@ const Footer = () => {
         >
           <User /> Profile
         </Button>
-      </footer>
+      </aside>
     ),
     [cartCount, isCurrentPath],
   );
 
-  return footer;
+  return aside;
 };
 
-export default Footer;
+export default SideBar;

@@ -9,7 +9,7 @@ import {
   SortDescriptor,
 } from "@nextui-org/table";
 import { Key, useCallback, useMemo, useState } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { fetchData } from "@/services/dataService";
 import { useParam } from "@/hooks/useParam";
@@ -36,6 +36,11 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
   const category = getQueryParam("category") || "";
   const store = getQueryParam("stores") || "";
 
+  // useEffect(() => {
+  //   setQueryParam("visibleColumns", Array.from(visibleColumns).join(","));
+  //   setQueryParam("keyword", "a");
+  // }, []);
+
   const { data, isLoading } = useQuery({
     queryKey: [
       title,
@@ -48,7 +53,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       store,
     ],
     queryFn: fetchData,
-    placeholderData: keepPreviousData,
+    staleTime: 0,
   });
 
   const renderCell = useCallback(

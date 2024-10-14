@@ -13,7 +13,7 @@ export type CartType = {
 
 export type CartContextType = {
   cart: CartType;
-  addItemToCart: (product: CartItem, storeId: string) => void;
+  addItemToCart: (product: CartItem, userEmail: string) => void;
   updateItemQuantity: (id: number, productId: number, quantity: number) => void;
   removeItemFromCart: (id: number, productId: number) => void;
   clearCart: (id: number) => void;

@@ -2,6 +2,7 @@
 import { createContext, useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 import { ChildType } from "@/shares/types";
 import {
@@ -29,8 +30,8 @@ export const useCart = (): CartContextType => {
 export const CartProvider = ({ children }: ChildType) => {
   const queryClient = useQueryClient();
 
-  // ! This is a dummy userId
-  const userId = "1";
+  const { data: session } = useSession();
+  const userId = session?.user?.email || "1";
 
   const { data } = useQuery<CartType>({
     queryKey: ["cart", userId],
