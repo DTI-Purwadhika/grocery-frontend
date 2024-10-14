@@ -5,7 +5,7 @@ import { useDisclosure } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { Card, CardBody } from "@nextui-org/card";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { Product } from "@/constants/entity";
 import { products } from "@/constants/defaultValue";
@@ -25,6 +25,7 @@ const ProductForm = ({ type = "create", id }: FormType) => {
     queryKey: [`stores`, "", 1, 100, "id", "asc", "", ""],
     queryFn: fetchData,
     staleTime: 10000,
+    placeholderData: keepPreviousData,
   });
   const [tempData, setTempData] = useState<Product>(data as Product);
   const [readyData, setReadyData] = useState<Product>();

@@ -6,7 +6,6 @@ import { SessionProvider } from "next-auth/react";
 import { Providers } from "@/providers";
 import { ChildType } from "@/shares/types";
 import { poppins } from "@/shares/assets/fonts";
-import { CartProvider } from "@/providers/CartProviders";
 import { LocationProvider } from "@/providers/LocationProvider";
 
 import { auth } from "../../auth";
@@ -26,9 +25,7 @@ const RootLayout = async ({ children }: ChildType) => {
       <SessionProvider session={session}>
         <body className={poppins.className}>
           <Providers>
-            <LocationProvider>
-              <CartProvider> {children}</CartProvider>
-            </LocationProvider>
+            <LocationProvider>{children}</LocationProvider>
           </Providers>
         </body>
       </SessionProvider>

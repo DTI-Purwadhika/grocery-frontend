@@ -1,6 +1,6 @@
 "use client";
 import { Key } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import React from "react";
 
 import { Loading, ProductCard } from "@/components/elements";
@@ -35,6 +35,7 @@ const TabContent = ({ category }: TabType) => {
     ],
     queryFn: fetchData,
     staleTime: 10000,
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {

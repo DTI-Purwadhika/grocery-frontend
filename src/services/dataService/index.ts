@@ -14,8 +14,9 @@ export const fetchData = async ({
   if (title.toLowerCase() === "users") endpoint += `roleKeyword=CUSTOMER&`;
   if (title.toLowerCase() === "admins") endpoint += `roleKeyword=ADMIN&`;
   if (userId) endpoint += `userId=${userId}&`;
+  if (keyword) endpoint += `&keyword=${encodeURIComponent(keyword?.toLowerCase())}`;
 
-  const url = `${endpoint}page=${page - 1}&keyword=${encodeURIComponent(keyword?.toLowerCase())}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir.replace("ending", "")}`;
+  const url = `${endpoint}page=${page - 1}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir.replace("ending", "")}`;
   const { content, totalData, totalPage } = await restService(url);
 
   return {
