@@ -9,7 +9,7 @@ import {
   SortDescriptor,
 } from "@nextui-org/table";
 import { Key, useCallback, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { fetchData } from "@/services/dataService";
 import { useParam } from "@/hooks/useParam";
@@ -54,6 +54,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
     ],
     queryFn: fetchData,
     staleTime: 10000,
+    placeholderData: keepPreviousData,
   });
 
   const renderCell = useCallback(

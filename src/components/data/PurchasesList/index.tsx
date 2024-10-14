@@ -1,5 +1,5 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Key } from "react";
 import { useSession } from "next-auth/react";
 
@@ -36,6 +36,7 @@ const PurchasesList = () => {
     ],
     queryFn: fetchData,
     staleTime: 10000,
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
