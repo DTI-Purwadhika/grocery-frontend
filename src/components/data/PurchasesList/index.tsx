@@ -35,7 +35,7 @@ const PurchasesList = () => {
       session?.user?.email || "",
     ],
     queryFn: fetchData,
-    staleTime: 0,
+    staleTime: 10000,
   });
 
   if (isLoading) {

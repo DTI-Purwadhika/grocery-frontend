@@ -53,7 +53,7 @@ const Datatable = ({ title = "data", columns, defaultCol = ["actions"] }: TableT
       store,
     ],
     queryFn: fetchData,
-    staleTime: 0,
+    staleTime: 10000,
   });
 
   const renderCell = useCallback(

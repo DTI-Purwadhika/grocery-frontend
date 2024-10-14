@@ -31,7 +31,7 @@ const UserCard = () => {
                 <User
                   avatarProps={{
                     src: `
-                    ${userProfile?.profilePicture}`,
+                    ${userProfile?.profilePicture || "https://via.placeholder.com/500x500"}`,
                   }}
                   className="hidden md:flex md:flex-nowrap w-fit"
                   description={userProfile?.role}

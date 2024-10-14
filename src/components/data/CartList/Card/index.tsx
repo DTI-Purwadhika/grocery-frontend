@@ -23,7 +23,7 @@ const CardCart = ({ cartId, item }: { cartId: number; item: CartItem }) => {
       </div>
       <div className="col-span-4 flex flex-col justify-between">
         <h3 className="text-medium font-semibold">{item.product.name}</h3>
-        <p className="text-2xs text-default-500 font-medium">Rp {item.product.price} / kg</p>
+        <p className="text-2xs text-default-500 font-medium">Rp {item.product.price} / 100 kg</p>
         <br />
         <p className="font-semibold text-sm">Rp {(item.product.price || 0) * item.quantity}</p>
       </div>
