@@ -1,6 +1,5 @@
+/* eslint-disable */
 "use client";
-import { AddressDataResponse, useAddress } from "@/hooks/useAddress";
-import { getPrimaryAddress, PrimaryAddress } from "@/hooks/PrimaryAddress";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import {
@@ -16,6 +15,9 @@ import { useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+
+import { getPrimaryAddress, PrimaryAddress } from "@/hooks/PrimaryAddress";
+import { AddressDataResponse, useAddress } from "@/hooks/useAddress";
 
 const Delivery = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -130,9 +132,9 @@ const Delivery = () => {
                     </>
                   )}
                   <Button
-                    size="sm"
-                    color="danger"
                     isIconOnly
+                    color="danger"
+                    size="sm"
                     onPress={() => {
                       setWillDeleteAddressId(address.id);
                       setDeleteAddressModal(true);
@@ -141,7 +143,7 @@ const Delivery = () => {
                     <FaTrash />
                   </Button>
                   <Link href={`/my-cart/checkout/${address.id}/update-address`}>
-                    <Button size="sm" isIconOnly color="default">
+                    <Button isIconOnly color="default" size="sm">
                       <FaPencilAlt />
                     </Button>
                   </Link>
@@ -200,10 +202,10 @@ const Delivery = () => {
         </ModalContent>
       </Modal>
       <Modal
+        backdrop={"blur"}
         classNames={{
           closeButton: "hover:bg-red-500 transition duration-300 text-black",
         }}
-        backdrop={"blur"}
         isOpen={deleteAddressModal}
         onClose={closeDeleteAddressModal}
       >

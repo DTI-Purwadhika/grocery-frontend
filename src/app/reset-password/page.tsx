@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+
 import { ResetPasswordForm } from "./components/ResetPassword";
 import { SuspenseFallback } from "@/components/elements/SuspenseFallback";
 

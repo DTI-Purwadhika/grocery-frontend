@@ -26,14 +26,14 @@ const PurchaseCard = ({ order }: { order: Order }) => {
         </div>
         <div className="flex flex-row items-start gap-4">
           <Image
-            alt={order.items[0].name + " image"}
+            alt={order?.items?.[0]?.name + " image"}
             fallbackSrc="https://via.placeholder.com/500x500"
             height={85}
-            src={order.items[0].image || ""}
+            src={order?.items?.[0]?.image || ""}
             width={85}
           />
           <div>
-            <p className="font-semibold">{order.items[0].name}</p>
+            <p className="font-semibold">{order?.items?.[0]?.name}</p>
             <p className="text-xs">+ {order.items.length} Other Product</p>
           </div>
         </div>

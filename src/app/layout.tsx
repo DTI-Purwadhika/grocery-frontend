@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 
+import { SessionProvider } from "next-auth/react";
+
 import { Providers } from "@/providers";
 import { ChildType } from "@/shares/types";
 import { poppins } from "@/shares/assets/fonts";
-import "@/styles/globals.css";
+
 import { auth } from "../../auth";
 import React from "react";
-import { SessionProvider } from "next-auth/react";
+
 import { CartProvider } from "@/providers/CartProviders";
 import { LocationProvider } from "@/providers/LocationProvider";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Repo Starter",
-  description: "Start Project",
+  title: "Grocery APP",
+  description: "All of everything you need to manage your groceries",
 };
 
 const RootLayout = async ({ children }: ChildType) => {

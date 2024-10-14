@@ -218,11 +218,11 @@ const AdminForm = ({ type = "create", id }: FormType) => {
                   )}
                   rules={{
                     required: "Password is required",
-                    pattern: {
-                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
-                      message:
-                        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
-                    },
+                    // pattern: {
+                    //   value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/i,
+                    //   message:
+                    //     "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+                    // },
                   }}
                 />
               </CardBody>

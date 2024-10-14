@@ -36,8 +36,10 @@ export const useStore = (id: string | string[]) => {
         }
 
         const data = await response.json();
+
         setStore(data.data);
       } catch (error) {
+        /* eslint-disable-next-line no-console */
         console.error(error);
       }
     };

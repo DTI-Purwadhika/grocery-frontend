@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
-import { Redo, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 import { OrderDetail } from "@/constants/entity";
@@ -33,9 +33,6 @@ const ProductCard = ({ item }: { item: OrderDetail }) => {
             <p className="font-semibold">Rp {item.totalPrice},-</p>
           </div>
           <div className="flex flex-row gap-2">
-            <Button isIconOnly color="default" size="sm" variant="bordered">
-              <Redo />
-            </Button>
             <Button as={Link} color="primary" href={`/catalog/${item.id}`} size="sm">
               <ShoppingCart /> Buy Again
             </Button>

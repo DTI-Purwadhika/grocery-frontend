@@ -17,6 +17,7 @@ export const RequestNewResetPassword = () => {
           },
         },
       );
+
       if (!response.ok) {
         throw new Error("Failed to send new reset password link");
       }
@@ -24,6 +25,7 @@ export const RequestNewResetPassword = () => {
       setIsSending(false);
       setIsSent(true);
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.log(error);
       setIsSending(false);
     }

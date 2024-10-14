@@ -1,5 +1,6 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
+
 import { City } from "@/constants/city";
 
 const useCities = () => {
@@ -24,8 +25,10 @@ const useCities = () => {
         }
 
         const data = await response.json();
+
         setCities(data.data);
       } catch (error) {
+        /* eslint-disable-next-line no-console */
         console.error(error);
       }
     };

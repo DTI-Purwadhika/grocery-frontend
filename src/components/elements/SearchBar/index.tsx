@@ -42,9 +42,14 @@ const SearchBar = ({ title, noLabel = false }: SearchBarType) => {
   return (
     <Input
       isClearable
+      classNames={{
+        label: "text-xs",
+        input: "text-xs",
+      }}
       label={noLabel ? "" : `Search ${title} by name`}
       labelPlacement="outside"
       placeholder={`${toCapital(title)} name...`}
+      radius="sm"
       startContent={<Search className="text-default-300" />}
       value={keyword}
       variant="bordered"

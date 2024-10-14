@@ -38,6 +38,7 @@ export const getPrimaryAddress = () => {
           city: data.data.city.name,
         });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     };

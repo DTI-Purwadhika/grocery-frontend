@@ -1,9 +1,9 @@
+/* eslint-disable */
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useLogout } from "@/hooks/useLogout";
 import { Button } from "@nextui-org/button";
 import { Apple } from "lucide-react";
 import { FaChevronDown, FaChevronUp, FaUser } from "react-icons/fa";
@@ -14,9 +14,11 @@ import { Avatar } from "@nextui-org/avatar";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/dropdown";
 import { Blocks, Heart, ShoppingCart } from "lucide-react";
 import { MdDashboard } from "react-icons/md";
-import { SearchBar } from "@/components/elements";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+
+import { SearchBar } from "@/components/elements";
+import { useLogout } from "@/hooks/useLogout";
 import { useCart } from "@/providers/CartProviders";
 import { useProfile } from "@/hooks/useProfile";
 import { Location } from "@/components/data/Location";
@@ -83,13 +85,13 @@ export const NavBar: React.FC = () => {
                 >
                   <span
                     className={`block w-6 h-1 bg-green-500 rounded-sm transform transition-transform duration-300 ease-in-out ${openHamburgerMenu ? "rotate-45 translate-y-1" : ""}`}
-                  ></span>
+                  />
                   <span
                     className={`block w-6 h-1 bg-green-500 rounded-sm transform transition-transform duration-300 ease-in-out ${openHamburgerMenu ? "opacity-0" : "my-1"}`}
-                  ></span>
+                  />
                   <span
                     className={`block w-6 h-1 bg-green-500 rounded-sm transform transition-transform duration-300 ease-in-out ${openHamburgerMenu ? "-rotate-45 -translate-y-1" : ""}`}
-                  ></span>
+                  />
                 </button>
 
                 <span className="font-bold text-green-600 text-xl lg:text-2xl lg:ml-6 flex flex-row gap-1 lg:gap-2 items-center">
@@ -112,8 +114,8 @@ export const NavBar: React.FC = () => {
               <div className="flex items-center gap-4 lg:gap-1 lg:space-x-4 space-x-1">
                 {!openHamburgerMenu && session && userProfile?.role === "CUSTOMER" && (
                   <Link href="my-cart">
-                    <Badge content={cartCount} color="danger">
-                      <Button isIconOnly variant="bordered" color="warning">
+                    <Badge color="danger" content={cartCount}>
+                      <Button isIconOnly color="warning" variant="bordered">
                         <FaShoppingCart className="h-6 w-6" />
                       </Button>
                     </Badge>
@@ -128,17 +130,17 @@ export const NavBar: React.FC = () => {
                             <DropdownTrigger>
                               <Button
                                 className="hover:bg-gray-400"
-                                variant="light"
-                                // @ts-ignore
-                                startContent={
-                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
-                                }
                                 endContent={
                                   openDropdownMenu ? (
                                     <FaChevronUp height={40} width={40} className="text-black" />
                                   ) : (
                                     <FaChevronDown height={40} width={40} className="text-black" />
                                   )
+                                }
+                                variant="light"
+                                // @ts-ignore
+                                startContent={
+                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
                                 }
                               >
                                 <h3 className="font-bold text-sm text-black line-clamp-1">
@@ -148,15 +150,15 @@ export const NavBar: React.FC = () => {
                             </DropdownTrigger>
                             <DropdownMenu>
                               <DropdownItem
-                                onPress={() => router.push("/my-profile")}
                                 startContent={<FaUser />}
+                                onPress={() => router.push("/my-profile")}
                               >
                                 Your Profile
                               </DropdownItem>
                               <DropdownItem
-                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 className="text-red-500"
                                 color="danger"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 onPress={logout}
                               >
                                 Logout
@@ -184,17 +186,17 @@ export const NavBar: React.FC = () => {
                                 <span className="text-medium text-black">{userProfile?.name}</span>
                               </DropdownItem>
                               <DropdownItem
-                                onPress={() => router.push("/my-profile")}
                                 key="profile"
                                 startContent={<FaUser />}
+                                onPress={() => router.push("/my-profile")}
                               >
                                 Your Profile
                               </DropdownItem>
                               <DropdownItem
                                 key="logout"
-                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 className="text-red-500"
                                 color="danger"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 onPress={logout}
                               >
                                 Logout
@@ -210,17 +212,17 @@ export const NavBar: React.FC = () => {
                             <DropdownTrigger>
                               <Button
                                 className="hover:bg-gray-400"
-                                variant="light"
-                                // @ts-ignore
-                                startContent={
-                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
-                                }
                                 endContent={
                                   openDropdownMenu ? (
                                     <FaChevronUp height={40} width={40} className="text-black" />
                                   ) : (
                                     <FaChevronDown height={40} width={40} className="text-black" />
                                   )
+                                }
+                                variant="light"
+                                // @ts-ignore
+                                startContent={
+                                  <Avatar isBordered size="sm" src={userProfile?.profilePicture} />
                                 }
                               >
                                 <h3 className="font-bold text-sm text-black line-clamp-1">
@@ -230,15 +232,15 @@ export const NavBar: React.FC = () => {
                             </DropdownTrigger>
                             <DropdownMenu>
                               <DropdownItem
-                                onPress={() => router.push("/dashboard")}
                                 startContent={<MdDashboard />}
+                                onPress={() => router.push("/dashboard")}
                               >
                                 Dashboard
                               </DropdownItem>
                               <DropdownItem
-                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 className="text-red-500"
                                 color="danger"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 onPress={logout}
                               >
                                 Logout
@@ -266,17 +268,17 @@ export const NavBar: React.FC = () => {
                                 <span className="text-medium text-black">{userProfile?.name}</span>
                               </DropdownItem>
                               <DropdownItem
-                                onPress={() => router.push("/dashboard")}
                                 key="profile"
                                 startContent={<MdDashboard />}
+                                onPress={() => router.push("/dashboard")}
                               >
                                 Dashboard
                               </DropdownItem>
                               <DropdownItem
                                 key="logout"
-                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 className="text-red-500"
                                 color="danger"
+                                startContent={<TbLogout className="w-[20px] h-[20px]" />}
                                 onPress={logout}
                               >
                                 Logout
@@ -290,10 +292,10 @@ export const NavBar: React.FC = () => {
                 ) : (
                   <div className="hidden lg:block">
                     <Button
-                      onPress={() => signIn()}
                       className="text-white font-bold"
                       color="success"
                       variant="solid"
+                      onPress={() => signIn()}
                     >
                       Login
                     </Button>

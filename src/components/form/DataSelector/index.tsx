@@ -22,16 +22,16 @@ const DataSelector = ({ ...fields }) => {
 
   return (
     <Autocomplete
-      isRequired
-      className="w-full"
+      className="w-full text-xs"
       defaultItems={collectData}
       isLoading={isLoading}
+      isRequired={fields.required || true}
       label={fields.label}
       labelPlacement="outside"
       listboxProps={{
         emptyContent: `${fields.label} not found`,
       }}
-      placeholder={`Choose the suitable ${fields.label}...`}
+      placeholder={`${fields.label}...`}
       radius="sm"
       scrollRef={scrollerRef}
       variant="bordered"

@@ -40,6 +40,7 @@ export const useShipping = () => {
 
         setShipping(data.data);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     };
