@@ -313,14 +313,20 @@ export const Profile: React.FC = () => {
           {/* Referral code */}
           {userProfile?.role === "CUSTOMER" && (
             <div>
-              <Input
-                {...register("referralCode")}
-                isReadOnly
-                className="font-bold"
-                label="Referral code"
-                labelPlacement="outside"
-                placeholder="Referral"
-                type="text"
+              <Controller
+                control={control}
+                name="referralCode"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    isReadOnly
+                    className="font-bold"
+                    label="Referral code"
+                    labelPlacement="outside"
+                    placeholder="Referral"
+                    type="text"
+                  />
+                )}
               />
             </div>
           )}
