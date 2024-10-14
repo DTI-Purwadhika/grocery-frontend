@@ -1,9 +1,9 @@
 export type LatLng = {
-    lat: number;
-    lng: number;
+  lat: number;
+  lng: number;
 };
 
 export type LocationContextType = {
-    latLng: LatLng;
-    setLocation : ({ lat, lng }: LatLng) => void;
-}
+  latLng: LatLng;
+  setLocation: ({ lat, lng }: LatLng) => void;
+};

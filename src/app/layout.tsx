@@ -13,7 +13,6 @@ import { LocationProvider } from "@/providers/LocationProvider";
 
 import "@/styles/globals.css";
 
-
 export const metadata: Metadata = {
   title: "Grocery APP",
   description: "All of everything you need to manage your groceries",

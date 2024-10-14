@@ -31,7 +31,6 @@ const Shipping = () => {
   const shippingContent = (
     <>
       {isLoading ? (
-
         <>
           <Spinner size="lg" color="primary" />
           <p className="font-semibold text-center">Getting shipping options...</p>

@@ -35,7 +35,7 @@ export const useShipping = () => {
         }
 
         setIsLoading(false);
-        
+
         const data = await response.json();
 
         setShipping(data.data);
@@ -48,5 +48,5 @@ export const useShipping = () => {
     fetchShipping();
   }, []);
 
-  return {shipping, isLoading};
+  return { shipping, isLoading };
 };
