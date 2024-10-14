@@ -213,7 +213,7 @@ const Delivery = () => {
               <ModalHeader className="flex flex-col gap-1">Delete Address</ModalHeader>
               <ModalBody>
                 <p className="font-semibold">
-                  Are you sure you want to delete this address? This action can't be undone!
+                  Are you sure you want to delete this address? This action can&apos;t be undone!
                 </p>
               </ModalBody>
               <ModalFooter>
