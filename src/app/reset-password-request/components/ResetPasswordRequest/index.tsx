@@ -86,7 +86,7 @@ export const ResetPasswordRequestForm: React.FC = () => {
                   },
                 })}
               />
-              {errors.email && <div className="text-red-500 text-xs">{errors.email.message}</div>}
+              {errors.email && <div className="text-red-500 text-xs">{errors.email?.message}</div>}
               <button
                 className="mt-2 py-2 px-4 text-sm font-semibold w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
                 disabled={isLoading}

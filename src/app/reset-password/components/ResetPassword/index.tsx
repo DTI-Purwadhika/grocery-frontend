@@ -25,8 +25,8 @@ export const ResetPasswordForm: React.FC = () => {
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token");
-  const email = params.get("email");
-  const emailToken = { email: email, token: token };
+  const id = params.get("userid");
+  const idToken = { id: id, token: token };
 
   const {
     register,
@@ -37,7 +37,7 @@ export const ResetPasswordForm: React.FC = () => {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        const status = await CheckResetPasswordLink(emailToken);
+        const status = await CheckResetPasswordLink(idToken);
 
         setLoading(false);
         setValid(status);
@@ -47,7 +47,7 @@ export const ResetPasswordForm: React.FC = () => {
     };
 
     checkStatus();
-  }, [token, email]);
+  }, [token, id]);
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -59,7 +59,7 @@ export const ResetPasswordForm: React.FC = () => {
 
   const sendLink = () => {
     try {
-      SendNewResetPassword(email);
+      SendNewResetPassword(id);
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.log(error);
@@ -68,8 +68,8 @@ export const ResetPasswordForm: React.FC = () => {
 
   const onSubmit = async (data: resetPasswordData) => {
     try {
-      const formDataWithEmail = { ...data, email: email };
-      const result = await SetPassword(formDataWithEmail);
+      const formDataWithId = { ...data, id: id };
+      const result = await SetPassword(formDataWithId);
 
       if (result) {
         onOpen();
