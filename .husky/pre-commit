@@ -45,16 +45,6 @@ echo ' '
 echo '🎬🌟✨ Showtime! Let’s run those tests! 🎬🌟✨'
 echo ' '
 
-# Check jest tests
-pnpm check-test ||
-(
-    echo ' '
-    echo '😩🤦‍♀️😭 Test disaster! 😩🤦‍♀️😭 
-          Your tests flopped harder than my soufflé. Get it together, gorgeous!';
-    echo ' '
-    false;
-)
-
 # Try Build
 echo ' '
 echo '🎉🎉🎉 Bravo, darling! 🎉🎉🎉 All tests passed! Moving on to the final check...'

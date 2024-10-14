@@ -34,6 +34,7 @@ export const LoginForm: React.FC = () => {
 
   useEffect(() => {
     const errorParam = params.get("error");
+
     if (errorParam !== null) {
       openModal(errorParam);
       window.history.replaceState(null, "", "/login");
@@ -70,10 +71,10 @@ export const LoginForm: React.FC = () => {
           <form className="flex flex-col gap-4 mt-3" onSubmit={handleSubmit(onSubmit)}>
             <div className="relative w-full">
               <input
-                id="email"
-                type="text"
-                placeholder="Email"
                 className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 "
+                id="email"
+                placeholder="Email"
+                type="text"
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -86,18 +87,18 @@ export const LoginForm: React.FC = () => {
             {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
             <div className="relative">
               <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
                 className="w-full text-black py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="password"
+                placeholder="Password"
+                type={showPassword ? "text" : "password"}
                 {...register("password", {
                   required: "Password is required",
                 })}
               />
               <button
+                className="absolute inset-y-0 right-3 flex items-center text-black"
                 type="button"
                 onClick={handlePasswordVisibility}
-                className="absolute inset-y-0 right-3 flex items-center text-black"
               >
                 {showPassword ? (
                   <PiEyeBold className="h-5 w-5 text-gray-600" />
@@ -109,15 +110,15 @@ export const LoginForm: React.FC = () => {
             {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
 
             <button
-              type="submit"
               className="mt-2 py-2 px-4 text-sm font-semibold w-full text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
+              type="submit"
             >
               LOGIN
             </button>
           </form>
           <Link
-            href="/reset-password-request"
             className="text-xs text-blue-500 font-semibold mt-2 hover:underline"
+            href="/reset-password-request"
           >
             Forgot password?
           </Link>
@@ -127,15 +128,15 @@ export const LoginForm: React.FC = () => {
           </div>
 
           <button
-            onClick={() => signIn("google", { redirectTo: "/" })}
             className="flex gap-2 items-center justify-center w-full border border-gray-300 rounded-md p-2 hover:bg-gray-50 transition duration-300"
+            onClick={() => signIn("google", { redirectTo: "/" })}
           >
             <FcGoogle className="w-6 h-6" />
             <span className="text-black text-sm font-bold">Google</span>
           </button>
           <div className="text-center w-full text-sm mt-4">
             <span className="text-black">Don&apos;t have an account? </span>
-            <Link href="/register" className="text-blue-500 font-semibold hover:underline">
+            <Link className="text-blue-500 font-semibold hover:underline" href="/register">
               Register
             </Link>
           </div>
@@ -148,10 +149,10 @@ export const LoginForm: React.FC = () => {
           }}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
-          placement="center"
           isOpen={isOpen}
-          onOpenChange={onOpenChange}
+          placement="center"
           onClose={closeModal}
+          onOpenChange={onOpenChange}
         >
           <ModalContent className="text-white">
             {() => (

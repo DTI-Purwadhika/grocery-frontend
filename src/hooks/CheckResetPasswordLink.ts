@@ -21,9 +21,12 @@ export const CheckResetPasswordLink = async (data: emailToken) => {
     }
 
     const result = await response.json();
+
     return result.data;
   } catch (error) {
+    /* eslint-disable-next-line no-console */
     console.log(error);
+
     return null;
   }
 };

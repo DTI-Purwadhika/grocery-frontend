@@ -51,56 +51,58 @@ const Purchase = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <SearchBar title={"purchases"} />
-      <div className="grid grid-cols-3 gap-2">
-        <Select
-          isRequired
-          aria-label="Purchases Range"
-          defaultSelectedKeys={[range]}
-          onSelectionChange={(value) => handleRageChange(value)}
-        >
-          <SelectItem key={"1"}>1 Day</SelectItem>
-          <SelectItem key={"7"}>7 Day</SelectItem>
-          <SelectItem key={"thismonth"}>This Month</SelectItem>
-          <SelectItem key={"31"}>1 Month</SelectItem>
-          <SelectItem key={"thisyear"}>This Year</SelectItem>
-          <SelectItem key={"365"}>1 Year</SelectItem>
-          <SelectItem key={"custom"}>Custom Range</SelectItem>
-        </Select>
-        <Select
-          isRequired
-          aria-label="Purchases Status"
-          defaultSelectedKeys={[status]}
-          onSelectionChange={(value) => setStatus(value.currentKey as string)}
-        >
-          <SelectItem key={"all"}>All</SelectItem>
-          <SelectItem key={"menunggu_pembayaran"}>Waiting for Payment</SelectItem>
-          <SelectItem key={"menunggu_konfirmasi_pembayaran"}>Waiting for Confirmation</SelectItem>
-          <SelectItem key={"diproses"}>Processed</SelectItem>
-          <SelectItem key={"dikirim"}>Shipped</SelectItem>
-          <SelectItem key={"pesanan_dikonfirmasi"}>Confirmed</SelectItem>
-          <SelectItem key={"dibatalkan"}>Cancelled</SelectItem>
-        </Select>
-        <Select
-          isRequired
-          aria-label="Purchases Sort"
-          defaultSelectedKeys={[sort]}
-          onSelectionChange={(value) => setSort(value.currentKey as string)}
-        >
-          <SelectItem key={"date...desc"}>Newest</SelectItem>
-          <SelectItem key={"date...asc"}>Oldest</SelectItem>
-        </Select>
-      </div>
-      <div className={`w-full ${range === "custom" ? "block" : "hidden"}`}>
-        <DateRangePicker
-          aria-label="Purchases Range"
-          defaultValue={date}
-          isReadOnly={range !== "custom"}
-          maxValue={today(getLocalTimeZone())}
-          value={date}
-          variant="bordered"
-          onChange={setDate}
-        />
+      <div className="hidden">
+        <SearchBar title={"purchases"} />
+        <div className="grid grid-cols-3 gap-2">
+          <Select
+            isRequired
+            aria-label="Purchases Range"
+            defaultSelectedKeys={[range]}
+            onSelectionChange={(value) => handleRageChange(value)}
+          >
+            <SelectItem key={"1"}>1 Day</SelectItem>
+            <SelectItem key={"7"}>7 Day</SelectItem>
+            <SelectItem key={"thismonth"}>This Month</SelectItem>
+            <SelectItem key={"31"}>1 Month</SelectItem>
+            <SelectItem key={"thisyear"}>This Year</SelectItem>
+            <SelectItem key={"365"}>1 Year</SelectItem>
+            <SelectItem key={"custom"}>Custom Range</SelectItem>
+          </Select>
+          <Select
+            isRequired
+            aria-label="Purchases Status"
+            defaultSelectedKeys={[status]}
+            onSelectionChange={(value) => setStatus(value.currentKey as string)}
+          >
+            <SelectItem key={"all"}>All</SelectItem>
+            <SelectItem key={"menunggu_pembayaran"}>Waiting for Payment</SelectItem>
+            <SelectItem key={"menunggu_konfirmasi_pembayaran"}>Waiting for Confirmation</SelectItem>
+            <SelectItem key={"diproses"}>Processed</SelectItem>
+            <SelectItem key={"dikirim"}>Shipped</SelectItem>
+            <SelectItem key={"pesanan_dikonfirmasi"}>Confirmed</SelectItem>
+            <SelectItem key={"dibatalkan"}>Cancelled</SelectItem>
+          </Select>
+          <Select
+            isRequired
+            aria-label="Purchases Sort"
+            defaultSelectedKeys={[sort]}
+            onSelectionChange={(value) => setSort(value.currentKey as string)}
+          >
+            <SelectItem key={"date...desc"}>Newest</SelectItem>
+            <SelectItem key={"date...asc"}>Oldest</SelectItem>
+          </Select>
+        </div>
+        <div className={`w-full ${range === "custom" ? "block" : "hidden"}`}>
+          <DateRangePicker
+            aria-label="Purchases Range"
+            defaultValue={date}
+            isReadOnly={range !== "custom"}
+            maxValue={today(getLocalTimeZone())}
+            value={date}
+            variant="bordered"
+            onChange={setDate}
+          />
+        </div>
       </div>
       {/* <div className="w-full px-10 text-center flex flex-col items-center h-full justify-center">
         <Scroll className="text-foreground-600 mb-4" size={100} />

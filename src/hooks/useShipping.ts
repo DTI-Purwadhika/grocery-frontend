@@ -2,14 +2,14 @@ import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
 export type ShippingDataResponse = {
-    id: number;
-    origin: string;
-    destination: string;
-    courier: string;
-    cost: number;
-    description: string;
-    etd: string;
-  };
+  id: number;
+  origin: string;
+  destination: string;
+  courier: string;
+  cost: number;
+  description: string;
+  etd: string;
+};
 
 export const useShipping = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,6 +40,7 @@ export const useShipping = () => {
 
         setShipping(data.data);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     };

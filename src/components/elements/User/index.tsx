@@ -3,11 +3,12 @@ import { Card, CardBody } from "@nextui-org/card";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/dropdown";
 import { User } from "@nextui-org/user";
 import { User2 } from "lucide-react";
-import { useProfile } from "@/hooks/useProfile";
 import { useRouter } from "next/navigation";
 
-import { ThemeButton, Notification } from "..";
+import { useProfile } from "@/hooks/useProfile";
 import { useLogout } from "@/hooks/useLogout";
+
+import { ThemeButton } from "..";
 
 const UserCard = () => {
   const { userProfile } = useProfile();
@@ -20,7 +21,7 @@ const UserCard = () => {
         <Card className="hidden md:flex">
           <CardBody className="flex flex-row gap-2">
             <ThemeButton />
-            <Notification />
+            {/* <Notification /> */}
           </CardBody>
         </Card>
         <Dropdown>
@@ -28,26 +29,26 @@ const UserCard = () => {
             <Card className="cursor-pointer">
               <CardBody>
                 <User
-                  className="hidden md:flex md:flex-nowrap w-fit"
-                  description={userProfile?.role}
-                  name={userProfile?.name}
                   avatarProps={{
                     src: `
                     ${userProfile?.profilePicture}`,
                   }}
+                  className="hidden md:flex md:flex-nowrap w-fit"
+                  description={userProfile?.role}
+                  name={userProfile?.name}
                 />
                 <User2 className="md:hidden" />
               </CardBody>
             </Card>
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
-            <DropdownItem onPress={() => router.push("/dashboard")} key="dashboard">
+            <DropdownItem key="dashboard" onPress={() => router.push("/dashboard")}>
               Dashboard
             </DropdownItem>
-            <DropdownItem onPress={() => router.push("/my-profile")} key="profile">
+            <DropdownItem key="profile" onPress={() => router.push("/my-profile")}>
               Profile
             </DropdownItem>
-            <DropdownItem onPress={logout} key="logout">
+            <DropdownItem key="logout" onPress={logout}>
               Logout
             </DropdownItem>
           </DropdownMenu>

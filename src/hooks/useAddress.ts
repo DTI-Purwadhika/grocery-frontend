@@ -2,14 +2,14 @@ import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
 export type AddressDataResponse = {
-    id: number;
-    addressName: string;
-    postcode: string;
-    city: string;
-    lat: number;
-    lng: number;
-    isPrimary: boolean;
-  };
+  id: number;
+  addressName: string;
+  postcode: string;
+  city: string;
+  lat: number;
+  lng: number;
+  isPrimary: boolean;
+};
 
 export const useAddress = () => {
   const cookieValue = getCookie("Sid");
@@ -36,6 +36,7 @@ export const useAddress = () => {
 
         setAddresses(data.data.content);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     };
