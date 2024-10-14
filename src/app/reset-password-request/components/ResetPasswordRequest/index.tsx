@@ -138,7 +138,7 @@ export const ResetPasswordRequestForm: React.FC = () => {
                       className="mt-2 py-2 px-4 text-sm font-semibold w-auto text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
                       disabled={isSending || isSent}
                       type="button"
-                      onClick={sendVericationLink}
+                      onClick={sendVerificationLink}
                     >
                       {isSending ? "Loading..." : "Request New Link"}
                     </button>

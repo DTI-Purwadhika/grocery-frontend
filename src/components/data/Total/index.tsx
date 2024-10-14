@@ -19,9 +19,9 @@ const Total = ({ source }: TotalType) => {
   const currentShipFee = shippingFee ? shippingFee : 11500;
   const total = subtotal + currentShipFee;
 
-  <div className="flex flex-col gap-4">
-    <Shipping />
-    <div>
+  return (
+    <>
+      {" "}
       <div className="flex flex-row justify-between">
         <span>Subtotal</span>
         <span>: Rp {subtotal},-</span>
@@ -36,8 +36,8 @@ const Total = ({ source }: TotalType) => {
         <span>: Rp {total},-</span>
       </div>
       {source === "cart" ? <CheckoutButton /> : <PaymentButtonWrapper />}
-    </div>
-  </div>;
+    </>
+  );
 };
 
 export default Total;
