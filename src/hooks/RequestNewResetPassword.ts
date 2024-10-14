@@ -4,12 +4,12 @@ export const RequestNewResetPassword = () => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
 
-  const SendNewResetPassword = async (email: string | null) => {
+  const SendNewResetPassword = async (id: string | null) => {
     setIsSending(true);
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/new-reset-password-link?email=${email}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/new-reset-password-link?id=${id}`,
         {
           method: "POST",
           headers: {

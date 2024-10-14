@@ -1,5 +1,5 @@
 export type emailToken = {
-  email: string | null;
+  id: string | null;
   token: string | null;
 };
 

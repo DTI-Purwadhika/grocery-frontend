@@ -26,9 +26,8 @@ export const SetPasswordForm: React.FC = () => {
   const { isSending, isSent, SendNewVerification } = RequestNewVerification();
   const params = useSearchParams();
   const token = params.get("token");
-  const email = params.get("email");
-  const email_alt = email!.replace("%40", "@");
-  const emailToken = { email: email_alt, token: token };
+  const id = params.get("userid");
+  const idToken = { id: id, token: token };
   const {
     register,
     handleSubmit,
@@ -38,7 +37,7 @@ export const SetPasswordForm: React.FC = () => {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        const status = await CheckVerificationLink(emailToken);
+        const status = await CheckVerificationLink(idToken);
 
         setLoading(false);
         setStatus(status);
@@ -48,7 +47,7 @@ export const SetPasswordForm: React.FC = () => {
     };
 
     checkStatus();
-  }, [token, email]);
+  }, [token, id]);
 
   const closeModal = () => {
     router.push("/login");
@@ -60,7 +59,7 @@ export const SetPasswordForm: React.FC = () => {
 
   const sendLink = () => {
     try {
-      SendNewVerification(email);
+      SendNewVerification(id);
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.log(error);
@@ -69,8 +68,8 @@ export const SetPasswordForm: React.FC = () => {
 
   const onSubmit = async (data: setPasswordData) => {
     try {
-      const formDataWithEmail = { ...data, email: email };
-      const result = await SetPassword(formDataWithEmail);
+      const formDataWithId = { ...data, id: id };
+      const result = await SetPassword(formDataWithId);
 
       if (result) {
         onOpen();
