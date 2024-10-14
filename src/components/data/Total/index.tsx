@@ -4,8 +4,6 @@ import React from "react";
 import { useCart } from "@/providers/CartProviders";
 import { useShippingFee } from "@/providers/ShippingProvider";
 
-import Shipping from "../CheckoutList/Card/Shipping";
-
 import PaymentButtonWrapper from "./PaymentButton/wrapper";
 import CheckoutButton from "./CheckoutButton";
 import { TotalType } from "./type";
