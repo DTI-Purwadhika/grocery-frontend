@@ -43,14 +43,16 @@ const PurchasesList = () => {
   }
 
   return (
-    <div className="mx-2 flex flex-col gap-4">
+    <div className="mx-2 flex flex-col gap-4 lg:grid lg:grid-cols-2">
       {data?.content.map((order: Order) => <PurchaseCard key={order.id} order={order} />)}
-      <BottomContent
-        notMultiple
-        selectedSize={data?.content.length}
-        totalData={data?.totalData}
-        totalPages={data?.totalPage}
-      />
+      <div className="col-span-2">
+        <BottomContent
+          notMultiple
+          selectedSize={data?.content.length}
+          totalData={data?.totalData}
+          totalPages={data?.totalPage}
+        />
+      </div>
     </div>
   );
 };

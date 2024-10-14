@@ -1,10 +1,10 @@
 "use client";
 import { Card, CardBody } from "@nextui-org/card";
-import { Select, SelectItem } from "@nextui-org/select";
 
 import { DataSelector, NumberInput } from "@/components/form";
 
 import SearchBar from "../SearchBar";
+import SortBy from "../SortBy/wrapper";
 
 const Filter = () => {
   return (
@@ -13,22 +13,7 @@ const Filter = () => {
         <h3 className="font-semibold text-lg">Filter</h3>
         <SearchBar noLabel title="products" />
         <DataSelector isRequired={false} label="Category" source="categories" />
-        <Select
-          classNames={{
-            label: "text-xs",
-            value: "text-2xs",
-          }}
-          label="Sort By"
-          labelPlacement="outside"
-          placeholder="Sort By..."
-          variant="bordered"
-        >
-          <SelectItem key={"id,ascending"}>Default</SelectItem>
-          <SelectItem key={"price,ascending"}>Cheapest</SelectItem>
-          <SelectItem key={"price,descending"}>Highest Price</SelectItem>
-          <SelectItem key={"name,ascending"}>Alphabetically</SelectItem>
-          <SelectItem key={"name,descending"}>Reverse Alphabetically</SelectItem>
-        </Select>
+        <SortBy />
         <NumberInput
           endContent=",-"
           label="Min Price"

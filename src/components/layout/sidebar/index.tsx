@@ -1,17 +1,7 @@
 "use client";
 import { Card, CardBody } from "@nextui-org/card";
 import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
-import {
-  Barcode,
-  Blocks,
-  ChartArea,
-  Group,
-  House,
-  Percent,
-  ReceiptText,
-  Store,
-  User,
-} from "lucide-react";
+import { Barcode, Blocks, Group, House, ReceiptText, Store, User } from "lucide-react";
 import { useState } from "react";
 
 import { useCurrentPath } from "@/hooks/useCurrentPath";
@@ -76,14 +66,14 @@ const Sidebar = () => {
             >
               Product Inventory
             </ListboxItem>
-            <ListboxItem
+            {/* <ListboxItem
               key="/dashboard/promotions"
               className={currentPath.includes("promotions") ? "bg-primary p-2 text-background" : ""}
               href="/dashboard/promotions?keyword="
               startContent={<Percent />}
             >
               Promotion
-            </ListboxItem>
+            </ListboxItem> */}
           </ListboxSection>
           <ListboxSection title="Store">
             <ListboxItem
@@ -111,7 +101,7 @@ const Sidebar = () => {
               Order
             </ListboxItem>
           </ListboxSection>
-          <ListboxSection title="Management">
+          {/* <ListboxSection title="Management">
             <ListboxItem
               key="/dashboard/reports"
               className={currentPath.includes("reports") ? "bg-primary p-2 text-background" : ""}
@@ -120,7 +110,7 @@ const Sidebar = () => {
             >
               Report
             </ListboxItem>
-          </ListboxSection>
+          </ListboxSection> */}
         </Listbox>
       </CardBody>
     </Card>
