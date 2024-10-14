@@ -1,76 +1,48 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-
 import { auth } from "../auth";
 
 export const config = {
-  matcher: [
-    "/",
-    "/catalog/:path*",
-    "/dashboard/:path*",
-    "/my-cart/:path*",
-    "/my-profile/:path*",
-    "/my-favorite/:path*",
-    "/login",
-    "/register",
-    "/reset-password",
-    "/reset-password-request",
-    "/set-password",
-  ],
-};
-
-export default auth(async (request: NextRequest) => {
-  const reqUrl = new URL(request.url);
-  const path = reqUrl.pathname;
-
-  const session = await auth();
-  const publicRoutes = [
-    "/",
-    "/login",
-    "/register",
-    "/catalog",
-    "/reset-password",
-    "/reset-password-request",
-    "/set-password",
-  ];
-  const noSessionRoutes = [
-    "/login",
-    "/register",
-    "/reset-password",
-    "/reset-password-request",
-    "/set-password",
-  ];
-  const superAdminRoutes = ["/dashboard/admins", "/dashboard/stores"];
-
-  if (session && noSessionRoutes.includes(path)) {
-    return NextResponse.redirect(new URL("/", request.url));
+    matcher: [
+      '/',
+      '/catalog/:path*',
+      '/dashboard/:path*',
+      '/my-cart/:path*',
+      '/my-profile/:path*',
+      '/my-favorite/:path*',
+      '/login',
+      '/register',
+      '/reset-password',
+      '/reset-password-request',
+      '/set-password',
+    ],
   }
 
-  if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
-    return NextResponse.next();
-  }
+export default auth( async (request : NextRequest) => {
+  const reqUrl = new URL(request.url)
+  const path = reqUrl.pathname
 
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-  // @ts-ignore
-  const userRole = session.user?.role;
+    const session = await auth();
+    const publicRoutes = ['/', '/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
+    const noSessionRoutes = ['/login', '/register', '/catalog', '/reset-password', '/reset-password-request', '/set-password',];
+    const superAdminRoutes = ['/dashboard/admins', '/dashboard/stores', '/my-profile']
 
-  if (userRole === "SUPER" || userRole === "ADMIN") {
-    if (path.startsWith("/my-profile")) {
-      return NextResponse.next();
+    if(session && noSessionRoutes.includes(path)){
+      return NextResponse.redirect(new URL("/", request.url))
     }
 
-    if (userRole === "ADMIN" && superAdminRoutes.includes(path)) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+    if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
+        return NextResponse.next()
+      }
 
+    if(!session){
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
 
     // @ts-ignore
     const userRole = session.user?.role;
         
     if (userRole === "ADMIN") {
-      
       if(path.startsWith("/my-profile")){
         return NextResponse.next();
       }
@@ -78,33 +50,14 @@ export default auth(async (request: NextRequest) => {
       if(superAdminRoutes.includes(path) || !path.startsWith("/dashboard")){
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
-  }
-
-  if (userRole === "CUSTOMER") {
-    if (!path.match(/^\/my-/)) {
-      return NextResponse.redirect(new URL("/", request.url));
     }
-  }
 
-  if (publicRoutes.includes(path) || path.startsWith("/catalog")) {
+    if(userRole === "CUSTOMER"){
+        if(!path.match(/^\/my-/)){
+          return NextResponse.redirect(new URL("/", request.url));
+      }
+    }   
+
     return NextResponse.next();
   }
-
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  if (userRole === "SUPER" || userRole === "ADMIN") {
-    if (!path.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-  }
-
-  if (userRole === "CUSTOMER") {
-    if (!path.match(/^\/my-/)) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  return NextResponse.next();
-});
+)
