@@ -27,7 +27,8 @@ export const SetPasswordForm: React.FC = () => {
   const params = useSearchParams();
   const token = params.get("token");
   const email = params.get("email");
-  const emailToken = { email: email, token: token };
+  const email_alt = email!.replace("%40", "@");
+  const emailToken = { email: email_alt, token: token };
   const {
     register,
     handleSubmit,
