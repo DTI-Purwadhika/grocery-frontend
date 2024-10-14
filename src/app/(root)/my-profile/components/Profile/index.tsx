@@ -164,7 +164,7 @@ export const Profile: React.FC = () => {
   const deleteProfile = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users?email=${userProfile?.email}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/delete?email=${userProfile?.email}`,
         {
           method: "DELETE",
           credentials: "include",
