@@ -24,14 +24,14 @@ const Total = ({ source }: TotalType) => {
         <span>Subtotal</span>
         <span>: Rp {subtotal},-</span>
       </div>
-      <div className="flex flex-row justify-between my-2">
+      <div className={`flex-row justify-between my-2 ${source === "cart" ? "hidden" : "flex"}`}>
         <span>Shipping</span>
         <span>: Rp {currentShipFee},-</span>
       </div>
       <hr className="my-3" />
       <div className="flex flex-row justify-between font-semibold text-lg">
         <span>Total</span>
-        <span>: Rp {total},-</span>
+        <span>: Rp {source === "cart" ? subtotal : total},-</span>
       </div>
       {source === "cart" ? <CheckoutButton /> : <PaymentButtonWrapper />}
     </>
