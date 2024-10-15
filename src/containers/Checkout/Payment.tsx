@@ -3,7 +3,7 @@ import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Button } from "@nextui-org/button";
 import { ScrollShadow } from "@nextui-org/scroll-shadow";
 import { Snippet } from "@nextui-org/snippet";
-import { Camera, CreditCard } from "lucide-react";
+import { Camera } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -164,9 +164,6 @@ const Payment = ({ id }: { id: string }) => {
           onClick={handleUpload}
         >
           <Camera /> {isUploading ? "Uploading..." : "Upload Transfer Proof"}
-        </Button>
-        <Button className="w-full" color="default" radius="sm" size="lg">
-          <CreditCard /> Use Other Payment Method
         </Button>
       </div>
     </div>
