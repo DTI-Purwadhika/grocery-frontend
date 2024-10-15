@@ -161,6 +161,7 @@ export const LoginForm: React.FC = () => {
                   {errorType === "email_not_found" && "Account with this email not found"}
                   {errorType === "account_not_verified" && "Account not verified"}
                   {errorType === "invalid_email_or_password" && "Invalid email or password"}
+                  {errorType === "social-login-error" && "Social Login Unavailable"}
                 </ModalHeader>
                 <ModalBody>
                   {errorType === "email_not_found" && <p>Please register with this email first.</p>}
@@ -168,6 +169,12 @@ export const LoginForm: React.FC = () => {
                     <p>Please verify your account through the link sent to your email.</p>
                   )}
                   {errorType === "invalid_email_or_password" && <p>Please try again.</p>}
+                  {errorType === "social-login-error" && (
+                    <p>
+                      This email is registered as an admin account. Google login is reserved for
+                      customers only.
+                    </p>
+                  )}
                 </ModalBody>
               </>
             )}

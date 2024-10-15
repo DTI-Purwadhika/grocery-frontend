@@ -28,9 +28,14 @@ export const ResetPasswordRequestForm: React.FC = () => {
   const { isSending, isSent, SendNewVerification } = RequestNewVerification();
   const { SendResetPasswordLink, isLoading } = RequestResetPassword();
 
-  const sendVerificationLink = () => {
+  const sendVerificationLink = async () => {
     try {
-      SendNewVerification(email);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/userid?email=${email}`,
+      );
+      const data = await response.json();
+
+      SendNewVerification(data.data);
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.log(error);

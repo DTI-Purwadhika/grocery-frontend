@@ -3,6 +3,7 @@ import { useState } from "react";
 export const RequestNewVerification = () => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const SendNewVerification = async (id: string | null) => {
     setIsSending(true);
@@ -19,6 +20,7 @@ export const RequestNewVerification = () => {
       );
 
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Failed to send new verification link");
       }
 
@@ -31,5 +33,5 @@ export const RequestNewVerification = () => {
     }
   };
 
-  return { isSending, isSent, SendNewVerification };
+  return { isSending, isSent, SendNewVerification, isError };
 };

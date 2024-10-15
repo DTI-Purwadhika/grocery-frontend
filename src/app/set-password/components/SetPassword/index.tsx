@@ -23,7 +23,7 @@ export const SetPasswordForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { onOpenChange, isOpen, onOpen } = useDisclosure();
   const { SetPassword, isLoading } = SetNewPassword();
-  const { isSending, isSent, SendNewVerification } = RequestNewVerification();
+  const { isSending, isSent, SendNewVerification, isError } = RequestNewVerification();
   const params = useSearchParams();
   const token = params.get("token");
   const id = params.get("userid");
@@ -245,7 +245,7 @@ export const SetPasswordForm: React.FC = () => {
                   </p>
                   <button
                     className="mt-2 py-2 px-4 text-sm font-semibold w-auto text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300"
-                    disabled={isSending || isSent}
+                    disabled={isSending || isSent || isError}
                     type="button"
                     onClick={sendLink}
                   >
@@ -255,6 +255,11 @@ export const SetPasswordForm: React.FC = () => {
                     <p className="font-bold">
                       A new verification link has been sent to your email. Please check your email
                       inbox or spam to verify your account.
+                    </p>
+                  )}
+                  {isError && (
+                    <p className="font-bold">
+                      Unable to send a new verification link as user with this email is not found.
                     </p>
                   )}
                 </ModalBody>

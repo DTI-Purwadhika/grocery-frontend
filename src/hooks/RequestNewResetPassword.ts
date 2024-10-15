@@ -3,6 +3,7 @@ import { useState } from "react";
 export const RequestNewResetPassword = () => {
   const [isSending, setIsSending] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const SendNewResetPassword = async (id: string | null) => {
     setIsSending(true);
@@ -19,6 +20,7 @@ export const RequestNewResetPassword = () => {
       );
 
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Failed to send new reset password link");
       }
 
@@ -31,5 +33,5 @@ export const RequestNewResetPassword = () => {
     }
   };
 
-  return { isSending, isSent, SendNewResetPassword };
+  return { isSending, isSent, SendNewResetPassword, isError };
 };
