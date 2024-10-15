@@ -15,6 +15,7 @@ import { useCart } from "@/providers/CartProviders";
 import StockList from "@/components/elements/Alert/StockList";
 import { Loading } from "@/components/elements";
 import { CartItem } from "@/providers/CartProviders/type";
+import { useProfile } from "@/hooks/useProfile";
 
 import { ProductDetailType } from "./type";
 
@@ -25,9 +26,11 @@ const ProductDetail = ({ id }: ProductDetailType) => {
   const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
   const { addItemToCart } = useCart();
+  const { userProfile } = useProfile();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const userEmail = session?.user?.email || "1";
+  const isAdmin = userProfile?.role === "admin" || userProfile?.role === "super";
 
   useEffect(() => {
     setIsLoading(true);
@@ -129,9 +132,9 @@ const ProductDetail = ({ id }: ProductDetailType) => {
         </div>
       </ScrollShadow>
       <Button
-        className="w-full opacity-90 hover:opacity-100"
+        className={`w-full opacity-90 hover:opacity-100 ${isAdmin ? "hidden" : ""}`}
         color="primary"
-        isDisabled={availableStock === 0}
+        isDisabled={availableStock === 0 || isAdmin}
         radius="sm"
         size="lg"
         onClick={handleOpen}
