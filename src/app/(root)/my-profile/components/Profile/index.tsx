@@ -133,12 +133,12 @@ export const Profile: React.FC = () => {
           "Profile updated successfully. Please verify your new email and login again.",
           {
             position: "top-center",
-            duration: 5000,
+            duration: 3000,
           },
         );
         setTimeout(() => {
           logout();
-        }, 5000);
+        }, 3000);
       } else {
         toast.success("Profile updated successfully", {
           position: "top-center",
@@ -178,10 +178,10 @@ export const Profile: React.FC = () => {
         throw new Error("Failed to delete profile");
       }
 
-      toast.error("Profile deleted", { position: "top-center", duration: 3000 });
+      toast.error("Profile deleted", { position: "top-center", duration: 1000 });
       setTimeout(() => {
         logout();
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error(error);
     }
