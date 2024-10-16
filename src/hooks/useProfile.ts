@@ -1,5 +1,6 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 type UserProfile = {
   name: string;
@@ -13,6 +14,7 @@ type UserProfile = {
 export const useProfile = () => {
   const cookieValue = getCookie("Sid");
   const [userProfile, setUserProfile] = useState<UserProfile>();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -43,7 +45,9 @@ export const useProfile = () => {
       }
     };
 
-    fetchUserProfile();
+    if(session){
+      fetchUserProfile();
+    }
   }, []);
 
   return { userProfile };
