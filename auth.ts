@@ -82,6 +82,10 @@ export const authConfig: NextAuthConfig = {
 
           const data = await response.json();
 
+          if(data.error){
+              return "/login?error=social-login-error";
+          }
+
           user.email = data.email;
 
           // @ts-ignore

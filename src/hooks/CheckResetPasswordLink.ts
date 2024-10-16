@@ -1,9 +1,9 @@
-export type emailToken = {
+export type idToken = {
   id: string | null;
   token: string | null;
 };
 
-export const CheckResetPasswordLink = async (data: emailToken) => {
+export const CheckResetPasswordLink = async (data: idToken) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/check-reset-password-link`,
