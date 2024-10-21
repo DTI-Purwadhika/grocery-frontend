@@ -1,7 +1,7 @@
 "use client";
 import { Card, CardBody } from "@nextui-org/card";
 import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/listbox";
-import { Barcode, Blocks, Group, House, ReceiptText, Store, User } from "lucide-react";
+import { Barcode, Blocks, Group, ReceiptText, Store, User } from "lucide-react";
 import { useState } from "react";
 
 import { useCurrentPath } from "@/hooks/useCurrentPath";
@@ -29,7 +29,7 @@ const Sidebar = () => {
           variant="flat"
           onSelectionChange={(value) => handleSelectionChange(value as string)}
         >
-          <ListboxSection showDivider>
+          {/* <ListboxSection showDivider>
             <ListboxItem
               key="/dashboard"
               className={currentPath === "/dashboard" ? "bg-primary p-2 text-background" : ""}
@@ -38,7 +38,7 @@ const Sidebar = () => {
             >
               Dashboard
             </ListboxItem>
-          </ListboxSection>
+          </ListboxSection> */}
           <ListboxSection showDivider title="Product">
             <ListboxItem
               key="/dashboard/categories"

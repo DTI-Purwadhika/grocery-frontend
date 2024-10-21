@@ -1,11 +1,12 @@
 "use client";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/autocomplete";
 import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useAutoComplete } from "@/hooks/useAutoComplete";
 import { toCapital } from "@/services/formatter";
 import { useParam } from "@/hooks/useParam";
+import { useProfile } from "@/hooks/useProfile";
 
 import { SelectorType } from "./type";
 
@@ -13,11 +14,15 @@ const StoreSelect = ({ source = "", noLabel = false }: SelectorType) => {
   const { getQueryParam, setQueryParam } = useParam();
   const [isOpen, setIsOpen] = useState(false);
   const [currentKeyword, setCurrentKeyword] = useState(getQueryParam(source) || "");
-
+  const { userProfile } = useProfile();
   const { collectData, hasMore, isLoading, onLoadMore } = useAutoComplete({
     title: source,
     keyword: currentKeyword,
   });
+
+  useEffect(() => {
+    if (userProfile && source === "stores") setQueryParam(source, userProfile?.role || "");
+  }, [userProfile]);
 
   const [, scrollerRef] = useInfiniteScroll({
     hasMore,
@@ -31,6 +36,7 @@ const StoreSelect = ({ source = "", noLabel = false }: SelectorType) => {
       aria-labelledby={source}
       className="w-full"
       defaultItems={collectData}
+      isDisabled={userProfile?.role?.toLowerCase() !== "super" && source === "stores"}
       isLoading={isLoading}
       label={noLabel ? "" : toCapital(source)}
       labelPlacement="outside"
