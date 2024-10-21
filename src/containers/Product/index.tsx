@@ -30,7 +30,8 @@ const ProductDetail = ({ id }: ProductDetailType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const userEmail = session?.user?.email || "1";
-  const isAdmin = userProfile?.role === "admin" || userProfile?.role === "super";
+  const isAdmin =
+    userProfile?.role?.toLowerCase() === "admin" || userProfile?.role?.toLowerCase() === "super";
 
   useEffect(() => {
     setIsLoading(true);
