@@ -106,7 +106,7 @@ const ProductDetail = ({ id }: ProductDetailType) => {
   return (
     <div className="grid gap-4 grid-rows-[1fr_auto] h-full overflow-hidden">
       <ScrollShadow className="h-full w-full flex flex-col">
-        <div className="w-full">
+        <div className="w-full flex justify-center">
           <Image
             isZoomed
             alt={collectData?.images[0]?.altText || collectData?.name}
