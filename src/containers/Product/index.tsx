@@ -110,7 +110,7 @@ const ProductDetail = ({ id }: ProductDetailType) => {
           <Image
             isZoomed
             alt={collectData?.images[0]?.altText || collectData?.name}
-            className="w-full aspect-video object-contain"
+            className="w-full aspect-video object-contain mx-auto"
             fallbackSrc="https://via.placeholder.com/500x500"
             src={collectData?.images[0]?.url}
             width={500}
