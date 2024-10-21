@@ -67,12 +67,12 @@ export default auth(async (request: NextRequest) => {
     }
   }
 
-  if(userRole === "SUPER"){
+  if (userRole === "SUPER") {
     if (path.startsWith("/my-profile")) {
       return NextResponse.next();
     }
 
-    if(!path.startsWith("/dashboard")){
+    if (!path.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
@@ -82,6 +82,9 @@ export default auth(async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
+
+  if (path === "/dashboard")
+    return NextResponse.redirect(new URL("/dashboard/orders", request.url));
 
   return NextResponse.next();
 });
