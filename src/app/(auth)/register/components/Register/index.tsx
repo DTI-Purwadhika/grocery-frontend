@@ -57,6 +57,8 @@ export const RegisterForm: React.FC = () => {
           throw new Error("Email already registered with social account");
         } else if (result.error === "Account with this email already registered") {
           throw new Error("Account with this email already registered");
+        } else if (result.error === "A super admin account has been registered") {
+          throw new Error("A super admin account has been registered");
         }
       }
 
@@ -88,6 +90,10 @@ export const RegisterForm: React.FC = () => {
         );
       } else if (error.message === "Account with this email already registered") {
         toast.error("Email has been registered. Please use a different email.", {
+          position: "top-center",
+        });
+      } else if (error.message === "A super admin account has been registered") {
+        toast.error("A super admin account has been registered. Please try again.", {
           position: "top-center",
         });
       }
